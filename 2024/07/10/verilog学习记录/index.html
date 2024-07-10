@@ -1,0 +1,246 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>verilog学习记录 | CassiusBlog</title><meta name="author" content="Cassius Black"><meta name="copyright" content="Cassius Black"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="语法Number Format 数值形式sized大小的形式如下，其中size只会以十进制表示 [size]&#x27;[base_format][number] 其中  base_format可以是十进制、十六进制和八进制来表示number部分是什么进制 number就是具体数字，十进制对应09，十六进制对应0F number部分允许使用下划线_来分隔方便阅读eg：3&#x27;b010;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="verilog学习记录">
+<meta property="og:url" content="http://example.com/2024/07/10/verilog%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95/index.html">
+<meta property="og:site_name" content="CassiusBlog">
+<meta property="og:description" content="语法Number Format 数值形式sized大小的形式如下，其中size只会以十进制表示 [size]&#x27;[base_format][number] 其中  base_format可以是十进制、十六进制和八进制来表示number部分是什么进制 number就是具体数字，十进制对应09，十六进制对应0F number部分允许使用下划线_来分隔方便阅读eg：3&#x27;b010;">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/img/avatar.jpg">
+<meta property="article:published_time" content="2024-07-10T15:56:21.000Z">
+<meta property="article:modified_time" content="2024-07-10T15:56:48.709Z">
+<meta property="article:author" content="Cassius Black">
+<meta property="article:tag" content="整理">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/avatar.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2024/07/10/verilog%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=4.13.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.33/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":200},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.11.1/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'verilog学习记录',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2024-07-10 23:56:48'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+        if (t === 'dark') activateDarkMode()
+        else if (t === 'light') activateLightMode()
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><meta name="generator" content="Hexo 7.1.1"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/avatar.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">9</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">4</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><span> Categories</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="CassiusBlog"><span class="site-name">CassiusBlog</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><span> Categories</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">verilog学习记录</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-07-10T15:56:21.000Z" title="发表于 2024-07-10 23:56:21">2024-07-10</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-07-10T15:56:48.709Z" title="更新于 2024-07-10 23:56:48">2024-07-10</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="verilog学习记录"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h1><h4 id="Number-Format-数值形式"><a href="#Number-Format-数值形式" class="headerlink" title="Number Format 数值形式"></a>Number Format 数值形式</h4><h4 id="sized"><a href="#sized" class="headerlink" title="sized"></a><code>sized</code></h4><p>大小的形式如下，其中<code>size</code>只会以十进制表示</p>
+<figure class="highlight verilog"><table><tr><td class="code"><pre><span class="line">[size]&#x27;[base_format][number]</span><br></pre></td></tr></table></figure>
+<p>其中</p>
+<ul>
+<li><code>base_format</code>可以是十进制、十六进制和八进制来表示<code>number</code>部分是什么进制</li>
+<li><code>number</code>就是具体数字，十进制对应0<del>9，十六进制对应0</del>F</li>
+<li><code>number</code>部分允许使用下划线<code>_</code>来分隔方便阅读<br>eg：<figure class="highlight verilog"><table><tr><td class="code"><pre><span class="line"><span class="number">3&#x27;b010</span>;     <span class="comment">// 大小为3，二进制类型，具体数值010</span></span><br><span class="line"><span class="number">3&#x27;d2</span>        <span class="comment">// 大小为3，十进制类型，数值为2</span></span><br><span class="line"><span class="number">8&#x27;h70</span>;      <span class="comment">// 大小为8，十六进制类型，数值为0x70</span></span><br><span class="line"><span class="number">9&#x27;h1FA</span>;     <span class="comment">// 大小为9，十六进制类型，数值0x1FA</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="Unsized"><a href="#Unsized" class="headerlink" title="Unsized"></a><code>Unsized</code></h4><p>没有进制类型的数据就是<code>Unsized</code>类型。没有明确size的数据有自动推断的位宽。</p>
+<figure class="highlight verilog"><table><tr><td class="code"><pre><span class="line"><span class="keyword">integer</span> a = <span class="number">5432</span>;       <span class="comment">// 进制类型没有指明，推断为十进制数值为5432</span></span><br><span class="line"><span class="keyword">integer</span> a = <span class="number">&#x27;h1AD7</span>&#x27;;    <span class="comment">// 大小没有指明，因为是int类型，所以存储为 `a = 32&#x27;h0000_1AD7`</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="Negative"><a href="#Negative" class="headerlink" title="Negative"></a><code>Negative</code></h4><p>负数就是前面加负号，但是在<code>base_format</code>和<code>number</code>之间不允许有负号</p>
+<figure class="highlight verilog"><table><tr><td class="code"><pre><span class="line">-<span class="number">6&#x27;d3</span>;      <span class="comment">// 以 3 的二进制补码形式存储的 8 位负数</span></span><br><span class="line">-<span class="number">6</span>&#x27;sd9;     <span class="comment">// 用于有符号数学</span></span><br><span class="line"><span class="number">8</span>&#x27;d-<span class="number">4</span>;      <span class="comment">// illegal</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="Strings"><a href="#Strings" class="headerlink" title="Strings"></a>Strings</h3><p>和C语言没什么区别，双引号，不能换行</p>
+<h3 id="Identifiers"><a href="#Identifiers" class="headerlink" title="Identifiers"></a>Identifiers</h3><p>[a-z][A-Z][0-9],_,$，其中下划线和美元符号不能开头</p>
+<h3 id="keywords"><a href="#keywords" class="headerlink" title="keywords"></a>keywords</h3><p>略</p>
+<h2 id="数值表示"><a href="#数值表示" class="headerlink" title="数值表示"></a>数值表示</h2><h3 id="整数数值表示方法"><a href="#整数数值表示方法" class="headerlink" title="整数数值表示方法"></a>整数数值表示方法</h3><h4 id="指明位宽"><a href="#指明位宽" class="headerlink" title="指明位宽"></a>指明位宽</h4><figure class="highlight verilog"><table><tr><td class="code"><pre><span class="line"><span class="number">4&#x27;b1001</span>  <span class="comment">// 4bit数值</span></span><br><span class="line"><span class="number">32&#x27;h3022_c0de</span>  <span class="comment">// 32bit数值</span></span><br></pre></td></tr></table></figure>
+<p>其中，下划线<code>_</code>只是为了方便读</p>
+<h4 id="不指明位宽"><a href="#不指明位宽" class="headerlink" title="不指明位宽"></a>不指明位宽</h4><figure class="highlight verilog"><table><tr><td class="code"><pre><span class="line">counter = <span class="number">&#x27;d100</span> ;  <span class="comment">// 一般回根据编译器自动分频位宽，常见32bit</span></span><br><span class="line">counter = <span class="number">100</span>;</span><br><span class="line">counter = <span class="number">32&#x27;h64</span></span><br><span class="line"><span class="comment">// 三种形式一个意思</span></span><br></pre></td></tr></table></figure>
+<h4 id="负数表示"><a href="#负数表示" class="headerlink" title="负数表示"></a>负数表示</h4><p>在表示位宽的数字前面加一个减号来表示负数</p>
+<figure class="highlight verilog"><table><tr><td class="code"><pre><span class="line">-<span class="number">6&#x27;d15</span></span><br><span class="line">-<span class="number">15</span></span><br></pre></td></tr></table></figure>
+<h3 id="实数表示方法"><a href="#实数表示方法" class="headerlink" title="实数表示方法"></a>实数表示方法</h3><h4 id="十进制"><a href="#十进制" class="headerlink" title="十进制"></a>十进制</h4><figure class="highlight verilog"><table><tr><td class="code"><pre><span class="line"><span class="number">30</span><span class="variable">.123</span></span><br><span class="line"><span class="number">6</span><span class="variable">.0</span></span><br><span class="line"><span class="number">3</span><span class="variable">.0</span></span><br><span class="line"><span class="number">0</span><span class="variable">.001</span></span><br></pre></td></tr></table></figure>
+<p>科学计数法</p>
+<figure class="highlight verilog"><table><tr><td class="code"><pre><span class="line"><span class="number">1</span><span class="variable">.2e4</span></span><br><span class="line"><span class="number">1_0001</span>e4</span><br><span class="line"><span class="number">1</span>E-<span class="number">3</span></span><br></pre></td></tr></table></figure>
+<h3 id="字符串表示方法"><a href="#字符串表示方法" class="headerlink" title="字符串表示方法"></a>字符串表示方法</h3><p>verilog将字符串当作一系列的单字节ASCII字符队列</p>
+<figure class="highlight verilog"><table><tr><td class="code"><pre><span class="line"><span class="keyword">reg</span> [<span class="number">0</span>:<span class="number">12</span>*<span class="number">8</span>-<span class="number">1</span>] str;</span><br><span class="line"><span class="keyword">initial</span> <span class="keyword">begin</span></span><br><span class="line">    str = <span class="string">&quot;w3cschool.cn&quot;</span>;</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a>数据类型</h2><h3 id="线网wire"><a href="#线网wire" class="headerlink" title="线网wire"></a>线网wire</h3><p>wire类型标识硬件单元之间的物理连线，由其连接的器件的输出端连续驱动。如果没有驱动原件连接到wire型变量，缺省值一般位”Z”</p>
+<figure class="highlight verilog"><table><tr><td class="code"><pre><span class="line"><span class="keyword">wire</span> interrupt;</span><br><span class="line"><span class="keyword">wire</span> flag1, flag2;</span><br><span class="line"><span class="keyword">wire</span> gnd = <span class="number">1&#x27;b0</span>;</span><br></pre></td></tr></table></figure>
+<h3 id="寄存器reg"><a href="#寄存器reg" class="headerlink" title="寄存器reg"></a>寄存器reg</h3><p>寄存器用来表示存储单元，它会保持数据原有的值，直到被改写</p>
+<figure class="highlight verilog"><table><tr><td class="code"><pre><span class="line"><span class="keyword">reg</span> clk_temp;</span><br><span class="line"><span class="keyword">reg</span> flag1, flag2;</span><br></pre></td></tr></table></figure>
+<p>例如，在always快中给，寄存器可能被综合成边沿触发器，在组合逻辑中可能被综合成wire型变量。寄存器不需要驱动源，也不一定需要时钟信号。在仿真时，寄存器的值可以在任意时刻通过赋值操作进行改写。</p>
+<figure class="highlight verilog"><table><tr><td class="code"><pre><span class="line"><span class="keyword">reg</span> rstn;</span><br><span class="line"><span class="keyword">initial</span> <span class="keyword">begin</span></span><br><span class="line">    rstn = <span class="number">1&#x27;b0</span>;</span><br><span class="line">    #<span class="number">100</span>;</span><br><span class="line">    rstn = <span class="number">1&#x27;b1</span>;</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="向量"><a href="#向量" class="headerlink" title="向量"></a>向量</h3><p>当位宽大于1时，wire或reg即可声明位向量的形式</p>
+<figure class="highlight verilog"><table><tr><td class="code"><pre><span class="line"><span class="keyword">reg</span> [<span class="number">3</span>:<span class="number">0</span>] counter;  <span class="comment">// 声明4bit位宽的寄存器counter</span></span><br><span class="line"><span class="keyword">wire</span> [<span class="number">32</span>-<span class="number">1</span>:<span class="number">0</span>] gpio_Data;  <span class="comment">// 声明32bit位宽的线型变量gpio_data</span></span><br><span class="line"><span class="keyword">wire</span> [<span class="number">8</span>:<span class="number">2</span>] addr; <span class="comment">// 声明7bit位宽的线型变量addr，位宽范围为8:2</span></span><br><span class="line"><span class="keyword">reg</span> [<span class="number">0</span>:<span class="number">31</span>] data;  <span class="comment">// 声明32bit位宽寄存器变量data，最高有效位为0</span></span><br></pre></td></tr></table></figure>
+<p>对于上面的变量，我们可以指定某一位或若干相邻位，作为其他逻辑使用</p>
+<figure class="highlight verilog"><table><tr><td class="code"><pre><span class="line"><span class="keyword">wire</span> [<span class="number">9</span>:<span class="number">0</span>] data_low = data[<span class="number">0</span>:<span class="number">9</span>];</span><br><span class="line">addr_tempp[<span class="number">3</span>:<span class="number">2</span>] = addr[<span class="number">8</span>:<span class="number">7</span>] + <span class="number">1&#x27;b1</span>;</span><br></pre></td></tr></table></figure>
+<p>verilog支持可变的向量域选择</p>
+<figure class="highlight verilog"><table><tr><td class="code"><pre><span class="line"><span class="keyword">reg</span> [<span class="number">31</span>:<span class="number">0</span>] data1;</span><br><span class="line"><span class="keyword">reg</span> [<span class="number">7</span>:<span class="number">0</span>] byte1 [<span class="number">3</span>:<span class="number">0</span>];</span><br><span class="line"><span class="keyword">integer</span> j;</span><br><span class="line">alwayrs@* <span class="keyword">begin</span></span><br><span class="line">    <span class="keyword">for</span>(j=<span class="number">0</span>;j&lt;=<span class="number">3</span>;j=j+<span class="number">1</span>) <span class="keyword">begin</span></span><br><span class="line">        byte1[j] = data1[(j+<span class="number">1</span>)*<span class="number">8</span>-<span class="number">1</span> : j*<span class="number">8</span>];</span><br><span class="line">        <span class="comment">//把data1[7:0]...data1[31:24]依次赋值给byte1[0][7:0] ... byte1[3][7:0]</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+<p>对信号重新进行组合成新的向量时候，需要用大括号</p>
+<figure class="highlight verilog"><table><tr><td class="code"><pre><span class="line"><span class="keyword">wire</span> [<span class="number">31</span>:<span class="number">0</span>] temp1, temp2;</span><br><span class="line"><span class="keyword">assign</span> temp1 = &#123;byte1[<span class="number">0</span>][<span class="number">7</span>:<span class="number">0</span>], data1[<span class="number">31</span>:<span class="number">8</span>]&#125;;  <span class="comment">// 数据拼接</span></span><br><span class="line"><span class="keyword">assign</span> temp2 = &#123;<span class="number">32</span>&#123;<span class="number">1&#x27;b0</span>&#125;&#125;;  <span class="comment">// 赋值32位的数值0</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="整数，实数，时间寄存器变量"><a href="#整数，实数，时间寄存器变量" class="headerlink" title="整数，实数，时间寄存器变量"></a>整数，实数，时间寄存器变量</h3><p>实际上也属于寄存器类型</p>
+<h4 id="整数-integer"><a href="#整数-integer" class="headerlink" title="整数 integer"></a>整数 integer</h4><h4 id="实数-real"><a href="#实数-real" class="headerlink" title="实数 real"></a>实数 real</h4><h4 id="时间-time"><a href="#时间-time" class="headerlink" title="时间 time"></a>时间 time</h4><p>verilog使用特殊的时间寄存器time型变量，对仿真时间进行保存。调用系统函数<code>$time</code>获取当前仿真时间</p>
+<h3 id="数组"><a href="#数组" class="headerlink" title="数组"></a>数组</h3><p>在verilog中，允许声明reg, wire, integer, time, real以及向量类型的数组<br>数组维数没有限制。线网数组也可以用于连接实例模块的接口。数组中的每个元素都可以作为标量或者向量，以同样的方式来是应用，形如<code>&lt;数组名&gt;[&lt;下标&gt;]</code>。</p>
+<figure class="highlight verilog"><table><tr><td class="code"><pre><span class="line"><span class="keyword">integer</span> flag[<span class="number">7</span>:<span class="number">0</span>]; <span class="comment">// 8个整数组成的数组</span></span><br><span class="line"><span class="keyword">reg</span> [<span class="number">3</span>:<span class="number">0</span>] coiunter [<span class="number">3</span>:<span class="number">0</span>];  <span class="comment">// 4个4bit计数器组成的数组</span></span><br><span class="line"><span class="keyword">wire</span> [<span class="number">7</span>:<span class="number">0</span>] addr_bus [<span class="number">3</span>:<span class="number">0</span>];  <span class="comment">// 有4个8bit wire类型变量组成的数组</span></span><br><span class="line"><span class="keyword">wire</span> data_bite[<span class="number">7</span>:<span class="number">0</span>][<span class="number">5</span>:<span class="number">0</span>];  <span class="comment">// 声明1bit wire型变量的二维数组</span></span><br><span class="line"><span class="keyword">reg</span> [<span class="number">31</span>:<span class="number">0</span>] data_4d[<span class="number">11</span>:<span class="number">0</span>][<span class="number">3</span>:<span class="number">0</span>][<span class="number">255</span>:<span class="number">0</span>]; <span class="comment">// 声明4维的32bit数据变量数组</span></span><br><span class="line"><span class="comment">// 赋值操作</span></span><br><span class="line">flag [<span class="number">1</span>] = <span class="number">32&#x27;d0</span>  <span class="comment">// 将flag数组中第二个元素赋值为32bit的0值</span></span><br><span class="line">counter[<span class="number">3</span>] = <span class="number">4&#x27;hf</span>;  <span class="comment">// 讲数组counter中第4个元素的值赋值为4bit 十六进制数f，等效于</span></span><br><span class="line">counter[<span class="number">3</span>][<span class="number">3</span>:<span class="number">0</span>] = <span class="number">4&#x27;hf</span>;  <span class="comment">// 可省略宽度</span></span><br><span class="line"><span class="keyword">assign</span> addr_bus[<span class="number">0</span>] = <span class="number">8&#x27;b0</span>;  <span class="comment">// 将数组addr_bus中第一个元素的值赋值为0</span></span><br><span class="line"><span class="keyword">assign</span> data_bit[<span class="number">0</span>][<span class="number">1</span>] = <span class="number">1&#x27;b1</span>;  <span class="comment">// 讲数组data_bit的第1行2列的元素赋值为1，不能省略第二个访问标号</span></span><br><span class="line">data_4d[<span class="number">0</span>][<span class="number">0</span>][<span class="number">0</span>][<span class="number">0</span>][<span class="number">15</span>:<span class="number">0</span>] = <span class="number">15&#x27;d3</span>;  <span class="comment">// 将数组data_4d中标号为[0][0][0][0]的寄存器i单元的15~0bit赋值为3</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>数组与向量的区别<br>向量是一个单独的原件，位宽为n；<br>数组由多个原件组成，其中每个原件的位宽为n或1</p>
+</blockquote>
+<h3 id="存储器"><a href="#存储器" class="headerlink" title="存储器"></a>存储器</h3><p>存储器变量就是一种寄存器数组，可用来描述RAM或ROm行为</p>
+<figure class="highlight verilog"><table><tr><td class="code"><pre><span class="line"><span class="keyword">reg</span> membit[<span class="number">0</span>:<span class="number">255</span>];  <span class="comment">// 256bit的1bit寄存器</span></span><br><span class="line"><span class="keyword">reg</span> [<span class="number">7</span>:<span class="number">0</span>] mem[<span class="number">0</span>:<span class="number">1023</span>];</span><br><span class="line">mem[<span class="number">511</span>] = <span class="number">8&#x27;b0</span>;</span><br></pre></td></tr></table></figure>
+
+<h3 id="参数"><a href="#参数" class="headerlink" title="参数"></a>参数</h3><p>参数用来表示常量，用关键字parameter声明，只能赋值一次。</p>
+<figure class="highlight verilog"><table><tr><td class="code"><pre><span class="line"><span class="keyword">parameter</span> data_width = <span class="number">10&#x27;d32</span>;</span><br><span class="line"><span class="keyword">parameter</span> i=<span class="number">1</span>, j=<span class="number">2</span>, k=<span class="number">3</span>;</span><br><span class="line"><span class="keyword">parameter</span> mem_size = data_width * <span class="number">10</span>;</span><br></pre></td></tr></table></figure>
+<p>但是，通过实例化的方式，可以更改参数在模块中的值。</p>
+<p>局部参数用<code>localparam</code>来声明，其作用和用法与parameter相同，区别在于它的值不能被改变。所以当参数值在本模块中调用的时候，可以用<code>localparam</code>来说明。</p>
+<h3 id="字符串"><a href="#字符串" class="headerlink" title="字符串"></a>字符串</h3><p>字符串保存在reg类型的变量中，每个字符占用一个字节。因此寄存器变量的宽度应该足够大，以保证不会溢出。</p>
+<figure class="highlight verilog"><table><tr><td class="code"><pre><span class="line"><span class="keyword">reg</span> [<span class="number">0</span>: <span class="number">12</span>*<span class="number">8</span>-<span class="number">1</span>] str;</span><br><span class="line"><span class="keyword">initial</span> <span class="keyword">begin</span></span><br><span class="line">    str = <span class="string">&quot;hello world&quot;</span>;</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="verilog表达式"><a href="#verilog表达式" class="headerlink" title="verilog表达式"></a>verilog表达式</h2><h3 id="操作数"><a href="#操作数" class="headerlink" title="操作数"></a>操作数</h3><figure class="highlight verilog"><table><tr><td class="code"><pre><span class="line"><span class="keyword">module</span> test;</span><br><span class="line"></span><br><span class="line"><span class="comment">// real</span></span><br><span class="line"><span class="keyword">real</span> a, b, c</span><br><span class="line">c = a + b;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 寄存器</span></span><br><span class="line"><span class="keyword">reg</span> [<span class="number">3</span>:<span class="number">8</span>] cprmu_1, cprmu_2 ;</span><br><span class="line"><span class="keyword">always</span> @(<span class="keyword">posedge</span> clk) <span class="keyword">begin</span></span><br><span class="line">    cprmu_2 = cprmu_1 ^ cprmu_2;</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 函数</span></span><br><span class="line"><span class="keyword">reg</span> flag1;</span><br><span class="line">flag = calculate_result(A, B)</span><br><span class="line"></span><br><span class="line"><span class="keyword">endmodule</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="操作符"><a href="#操作符" class="headerlink" title="操作符"></a>操作符</h3><h4 id="算数操作符"><a href="#算数操作符" class="headerlink" title="算数操作符"></a>算数操作符</h4><p>如果操作数某一位为X，则计算结果也会全部出现X</p>
+<p>对变量进行声明时，要根据变量的操作符对变量的位宽进行合理声明，不要让结果溢出。</p>
+<p>负数表示时候，可以直接在十进制数前面增加一个符号，也可以指定位宽。因为负数使用二进制补码来表示，不指定位宽来表示i附属时候，会自动分位宽，进而导致意想不到的结果。</p>
+<h4 id="按位操作符"><a href="#按位操作符" class="headerlink" title="按位操作符"></a>按位操作符</h4><p>同或<code>~^</code></p>
+<ul>
+<li>按位操作符对两个操作数的每1bit数据进行按位操作</li>
+<li>如果2个操作数位宽不相等，则用0向左扩展补充较短的操作数</li>
+<li>取反操作符只有一个操作数，它对操作数的每1bit数据进行取反操作</li>
+</ul>
+<h4 id="归约操作符"><a href="#归约操作符" class="headerlink" title="归约操作符"></a>归约操作符</h4><p>只有一个操作数，对这个向量操作数逐位进行操作，最终产生一个1bit结果</p>
+<figure class="highlight verilog"><table><tr><td class="code"><pre><span class="line">A = <span class="number">4&#x27;b1010</span>;</span><br><span class="line">&amp;A;  <span class="comment">// 结果为1&amp;0&amp;1&amp;0 = 1&#x27;b0,可用来判断变量A是否全为1</span></span><br><span class="line">~|A;  <span class="comment">// 结果为~(1|0|1|0) = 1&#x27;b0,可用来判断变量A是否全为0</span></span><br><span class="line">^A;  <span class="comment">// 结果为1^0^1^0 = 1&#x27;b0;</span></span><br></pre></td></tr></table></figure>
+<h4 id="移位操作符"><a href="#移位操作符" class="headerlink" title="移位操作符"></a>移位操作符</h4><p>逻辑左移<code>&lt;&lt;</code>,逻辑右移<code>&gt;&gt;</code>,算数左移<code>&lt;&lt;&lt;</code>,算数右移<code>&gt;&gt;&gt;</code></p>
+<h4 id="拼接操作符"><a href="#拼接操作符" class="headerlink" title="拼接操作符"></a>拼接操作符</h4><p>用大括号<code>&#123;, &#125;</code>来表示，用于将多个操作数（向量）拼接成新的操作数（向量），信号间用逗号隔开</p>
+<p>拼接操作数必须指定位宽，常数也需要指定</p>
+<figure class="highlight verilog"><table><tr><td class="code"><pre><span class="line">A = <span class="number">4&#x27;b1010</span>;</span><br><span class="line">B = <span class="number">1&#x27;b1</span>;</span><br><span class="line">Y1 = &#123;B, A[<span class="number">3</span>:<span class="number">2</span>],A[<span class="number">0</span>], <span class="number">4&#x27;h3</span>&#125;;  <span class="comment">// 结果为Y1 = &#x27;b1100_0011</span></span><br><span class="line">Y2 = &#123;<span class="number">4</span>&#123;B&#125;, <span class="number">3&#x27;d4</span>&#125;;  <span class="comment">// 结果为Y2 = 7&#x27;b111_1100</span></span><br><span class="line">Y3 = &#123;<span class="number">32</span>&#123;<span class="number">1&#x27;b0</span>&#125;&#125;;  <span class="comment">// 结果为Y3 = 32&#x27;h0，长用作寄存器初始化时匹配位宽的赋初值</span></span><br></pre></td></tr></table></figure>
+<h4 id="条件操作符"><a href="#条件操作符" class="headerlink" title="条件操作符"></a>条件操作符</h4><p>和C语言的三木运算符相同</p>
+<h1 id="编译指令"><a href="#编译指令" class="headerlink" title="编译指令"></a>编译指令</h1><h1 id="连续赋值"><a href="#连续赋值" class="headerlink" title="连续赋值"></a>连续赋值</h1><p>连续赋值语句是Verilog数据流建模的基本语句，用于对wire型变量进行赋值</p>
+<figure class="highlight verilog"><table><tr><td class="code"><pre><span class="line"><span class="keyword">assign</span> LHS_target = RHS_expression;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>说明<ul>
+<li><code>LHS_target</code>必须是一个标量或者线型向量，而不能是寄存器类型</li>
+<li><code>LHS_expression</code>的类型没有要求，可以是标量或线型或存器向量，也可以是函数调用</li>
+<li>只要<code>RHS_expression</code>表达式的操作数由事件发生（值的变化）时，<code>RHS_expression</code>就会立刻重新计算，同时赋值给<code>LHS_expression</code></li>
+</ul>
+</li>
+<li>Verilog还提供了另一种对wire型赋值的简单方法，即在wire型变量声明的时候同时对其赋值。wire型变量只能被赋值依次，因此该种连续赋值方式也只能有一次。</li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://example.com">Cassius Black</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2024/07/10/verilog%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95/">http://example.com/2024/07/10/verilog%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://example.com" target="_blank">CassiusBlog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E6%95%B4%E7%90%86/">整理</a></div><div class="post_share"><div class="social-share" data-image="/img/avatar.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2024/07/06/HUST-CS-%E6%95%B0%E6%8D%AE%E5%BA%93%E6%95%B4%E7%90%86/" title="HUST_CS_数据库整理"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">HUST_CS_数据库整理</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2024/07/06/HUST-CS-%E7%B3%BB%E7%BB%9F%E5%9F%BA%E7%A1%80%E6%95%B4%E7%90%86/" title="HUST_CS_系统基础整理"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-07-06</div><div class="title">HUST_CS_系统基础整理</div></div></a></div><div><a href="/2024/07/06/HUST-CS-%E6%95%B0%E6%8D%AE%E5%BA%93%E6%95%B4%E7%90%86/" title="HUST_CS_数据库整理"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-07-06</div><div class="title">HUST_CS_数据库整理</div></div></a></div><div><a href="/2024/07/06/HUST-CS-%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86%E6%95%B4%E7%90%86/" title="HUST_CS_组成原理整理"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-07-06</div><div class="title">HUST_CS_组成原理整理</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Cassius Black</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">9</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">4</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/CassiusBlackX" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="/cassiusblackx@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%AF%AD%E6%B3%95"><span class="toc-number">1.</span> <span class="toc-text">语法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Number-Format-%E6%95%B0%E5%80%BC%E5%BD%A2%E5%BC%8F"><span class="toc-number">1.0.0.1.</span> <span class="toc-text">Number Format 数值形式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#sized"><span class="toc-number">1.0.0.2.</span> <span class="toc-text">sized</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Unsized"><span class="toc-number">1.0.0.3.</span> <span class="toc-text">Unsized</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Negative"><span class="toc-number">1.0.0.4.</span> <span class="toc-text">Negative</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Strings"><span class="toc-number">1.0.1.</span> <span class="toc-text">Strings</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Identifiers"><span class="toc-number">1.0.2.</span> <span class="toc-text">Identifiers</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#keywords"><span class="toc-number">1.0.3.</span> <span class="toc-text">keywords</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%B0%E5%80%BC%E8%A1%A8%E7%A4%BA"><span class="toc-number">1.1.</span> <span class="toc-text">数值表示</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B4%E6%95%B0%E6%95%B0%E5%80%BC%E8%A1%A8%E7%A4%BA%E6%96%B9%E6%B3%95"><span class="toc-number">1.1.1.</span> <span class="toc-text">整数数值表示方法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%8C%87%E6%98%8E%E4%BD%8D%E5%AE%BD"><span class="toc-number">1.1.1.1.</span> <span class="toc-text">指明位宽</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%8D%E6%8C%87%E6%98%8E%E4%BD%8D%E5%AE%BD"><span class="toc-number">1.1.1.2.</span> <span class="toc-text">不指明位宽</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%B4%9F%E6%95%B0%E8%A1%A8%E7%A4%BA"><span class="toc-number">1.1.1.3.</span> <span class="toc-text">负数表示</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9E%E6%95%B0%E8%A1%A8%E7%A4%BA%E6%96%B9%E6%B3%95"><span class="toc-number">1.1.2.</span> <span class="toc-text">实数表示方法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8D%81%E8%BF%9B%E5%88%B6"><span class="toc-number">1.1.2.1.</span> <span class="toc-text">十进制</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E8%A1%A8%E7%A4%BA%E6%96%B9%E6%B3%95"><span class="toc-number">1.1.3.</span> <span class="toc-text">字符串表示方法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B"><span class="toc-number">1.2.</span> <span class="toc-text">数据类型</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BA%BF%E7%BD%91wire"><span class="toc-number">1.2.1.</span> <span class="toc-text">线网wire</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%84%E5%AD%98%E5%99%A8reg"><span class="toc-number">1.2.2.</span> <span class="toc-text">寄存器reg</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%91%E9%87%8F"><span class="toc-number">1.2.3.</span> <span class="toc-text">向量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B4%E6%95%B0%EF%BC%8C%E5%AE%9E%E6%95%B0%EF%BC%8C%E6%97%B6%E9%97%B4%E5%AF%84%E5%AD%98%E5%99%A8%E5%8F%98%E9%87%8F"><span class="toc-number">1.2.4.</span> <span class="toc-text">整数，实数，时间寄存器变量</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%95%B4%E6%95%B0-integer"><span class="toc-number">1.2.4.1.</span> <span class="toc-text">整数 integer</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%9E%E6%95%B0-real"><span class="toc-number">1.2.4.2.</span> <span class="toc-text">实数 real</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%97%B6%E9%97%B4-time"><span class="toc-number">1.2.4.3.</span> <span class="toc-text">时间 time</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B0%E7%BB%84"><span class="toc-number">1.2.5.</span> <span class="toc-text">数组</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%98%E5%82%A8%E5%99%A8"><span class="toc-number">1.2.6.</span> <span class="toc-text">存储器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%82%E6%95%B0"><span class="toc-number">1.2.7.</span> <span class="toc-text">参数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="toc-number">1.2.8.</span> <span class="toc-text">字符串</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#verilog%E8%A1%A8%E8%BE%BE%E5%BC%8F"><span class="toc-number">1.3.</span> <span class="toc-text">verilog表达式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%93%8D%E4%BD%9C%E6%95%B0"><span class="toc-number">1.3.1.</span> <span class="toc-text">操作数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%93%8D%E4%BD%9C%E7%AC%A6"><span class="toc-number">1.3.2.</span> <span class="toc-text">操作符</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%AE%97%E6%95%B0%E6%93%8D%E4%BD%9C%E7%AC%A6"><span class="toc-number">1.3.2.1.</span> <span class="toc-text">算数操作符</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%8C%89%E4%BD%8D%E6%93%8D%E4%BD%9C%E7%AC%A6"><span class="toc-number">1.3.2.2.</span> <span class="toc-text">按位操作符</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%BD%92%E7%BA%A6%E6%93%8D%E4%BD%9C%E7%AC%A6"><span class="toc-number">1.3.2.3.</span> <span class="toc-text">归约操作符</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%A7%BB%E4%BD%8D%E6%93%8D%E4%BD%9C%E7%AC%A6"><span class="toc-number">1.3.2.4.</span> <span class="toc-text">移位操作符</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%8B%BC%E6%8E%A5%E6%93%8D%E4%BD%9C%E7%AC%A6"><span class="toc-number">1.3.2.5.</span> <span class="toc-text">拼接操作符</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%9D%A1%E4%BB%B6%E6%93%8D%E4%BD%9C%E7%AC%A6"><span class="toc-number">1.3.2.6.</span> <span class="toc-text">条件操作符</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%BC%96%E8%AF%91%E6%8C%87%E4%BB%A4"><span class="toc-number">2.</span> <span class="toc-text">编译指令</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%BF%9E%E7%BB%AD%E8%B5%8B%E5%80%BC"><span class="toc-number">3.</span> <span class="toc-text">连续赋值</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/07/10/verilog%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95/" title="verilog学习记录">verilog学习记录</a><time datetime="2024-07-10T15:56:21.000Z" title="发表于 2024-07-10 23:56:21">2024-07-10</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/07/06/HUST-CS-%E6%95%B0%E6%8D%AE%E5%BA%93%E6%95%B4%E7%90%86/" title="HUST_CS_数据库整理">HUST_CS_数据库整理</a><time datetime="2024-07-06T08:16:56.000Z" title="发表于 2024-07-06 16:16:56">2024-07-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/07/06/HUST-CS-%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86%E6%95%B4%E7%90%86/" title="HUST_CS_组成原理整理">HUST_CS_组成原理整理</a><time datetime="2024-07-06T08:14:48.000Z" title="发表于 2024-07-06 16:14:48">2024-07-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/07/06/HUST-CS-%E7%B3%BB%E7%BB%9F%E5%9F%BA%E7%A1%80%E6%95%B4%E7%90%86/" title="HUST_CS_系统基础整理">HUST_CS_系统基础整理</a><time datetime="2024-07-06T08:09:11.000Z" title="发表于 2024-07-06 16:09:11">2024-07-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/06/09/jetson_xavier_nx-ubuntu18-04-ros-melodic-yolov5-cpp%E5%AE%9E%E8%B7%B5/" title="jetson_xavier_nx-ubuntu18-04-ros-melodic-yolov5-cpp实践">jetson_xavier_nx-ubuntu18-04-ros-melodic-yolov5-cpp实践</a><time datetime="2024-06-08T17:42:56.000Z" title="发表于 2024-06-09 01:42:56">2024-06-09</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2024 By Cassius Black</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=4.13.0"></script><script src="/js/main.js?v=4.13.0"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.33/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
