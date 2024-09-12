@@ -1,360 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Linux基础知识</title>
-    <url>/2024/04/02/Linux%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/</url>
-    <content><![CDATA[<h1 id="Linux基础知识"><a href="#Linux基础知识" class="headerlink" title="Linux基础知识"></a>Linux基础知识</h1><h2 id="1-系统目录结构"><a href="#1-系统目录结构" class="headerlink" title="1. 系统目录结构"></a>1. 系统目录结构</h2><ul>
-<li><strong>&#x2F;bin</strong>: ‘bin’是Binaries（二进制文件）的缩写，这个目录存放着最经常使用的命令。比如说很多个Shell的程序都会放在&#x2F;bin文件夹里面。</li>
-<li><strong>&#x2F;boot</strong>: 这里存放的是启动Linux时候使用的一些核心文件，包括一些连接文件以及镜像文件。</li>
-<li><strong>&#x2F;dev</strong>: dev是Device的缩写，该目录下存放的是Linux的外部设备，在Linux中访问设备的方式和访问文件的方式是相同。</li>
-<li><strong>&#x2F;ect</strong>: etc是Etcetera的缩写，这个目录是用来存放所有的系统管理所需要的配置文件和子目录。</li>
-<li><strong>&#x2F;home</strong>: 用户的主目录，在Linux中，每个用户都有一个自己的目录，一般该目录名是以用户的账号命名的。</li>
-<li><strong>&#x2F;lib</strong>: lib是Library的缩写，这个目录里面存放这系统最基本的动态连接共享库，其作用类似于windows里的dll文件。几乎所有的应用程序都需要用到这些共享库。</li>
-<li><strong>&#x2F;lost+found</strong>: 这个目录一般情况下是空的，但是当系统非法关机，这里就存放了一些文件。</li>
-<li><strong>&#x2F;media</strong>: Linux系统会自动识别一些设备，例如U盘、光驱等等，当识别后，Linux会把识别的设备挂载到这个目录下。</li>
-<li><strong>&#x2F;mnt</strong>: 系统提供该目录是为了让用户临时挂载别的文件系统的，例如可以把光驱挂载在这里，就可以查看光驱内的内容了。</li>
-<li><strong>&#x2F;opt</strong>: opt是optional的缩写，这是给主机额外安装软件所拜访的目录。例如安装ORACLE的数据库就可以放到这里，默认是空的。</li>
-<li><strong>&#x2F;proc</strong>: proc是Processes的缩写，&#x2F;proc是一种伪文件系统（也即虚拟文件系统），存储的是当前内核运行状态的一系列特殊文件，这个目录是一个虚拟的目录，它是系统内存的映射，我们可以通过直接访问这个目录来获取系统信息。</li>
-<li><strong>&#x2F;root</strong>: 该目录为系统管理员，也称作超级权限者的用户主目录。</li>
-<li><strong>&#x2F;sbin</strong>: 超级用户的二进制文件，存放的是系统管理员使用的系统管理程序。</li>
-<li><strong>&#x2F;selinux</strong>: 这个目录是Redhat&#x2F;centos特有的目录，SeLinux是一个安全机制，类似于Windows的防火墙。</li>
-<li><strong>&#x2F;srv</strong>: 该目录存放一些服务启动之后需要提取的数据。</li>
-<li><strong>&#x2F;sys</strong>: 该目录下安装了Linux2.6内核中新出现的一个文件系统sysfs。sysfs文件系统继承了三种文件系统的信息：针对进程信息的proc文件系统、针对设备的devfs文件系统以及针对伪终端的devpts文件系统。该文件系统是内核设备树的一个直观反映。当一个内核对象被创建的时候，对应的文件和目录也在内核对象子系统中被创建。</li>
-<li><strong>&#x2F;tmp</strong>: tmp是temporary的缩写，用来存放一些临时文件。</li>
-<li><strong>&#x2F;usr</strong>: usr是unix shared resources(共享资源)的缩写，是一个非常重要的目录，用户的很多应用程序和文件都放在这个目录下，类似于Windows下的program files目录。</li>
-<li><strong>&#x2F;&#x2F;usr&#x2F;bin</strong>: 系统用户使用的应用程序。</li>
-<li><strong>&#x2F;usr&#x2F;sbin</strong>: 超级用户使用的比较高级的管理程序和系统守护程序。</li>
-<li><strong>&#x2F;usr&#x2F;src</strong>: 内核源码默认的放置目录。</li>
-<li><strong>&#x2F;var</strong>: var是variable的缩写，这个目录中存放这不断扩充的东西，习惯将哪些经常被修改的目录放在这个目录下，包括各种日志文件。</li>
-<li><strong>&#x2F;run</strong>: 一个临时文件系统，存储系统启动以来的信息。当系统重启时，这个目录下的文件应该被删除或者清除。如果你的系统上有<code>/var/run/</code>目录，应该让它指向<code>/run</code>。</li>
-</ul>
-<h2 id="2-一些常用命令"><a href="#2-一些常用命令" class="headerlink" title="2. 一些常用命令"></a>2. 一些常用命令</h2><h3 id="2-1-ls（列出目录）"><a href="#2-1-ls（列出目录）" class="headerlink" title="2.1 ls（列出目录）"></a>2.1 ls（列出目录）</h3><p>语法</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">ls [-aAdfFhilnrRSt] 目录名称</span><br><span class="line">ls [--color=&#123;never, auto, always&#125;] 目录名称</span><br><span class="line">ls [--full-time] 目录名称</span><br></pre></td></tr></table></figure>
-<p>选项与参数：</p>
-<ul>
-<li><code>-a</code>: 全部的文件，联通隐藏文件一起列出来</li>
-<li><code>-d</code>: 仅列出目录本身，而不是列出目录内的文件数据</li>
-<li><code>-l</code>: 长数据串列出，包含文件的属性与权限等等数据</li>
-</ul>
-<h3 id="2-2-cd（切换目录）"><a href="#2-2-cd（切换目录）" class="headerlink" title="2.2 cd（切换目录）"></a>2.2 cd（切换目录）</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">cd [相对路径或者绝对路径]</span><br></pre></td></tr></table></figure>
-<h3 id="2-3-pwd（显示目前所在的目录）"><a href="#2-3-pwd（显示目前所在的目录）" class="headerlink" title="2.3 pwd（显示目前所在的目录）"></a>2.3 pwd（显示目前所在的目录）</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">pwd [-P]</span><br></pre></td></tr></table></figure>
-<p>选项与参数：</p>
-<ul>
-<li><code>-P</code>: 显示出确实的路径，而非使用连接(link)的路径。</li>
-</ul>
-<h3 id="2-4-mkdir（创建新目录）"><a href="#2-4-mkdir（创建新目录）" class="headerlink" title="2.4 mkdir（创建新目录）"></a>2.4 mkdir（创建新目录）</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">mkdir [-mp] 目录名称</span><br></pre></td></tr></table></figure>
-<p>选项与参数：</p>
-<ul>
-<li><code>-m</code>: 配置文件的权限，直接配置，不考虑默认权限(unmask)</li>
-<li><code>-p</code>: 递归的创建目录。</li>
-</ul>
-<h3 id="2-5-rmdir（删除空的目录）"><a href="#2-5-rmdir（删除空的目录）" class="headerlink" title="2.5 rmdir（删除空的目录）"></a>2.5 rmdir（删除空的目录）</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">rmdir [-p] 目录名称</span><br></pre></td></tr></table></figure>
-<p>选项与参数：</p>
-<ul>
-<li><code>-p</code>: 从该目录起，依次删除多级空目录，和上面的mkdir类似，可以直接一次性删除多级别&#x3D;目录。</li>
-</ul>
-<h3 id="2-6-cp（复制文件或目录）"><a href="#2-6-cp（复制文件或目录）" class="headerlink" title="2.6 cp（复制文件或目录）"></a>2.6 cp（复制文件或目录）</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">cp [-dfilprsu] &lt;source&gt;（来源档） &lt;destination&gt;（目标档）</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">如果把多个文件放到directory位置</span></span><br><span class="line">cp [options] &lt;source1&gt; &lt;source2&gt; .... &lt;directory&gt;</span><br></pre></td></tr></table></figure>
-<p>选项与参数：</p>
-<ul>
-<li><code>-d</code>: 若来源档为连接文件的属性(link file)，则复制连接档属性而非文件本身。</li>
-<li><code>-f</code>： 为强制的意思，若目标文件已经存在且无法开启，则移除后再尝试一次。</li>
-<li><code>-i</code>: 若目标档已经存在时，再覆盖时会先询问动作的进行。</li>
-<li><code>-l</code>: 进行硬式连接(hard link)的连接档创建，而非复制文件本身。</li>
-<li><code>-p</code>: 连同文件的属性一起复制过去，而非使用默认属性（备份的时候使用）</li>
-<li><code>-r</code>: 递归持续复制。</li>
-<li><code>-s</code>: 复制成为符号连结档(symbolic link),亦及捷径文件。</li>
-<li><code>-u</code>: 若destination比source旧才覆盖destination。</li>
-</ul>
-<h3 id="2-7-rm（移除文件或目录）"><a href="#2-7-rm（移除文件或目录）" class="headerlink" title="2.7 rm（移除文件或目录）"></a>2.7 rm（移除文件或目录）</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">rm [fir] 文件或目录</span><br></pre></td></tr></table></figure>
-<p>选项与参数：</p>
-<ul>
-<li><code>-f</code>: 忽略不存在的文件，不会出现井盖信息。</li>
-<li><code>-i</code>: 互动模式，在删除前会询问使用者。</li>
-<li><code>-r</code>: 递归删除</li>
-</ul>
-<h3 id="2-8-mv（移动文件与目录，或修改名称）"><a href="#2-8-mv（移动文件与目录，或修改名称）" class="headerlink" title="2.8 mv（移动文件与目录，或修改名称）"></a>2.8 mv（移动文件与目录，或修改名称）</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">mv [-fiu] &lt;source&gt; &lt;destination&gt;</span><br><span class="line">mv [options] &lt;source1&gt; &lt;source2&gt; ... &lt;directory&gt;</span><br></pre></td></tr></table></figure>
-<p>选项与参数：</p>
-<ul>
-<li><code>-f</code>: 如果目标文件已经存在，不会询问而直接覆盖。</li>
-<li><code>-i</code>: 如果目标文件已经存在，会询问是否覆盖。</li>
-</ul>
-]]></content>
-      <categories>
-        <category>basic_cs</category>
-        <category>note</category>
-      </categories>
-      <tags>
-        <tag>linux</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>git相关操作</title>
-    <url>/2024/04/02/git%E7%9B%B8%E5%85%B3%E6%93%8D%E4%BD%9C/</url>
-    <content><![CDATA[<h1 id="git的相关操作"><a href="#git的相关操作" class="headerlink" title="git的相关操作"></a>git的相关操作</h1><h2 id="基础"><a href="#基础" class="headerlink" title="基础"></a>基础</h2><ul>
-<li><code>git help &lt;command&gt;</code> 获取git命令的帮助信息</li>
-<li><code>git init</code> 创建一个新的git仓库，其数据会被存放在一个名为’.git的目录下’</li>
-<li><code>git status</code> 显示当前的仓库状态</li>
-<li><code>git add &lt;filename&gt;</code> 添加文件到暂存区<ul>
-<li><code>git add .</code> 把当前路径下的所有文件都添加到暂存你去（递归的），但是不包括’.gitignore’文件中声明的不被包含的文件</li>
-</ul>
-</li>
-<li><code>git commit</code> 创建一个新的提交</li>
-<li><code>git log</code> 显示历史日志</li>
-<li><code>git log --all --graph --decorate</code> 可视化历史记录（有向无环图）</li>
-<li><code>git diff &lt;filename&gt;</code> 显示与暂存区文件的差异</li>
-<li><code>git diff &lt;revisiokn&gt; &lt;filename&gt;</code> 显示某个文件两个版本之间的差异</li>
-<li><code>git checkout &lt;revision&gt;</code> 更新HEAD和目前的分支</li>
-</ul>
-<h2 id="分支和合并"><a href="#分支和合并" class="headerlink" title="分支和合并"></a>分支和合并</h2><ul>
-<li><code>git branch</code> 显示分支</li>
-<li><code>git branch &lt;name&gt;</code> 创建分支</li>
-<li><code>git checkout &lt;name&gt;</code> 切换到分支<ul>
-<li><code>git checkout -b &lt;name&gt;</code> 创建分支并切换到该分支</li>
-</ul>
-</li>
-<li><code>git merge &lt;revision&gt;</code> 合并分支到当前分支</li>
-<li><code>git mergetool</code> 使用工具来处理合并冲突</li>
-<li><code>git rebase</code> 将一系列补丁变基变为新的基线</li>
-</ul>
-<h2 id="远端操作"><a href="#远端操作" class="headerlink" title="远端操作"></a>远端操作</h2><ul>
-<li><code>git remote</code> 列出远端</li>
-<li><code>git remote add &lt;name&gt; &lt;url&gt;</code> 添加一个远端</li>
-<li><code>git push &lt;remote&gt; &lt;local branch&gt;:&lt;remote branch&gt;</code> 将对象传送至远端并更新远端引用</li>
-<li><code>git branch --set-upstream-to=&lt;remote&gt;/&lt;remote branch&gt;</code> 创建本地和远端分支的关联关系</li>
-<li><code>git fetch</code> 从远端获取对象&#x2F;索引</li>
-<li><code>git pull</code> 相当于<code>git fetch; git merge</code></li>
-<li><code>git clone</code> 从远端下载仓库</li>
-</ul>
-<h2 id="撤销"><a href="#撤销" class="headerlink" title="撤销"></a>撤销</h2><ul>
-<li><code>git commit --amend</code> 编辑提交的内容或信息</li>
-<li><code>git reset HEAD &lt;file&gt;</code> 恢复暂存的文件</li>
-<li><code>git checkout -- &lt;file&gt;</code> 丢弃修改</li>
-</ul>
-<h2 id="git高级操作"><a href="#git高级操作" class="headerlink" title="git高级操作"></a>git高级操作</h2><ul>
-<li><code>git config</code> 可以设置git的相关参数</li>
-<li><code>git clone --depth=1</code> 浅克隆，不包括完整的版本历史信息</li>
-<li><code>git add -p</code> 交互式暂存</li>
-<li><code>git rebase -i</code> 交互式边基</li>
-<li><code>git blame</code> 查看最后修改某行的人</li>
-<li><code>git stash</code> 暂时移除工作目录下的修改内容</li>
-<li><code>git bisect</code> 通过二分查找搜索历史记录</li>
-</ul>
-<h2 id="子模块"><a href="#子模块" class="headerlink" title="子模块"></a>子模块</h2><p>子模块就是当你的项目中存在着另外一个git仓库，这种时候，如果你希望能够保持另外一个git仓库的独立性，就需要吧“另外一个git仓库”给设置为当前项目的子模块。</p>
-<p>如果你非常希望能够删除子模块的话，直接进入到子模块文件夹中，删除<code>.git</code>文件夹就可以了。但是请务必注意是否符合相关的许可要求。</p>
-<h4 id="克隆"><a href="#克隆" class="headerlink" title="克隆"></a>克隆</h4><p>在克隆一个包含子模块的项目的时候，默认的<code>git clone</code>只会克隆下来子模块所在的目录，文件夹内部并没有文件。一般来说直接通过<code>git clone --recurse-submodules</code>来要求同时克隆子模块。</p>
-<h4 id="添加"><a href="#添加" class="headerlink" title="添加"></a>添加</h4><p>当在你的项目内部还额外通过<code>git clone</code>克隆下来了另外一个仓库的时候，应当使用</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">git submodule add &lt;submodule-url&gt; &lt;submodule-path&gt;</span><br></pre></td></tr></table></figure>
-<p>来把子模块添加到本项目中。可以在<code>.gitsubmodules</code>文件中看到相关的内容。</p>
-<h4 id="初始化和更新"><a href="#初始化和更新" class="headerlink" title="初始化和更新"></a>初始化和更新</h4><p>为了确保子模块能够被初始化和更新，还需要运行以下两个命令</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">git submodule init</span><br><span class="line">git submodule update</span><br></pre></td></tr></table></figure>
-
-<h4 id="同步"><a href="#同步" class="headerlink" title="同步"></a>同步</h4><p>在子模块中更改完后，在主项目中直接通过<code>git add &lt;submodule-path&gt;</code>来进行同步</p>
-<h4 id="更新"><a href="#更新" class="headerlink" title="更新"></a>更新</h4><p>只是单纯的在主项目中使用<code>git pull</code>并不会把你在子模块中的更新也推送到子模块对应的仓库中。</p>
-<p>一个普通的办法就是直接进入到子模块的目录下，手动进行<code>git push</code>，然后再回到主项目中执行推送。</p>
-<p>当然，也可以通过以下命令让git自动尝试推送子模块，然后再推送主项目</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">git push --recursive-submodules=on-demand</span><br></pre></td></tr></table></figure>
-
-<h2 id="P-S"><a href="#P-S" class="headerlink" title="P.S."></a>P.S.</h2><p>当遇到无法ssh无法push上github的时候，尝试在开代理的情况下，在<code>~/.ssh/config</code>中添加以下内容</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Host github.com</span><br><span class="line">    HostName ssh.github.com</span><br><span class="line">    Port 443</span><br></pre></td></tr></table></figure>
-<p>因为你的代理肯定都会照看到443端口的访问的，所以只要让ssh的时候也是走443端口就可以解决问题了。</p>
-]]></content>
-      <categories>
-        <category>basic_cs</category>
-        <category>note</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>Hello World</title>
-    <url>/2024/04/02/hello-world/</url>
-    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
-]]></content>
-  </entry>
-  <entry>
-    <title>vim的相关操作</title>
-    <url>/2024/04/02/vim%E7%9A%84%E7%9B%B8%E5%85%B3%E6%93%8D%E4%BD%9C/</url>
-    <content><![CDATA[<h1 id="Vim的相关操作"><a href="#Vim的相关操作" class="headerlink" title="Vim的相关操作"></a>Vim的相关操作</h1><h2 id="Vim的操作模式："><a href="#Vim的操作模式：" class="headerlink" title="Vim的操作模式："></a>Vim的操作模式：</h2><ul>
-<li>正常模式：在文本中四处移动光标进行修改</li>
-<li>插入模式：插入文本</li>
-<li>替换模式：替换文本</li>
-<li>可视化（一般，行，块）模式：选中文本块</li>
-<li>命令模式：用于执行命令</li>
-</ul>
-<p>在默认设置下，Vim会在左下角显示当前的模式。Vim启动时的默认模式是正常模式。</p>
-<p>你可以按下<code>&lt;ESC&gt;</code>从任何其它模式返回正常模式。在正常模式，键入<code>i</code>进入插入模式，<code>R</code>进入替换模式，<code>v</code>进入可视（一般）模式，<code>V</code>进入可视（行）模式，<code>^v</code>进入可视（块）模式，<code>:</code>进入命令模式。</p>
-<h2 id="缓存，标签页，窗口"><a href="#缓存，标签页，窗口" class="headerlink" title="缓存，标签页，窗口"></a>缓存，标签页，窗口</h2><p>Vim会维护一系列打开的文件，成为“缓存”。一个Vim会话包含一系列标签页，每个标签页包含一系列窗口（分割面板）。每个窗口显示一个缓存。跟网页浏览器等其它程序不一样，缓存和窗口不是一一对应的关系；窗口只是视角。一个缓存可以在多个窗口打开，甚至在同一个标签页内的多个窗口打开。</p>
-<ul>
-<li>组合键<code>^w+s</code>会上下分割当前打开的文件。</li>
-<li><code>:sp &lt;filename&gt;</code>会上下分割当前文件和新打开的文件<filename></li>
-<li>组合键<code>^w+v</code>会左右分割当前打开的文件。</li>
-<li><code>:vsp &lt;filename&gt;</code>会左右分割当前打开的文件和新打开的文件<filename></li>
-<li><code>^w+h</code> 将当前光标定位到左边的屏幕。</li>
-<li><code>^w+l</code> 将当前光标定位到右边的屏幕。</li>
-<li><code>^w+j</code> 将当前光标移动到下面的屏幕。</li>
-<li><code>^w+k</code> 将当前光标移动到上面的屏幕。</li>
-<li><code>^w+H</code> 将当前的分屏移动到左边。</li>
-<li><code>^w+L</code> 将当前的分屏移动到右边。</li>
-<li><code>^w+J</code> 将当前的分屏移动到下边。</li>
-<li><code>^w+K</code> 将当前的分屏移动到上边。</li>
-<li><code>^w+c</code> 关闭当前的分屏。</li>
-<li><code>^w+q</code> 关闭当前的分屏，如果是最后一个则将退出Vim。</li>
-</ul>
-<h2 id="Vim的退出"><a href="#Vim的退出" class="headerlink" title="Vim的退出"></a>Vim的退出</h2><ul>
-<li><code>:w</code> 保存当前对文件的修改，但是不退出文件</li>
-<li><code>:w!</code> 强制保存但是不退出文件</li>
-<li><code>:w &lt;file&gt;</code> 保存当前的文件修改到<file>文件当中。</li>
-<li><code>:q!</code> 退出文件，对文件的修改不做保存。</li>
-<li><code>qa!</code> 退出所有的文件，并且不保存。</li>
-<li><code>:wq</code> 保存并退出。</li>
-<li><code>:e &lt;file&gt;</code> 打开<file>文件。</li>
-<li><code>:e!</code> 放弃对文件的所有修改，恢复文件到上次保存的位置。</li>
-<li><code>:saveas &lt;file&gt;</code> 另存为<file></li>
-<li><code>:bn</code>和<code>:bp</code> 当打开多个文件的时候可以进行上一个文件或者下一个文件的切换。</li>
-</ul>
-<h2 id="Vim的插入"><a href="#Vim的插入" class="headerlink" title="Vim的插入"></a>Vim的插入</h2><ul>
-<li><code>i</code> 是在光标所在的字符之前插入需要录入的文本。</li>
-<li><code>I</code> 是在光标所在的行首插入需要录入的文本。</li>
-<li><code>a</code> 是在光标所在的字符之后插入需要录入的文本。</li>
-<li><code>A</code> 是在光标所在的行末插入需要录入的文本。</li>
-<li><code>s</code> 是删除光标所在处的字符然后插入文本。</li>
-<li><code>S</code> 是删除光标所在行，在当前行的行首插入文本。</li>
-</ul>
-<h2 id="Vim的命令模式"><a href="#Vim的命令模式" class="headerlink" title="Vim的命令模式"></a>Vim的命令模式</h2><h3 id="行号"><a href="#行号" class="headerlink" title="行号"></a>行号</h3><ul>
-<li><code>:set nu</code> 显示行号。</li>
-<li><code>:set nonu</code> 不显示行号。</li>
-<li><code>:&lt;n&gt;</code> 定位到第<n>行</li>
-</ul>
-<h3 id="关键字查找"><a href="#关键字查找" class="headerlink" title="关键字查找"></a>关键字查找</h3><ul>
-<li><code>/&#123;目标字符串&#125;</code> 查找文本中匹配的目标字符串，查到以后按<code>n</code>会去寻找下一个匹配，<code>N</code>会去寻找上一个匹配。</li>
-</ul>
-<h3 id="删除"><a href="#删除" class="headerlink" title="删除"></a>删除</h3><ul>
-<li>在命令模式下<code>dd</code>会删除本行。</li>
-<li><code>:&lt;n1&gt;,&lt;n2&gt;d</code> 从第<n1>行一直删除到<n2>行（两边都闭区间）</li>
-</ul>
-<h3 id="Vim处理文本替换"><a href="#Vim处理文本替换" class="headerlink" title="Vim处理文本替换"></a>Vim处理文本替换</h3><ul>
-<li><code>:&#123;作用范围&#125;s/&#123;目标&#125;/&#123;替换&#125;/&#123;替换的标志&#125;</code>,其中作用范围分为当前行、全文、选区等。</li>
-<li>例如：<ul>
-<li><code>:s/zempty/handsome/g</code> 将会把当前光标所在行的zempty替换成handsome</li>
-<li><code>%s/zempty/handsome/g</code> 将会把全文中的zempty替换成handsome</li>
-<li><code>&lt;n1&gt;,&lt;n2&gt;s/zempty/handsome/g</code> 把<n1>行到<n2>行的所有zempty替换为handsome。</li>
-</ul>
-</li>
-<li>替换标志中，<code>g</code>代表global全局替换，空替换只替换从光标位置开始的第一次，<code>i</code>表示大小写不敏感，<code>I</code>表示大小写敏感，<code>c</code>表示需要确认。</li>
-</ul>
-<h3 id="Vim执行Linux命令"><a href="#Vim执行Linux命令" class="headerlink" title="Vim执行Linux命令"></a>Vim执行Linux命令</h3><p><code>:!&lt;command&gt;</code> 将执行<command>命令</p>
-<h2 id="Vim的正常模式"><a href="#Vim的正常模式" class="headerlink" title="Vim的正常模式"></a>Vim的正常模式</h2><ul>
-<li><code>h,j,k,l</code>分别代表左右下上。</li>
-<li>在当前行上移动光标<ul>
-<li><code>0</code> 移动到行头</li>
-<li><code>^</code> 移动到本行的第一个不是blank的字符</li>
-<li><code>$</code> 移动到行尾</li>
-<li><code>g_</code> 移动到本行最后一个不是blank字符的位置</li>
-<li><code>w</code> 光标移动到下一个单词的开头</li>
-<li><code>e</code> 光标移动到下一个单词的结尾</li>
-<li><code>f&lt;c&gt;</code> 光标移动到本行下一个为<c>的字符处</li>
-</ul>
-</li>
-<li>跨行移动光标<ul>
-<li><code>nG</code> 光标定位到第N行行首</li>
-<li><code>gg</code> 光标定位到第一行的行首</li>
-<li><code>G</code> 光标定位到最后一行的行首</li>
-<li><code>H</code> 光标定位到最后一行的行首</li>
-</ul>
-</li>
-</ul>
-<h2 id="Vim的基础文本操作"><a href="#Vim的基础文本操作" class="headerlink" title="Vim的基础文本操作"></a>Vim的基础文本操作</h2><ul>
-<li>删除<ul>
-<li><code>d</code>就是删除的意思</li>
-<li><code>dw</code> 删除一个单词</li>
-<li><code>d&lt;n&gt;w</code> 删除<n>个单词</li>
-<li><code>dd</code> 删除整行</li>
-<li><code>&lt;n&gt;dd</code> 删除光标处开始的<n>行</li>
-<li><code>d$</code> 删除光标到本行的借位</li>
-<li><code>dH</code> 删除屏幕显示的第一行文本到光标所在</li>
-<li><code>dG</code> 删除光标所在行到文本结束</li>
-</ul>
-</li>
-<li>复制<ul>
-<li><code>y</code>就是复制的意思</li>
-<li><code>yw</code> 复制一个单词</li>
-<li><code>yy</code> 复制整行</li>
-</ul>
-</li>
-<li>粘贴<ul>
-<li><code>p</code> 就是粘贴的意思，在光标后粘贴</li>
-<li><code>P</code> 在光标前粘贴</li>
-</ul>
-</li>
-<li>撤销<ul>
-<li><code>u</code> 撤销刚才的操作</li>
-<li><code>^r</code> 恢复撤销操作</li>
-</ul>
-</li>
-<li>删除字符串操作和替换<ul>
-<li><code>x</code> 删除光标当前所在的字符</li>
-<li><code>r</code> 替换光标当前所在的字符</li>
-</ul>
-</li>
-</ul>
-]]></content>
-      <categories>
-        <category>basic_cs</category>
-        <category>note</category>
-      </categories>
-      <tags>
-        <tag>vim</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>jetson_xavier_nx-ubuntu18-04-ros-melodic-yolov5-cpp实践</title>
-    <url>/2024/06/09/jetson_xavier_nx-ubuntu18-04-ros-melodic-yolov5-cpp%E5%AE%9E%E8%B7%B5/</url>
-    <content><![CDATA[<h2 id="ros换源"><a href="#ros换源" class="headerlink" title="ros换源"></a>ros换源</h2><p>原中科大源很多包都已经不再被维护了，使用清华源</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo sh -c <span class="string">&#x27;. /etc/lsb-release &amp;&amp; echo &quot;deb http://mirrors.tuna.tsinghua.edu.cn/ros/ubuntu/ $DISTRIB_CODENAME main&quot; &gt; /etc/apt/sources.list.d/ros-latest.list&#x27;</span></span><br><span class="line">sudo apt update</span><br></pre></td></tr></table></figure>
-
-<h2 id="opencv"><a href="#opencv" class="headerlink" title="opencv"></a>opencv</h2><p>因为jetson xavier nx自带的opencv没有支持cuda，为了能够使用cuda，需要源码编译opencv4.5。</p>
-<p>但是在我的情况下，我的ros的工作空间中有太多的文件已经依赖自带的opencv了，所以不能直接删除自带的opencv而完全替换为新的opencv4.5.4。因此需要能够同时允许系统自带opencv和支持cuda的opencv4.5.4</p>
-<h3 id="opencv4-5-4编译"><a href="#opencv4-5-4编译" class="headerlink" title="opencv4.5.4编译"></a>opencv4.5.4编译</h3><p>从opencv官网下载opencv4.5.4的源码，和对应的opencv_contribe的源码，解压。<br>为了不影响本来就有的opencv，在<code>/usr/local/</code>下自己新建一个<code>opencv4.5.4</code>的文件夹</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo <span class="built_in">mkdir</span> /usr/local/opencv4.5.4</span><br></pre></td></tr></table></figure>
-<p>进入到解压后的<code>opencv-4.5.4</code>文件夹中，自己新建一个<code>build</code>文件夹，进入其中，使用以下命令。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">cmake \</span><br><span class="line">-DCMAKE_BUILD_TYPE=Release \</span><br><span class="line">-DCMAKE_INSTALL_PREFIX=/usr/local/opencv4.5.4 \</span><br><span class="line">-DOPENCV_ENABLE_NONFREE=1 \</span><br><span class="line">-DBUILD_opencv_python2=1 \</span><br><span class="line">-DBUILD_opencv_python3=1 \</span><br><span class="line">-DWITH_FFMPEG=1 \</span><br><span class="line">-DCUDA_TOOLKIT_ROOT_DIR=/usr/local/cuda \</span><br><span class="line">-DCUDA_ARCH_BIN=7.2 \</span><br><span class="line">-DCUDA_ARCH_PTX=7.2 \</span><br><span class="line">-DWITH_CUDA=1 \</span><br><span class="line">-DENABLE_FAST_MATH=1 \</span><br><span class="line">-DCUDA_FAST_MATH=1 \</span><br><span class="line">-DWITH_CUBLAS=1 \</span><br><span class="line">-DOPENCV_GENERATE_PKGCONFIG=1 \</span><br><span class="line">-DOPENCV_EXTRA_MODULES_PATH=../../opencv_contrib-4.5.4/modules \</span><br><span class="line">..</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p>其中，<code>CMAKE_INSTALL_PREFIX</code>就是希望把opencv按转到的目标路径，<code>OPENCV_EXTRA_MODULES_PATH</code>是对应的<code>opencv_contrib</code>中的module文件夹的相对路径。</p>
-<p>在<code>cmake</code>成功后，就可以<code>make</code>了。</p>
-<p>因为是在jetson板子上进行编译，所以需要的时间可能会非常长，又不想费精力去弄交叉编译了，所以要尽可能的利用多核，在我这里我使用<code>make -j6</code>因为nx有6个CPU核心，同时开了一个<code>tmux</code>窗口，这样可以防止不小心把make给挂了。</p>
-<p>在<code>make</code>结束后还需要<code>sudo make install</code>，把一些相关的库放到<code>/usr</code>等系统目录下。</p>
-<h3 id="对应cv-bridge的处理"><a href="#对应cv-bridge的处理" class="headerlink" title="对应cv_bridge的处理"></a>对应<code>cv_bridge</code>的处理</h3><p>melodic自带的cv_bridge和opencv4.5会有冲突，所以如果希望使用opencv4.5，需要自己在工作空间下下载源码vision_opencv，然后使用工作空间内的cv_bridge。</p>
-<p>为了能够使用opencv4.5，需要下载<a href="https://github.com/ros-perception/vision_opencv/tree/noetic">noetic 版本的vision_opencv</a>,并且修改<code>vision_opencv/cv_bridge</code>下的CMakeLists.txt</p>
-<figure class="highlight cmake"><table><tr><td class="code"><pre><span class="line"><span class="keyword">cmake_minimum_required</span>(VERSION <span class="number">3.0</span>.<span class="number">2</span>)</span><br><span class="line"><span class="keyword">project</span>(cv_bridge)</span><br><span class="line"></span><br><span class="line"><span class="keyword">set</span>(OpenCV_DIR <span class="string">&quot;/usr/loca/opencv4.5.4&quot;</span>)  <span class="comment"># 此处OpenCV_DIR修改为自己安装的opencv的路径</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">find_package</span>(catkin REQUIRED COMPONENTS rosconsole sensor_msgs)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(<span class="keyword">NOT</span> ANDROID)</span><br><span class="line">  <span class="keyword">find_package</span>(PythonLibs)</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span>(PYTHONLIBS_VERSION_STRING <span class="keyword">VERSION_LESS</span> <span class="string">&quot;3.8&quot;</span>)</span><br><span class="line">    <span class="comment"># Debian Buster</span></span><br><span class="line">    <span class="keyword">find_package</span>(Boost REQUIRED python3)</span><br><span class="line">  <span class="keyword">else</span>()</span><br><span class="line">    <span class="comment"># Ubuntu Focal</span></span><br><span class="line">    <span class="keyword">find_package</span>(Boost REQUIRED python)</span><br><span class="line">  <span class="keyword">endif</span>()</span><br><span class="line"><span class="keyword">else</span>()</span><br><span class="line"><span class="keyword">find_package</span>(Boost REQUIRED)</span><br><span class="line"><span class="keyword">endif</span>()</span><br><span class="line"></span><br><span class="line"><span class="keyword">set</span>(_opencv_version <span class="number">4</span>)</span><br><span class="line"><span class="keyword">find_package</span>(OpenCV <span class="number">4.5</span>.<span class="number">4</span> QUIET)  <span class="comment"># 为了明确指定希望使用的opencv的版本</span></span><br><span class="line"><span class="keyword">if</span>(<span class="keyword">NOT</span> OpenCV_FOUND)</span><br><span class="line">  <span class="keyword">message</span>(STATUS <span class="string">&quot;Did not find OpenCV 4, trying OpenCV 3&quot;</span>)</span><br><span class="line">  <span class="keyword">set</span>(_opencv_version <span class="number">3</span>)</span><br><span class="line"><span class="keyword">endif</span>()</span><br></pre></td></tr></table></figure>
-<p>但是仅仅修改以后，cmake虽然可以了，但是在编译的时候仍然会遇到报错“<br>&#x2F;home&#x2F;nvidia&#x2F;zal_ws&#x2F;src&#x2F;vision_opencv&#x2F;cv_bridge&#x2F;src&#x2F;module.hpp: In function ‘void* do_numpy_import()’:<br>&#x2F;usr&#x2F;include&#x2F;python2.7&#x2F;numpy&#x2F;__multiarray_api.h:1537:144: error: return-statement with no value, in function returning ‘void*’ [-fpermissive]<br> #define import_array() {if (_import_array() &lt; 0) {PyErr_Print(); PyErr_SetString(PyExc_ImportError, “numpy.core.multiarray failed to import”); return NUMPY_IMPORT_ARRAY_RETVAL; } }<br>”</p>
-<p>根据报错信息，直接去修改源码：</p>
-<p>进入<code>/vision_opencv/cv_bridge/src/module.hpp</code>，把<code>do_numpy_import</code>函数的声明修改为</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="type">static</span> <span class="type">void</span> <span class="title">do_numpy_import</span><span class="params">( )</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">import_array</span>( );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>再次<code>catkin_make</code>，成功编译。</p>
-<h3 id="在工作空间中指定需要的cv-bridge和opencv"><a href="#在工作空间中指定需要的cv-bridge和opencv" class="headerlink" title="在工作空间中指定需要的cv_bridge和opencv"></a>在工作空间中指定需要的cv_bridge和opencv</h3><p>在自己的<code>CMakeLists.txt</code>中明确指定需要的opencv版本,cv_bridge不需要专门指定，<code>catkin_make</code>的时候会优先使用工作空间内的<code>cv_bridge</code>的源码编译生成的包的。</p>
-<figure class="highlight cmake"><table><tr><td class="code"><pre><span class="line"><span class="keyword">set</span>(OpenCV_DIR <span class="string">&quot;/usr/local/opencv4.5.4&quot;</span>)  <span class="comment"># Opencv的安装路径</span></span><br><span class="line"><span class="keyword">find_package</span>(OpenCV <span class="number">4.5</span>.<span class="number">4</span> REQUIRED)</span><br><span class="line"></span><br><span class="line"><span class="keyword">find_package</span>(catkin REQUIRED COMPONENTS</span><br><span class="line">  cv_bridge</span><br><span class="line">  ... <span class="comment"># 其它需要的包</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure>
-<p>接下来，在代码中，就可以正常的导入<code>opencv4.5</code>和<code>cv_bridge</code>了。</p>
-]]></content>
-      <categories>
-        <category>airhust</category>
-        <category>project</category>
-      </categories>
-      <tags>
-        <tag>ros</tag>
-        <tag>opencv</tag>
-        <tag>jetson</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>HUST_CS_系统基础整理</title>
     <url>/2024/07/06/HUST-CS-%E7%B3%BB%E7%BB%9F%E5%9F%BA%E7%A1%80%E6%95%B4%E7%90%86/</url>
     <content><![CDATA[<h1 id="第二章"><a href="#第二章" class="headerlink" title="第二章"></a>第二章</h1><h2 id="2-1-数值数据的表示"><a href="#2-1-数值数据的表示" class="headerlink" title="2.1 数值数据的表示"></a>2.1 数值数据的表示</h2><ul>
@@ -1143,6 +789,187 @@
         <tag>整理</tag>
         <tag>系统</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>Linux基础知识</title>
+    <url>/2024/04/02/Linux%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/</url>
+    <content><![CDATA[<h1 id="Linux基础知识"><a href="#Linux基础知识" class="headerlink" title="Linux基础知识"></a>Linux基础知识</h1><h2 id="1-系统目录结构"><a href="#1-系统目录结构" class="headerlink" title="1. 系统目录结构"></a>1. 系统目录结构</h2><ul>
+<li><strong>&#x2F;bin</strong>: ‘bin’是Binaries（二进制文件）的缩写，这个目录存放着最经常使用的命令。比如说很多个Shell的程序都会放在&#x2F;bin文件夹里面。</li>
+<li><strong>&#x2F;boot</strong>: 这里存放的是启动Linux时候使用的一些核心文件，包括一些连接文件以及镜像文件。</li>
+<li><strong>&#x2F;dev</strong>: dev是Device的缩写，该目录下存放的是Linux的外部设备，在Linux中访问设备的方式和访问文件的方式是相同。</li>
+<li><strong>&#x2F;ect</strong>: etc是Etcetera的缩写，这个目录是用来存放所有的系统管理所需要的配置文件和子目录。</li>
+<li><strong>&#x2F;home</strong>: 用户的主目录，在Linux中，每个用户都有一个自己的目录，一般该目录名是以用户的账号命名的。</li>
+<li><strong>&#x2F;lib</strong>: lib是Library的缩写，这个目录里面存放这系统最基本的动态连接共享库，其作用类似于windows里的dll文件。几乎所有的应用程序都需要用到这些共享库。</li>
+<li><strong>&#x2F;lost+found</strong>: 这个目录一般情况下是空的，但是当系统非法关机，这里就存放了一些文件。</li>
+<li><strong>&#x2F;media</strong>: Linux系统会自动识别一些设备，例如U盘、光驱等等，当识别后，Linux会把识别的设备挂载到这个目录下。</li>
+<li><strong>&#x2F;mnt</strong>: 系统提供该目录是为了让用户临时挂载别的文件系统的，例如可以把光驱挂载在这里，就可以查看光驱内的内容了。</li>
+<li><strong>&#x2F;opt</strong>: opt是optional的缩写，这是给主机额外安装软件所拜访的目录。例如安装ORACLE的数据库就可以放到这里，默认是空的。</li>
+<li><strong>&#x2F;proc</strong>: proc是Processes的缩写，&#x2F;proc是一种伪文件系统（也即虚拟文件系统），存储的是当前内核运行状态的一系列特殊文件，这个目录是一个虚拟的目录，它是系统内存的映射，我们可以通过直接访问这个目录来获取系统信息。</li>
+<li><strong>&#x2F;root</strong>: 该目录为系统管理员，也称作超级权限者的用户主目录。</li>
+<li><strong>&#x2F;sbin</strong>: 超级用户的二进制文件，存放的是系统管理员使用的系统管理程序。</li>
+<li><strong>&#x2F;selinux</strong>: 这个目录是Redhat&#x2F;centos特有的目录，SeLinux是一个安全机制，类似于Windows的防火墙。</li>
+<li><strong>&#x2F;srv</strong>: 该目录存放一些服务启动之后需要提取的数据。</li>
+<li><strong>&#x2F;sys</strong>: 该目录下安装了Linux2.6内核中新出现的一个文件系统sysfs。sysfs文件系统继承了三种文件系统的信息：针对进程信息的proc文件系统、针对设备的devfs文件系统以及针对伪终端的devpts文件系统。该文件系统是内核设备树的一个直观反映。当一个内核对象被创建的时候，对应的文件和目录也在内核对象子系统中被创建。</li>
+<li><strong>&#x2F;tmp</strong>: tmp是temporary的缩写，用来存放一些临时文件。</li>
+<li><strong>&#x2F;usr</strong>: usr是unix shared resources(共享资源)的缩写，是一个非常重要的目录，用户的很多应用程序和文件都放在这个目录下，类似于Windows下的program files目录。</li>
+<li><strong>&#x2F;&#x2F;usr&#x2F;bin</strong>: 系统用户使用的应用程序。</li>
+<li><strong>&#x2F;usr&#x2F;sbin</strong>: 超级用户使用的比较高级的管理程序和系统守护程序。</li>
+<li><strong>&#x2F;usr&#x2F;src</strong>: 内核源码默认的放置目录。</li>
+<li><strong>&#x2F;var</strong>: var是variable的缩写，这个目录中存放这不断扩充的东西，习惯将哪些经常被修改的目录放在这个目录下，包括各种日志文件。</li>
+<li><strong>&#x2F;run</strong>: 一个临时文件系统，存储系统启动以来的信息。当系统重启时，这个目录下的文件应该被删除或者清除。如果你的系统上有<code>/var/run/</code>目录，应该让它指向<code>/run</code>。</li>
+</ul>
+<h2 id="2-一些常用命令"><a href="#2-一些常用命令" class="headerlink" title="2. 一些常用命令"></a>2. 一些常用命令</h2><h3 id="2-1-ls（列出目录）"><a href="#2-1-ls（列出目录）" class="headerlink" title="2.1 ls（列出目录）"></a>2.1 ls（列出目录）</h3><p>语法</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">ls [-aAdfFhilnrRSt] 目录名称</span><br><span class="line">ls [--color=&#123;never, auto, always&#125;] 目录名称</span><br><span class="line">ls [--full-time] 目录名称</span><br></pre></td></tr></table></figure>
+<p>选项与参数：</p>
+<ul>
+<li><code>-a</code>: 全部的文件，联通隐藏文件一起列出来</li>
+<li><code>-d</code>: 仅列出目录本身，而不是列出目录内的文件数据</li>
+<li><code>-l</code>: 长数据串列出，包含文件的属性与权限等等数据</li>
+</ul>
+<h3 id="2-2-cd（切换目录）"><a href="#2-2-cd（切换目录）" class="headerlink" title="2.2 cd（切换目录）"></a>2.2 cd（切换目录）</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">cd [相对路径或者绝对路径]</span><br></pre></td></tr></table></figure>
+<h3 id="2-3-pwd（显示目前所在的目录）"><a href="#2-3-pwd（显示目前所在的目录）" class="headerlink" title="2.3 pwd（显示目前所在的目录）"></a>2.3 pwd（显示目前所在的目录）</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">pwd [-P]</span><br></pre></td></tr></table></figure>
+<p>选项与参数：</p>
+<ul>
+<li><code>-P</code>: 显示出确实的路径，而非使用连接(link)的路径。</li>
+</ul>
+<h3 id="2-4-mkdir（创建新目录）"><a href="#2-4-mkdir（创建新目录）" class="headerlink" title="2.4 mkdir（创建新目录）"></a>2.4 mkdir（创建新目录）</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">mkdir [-mp] 目录名称</span><br></pre></td></tr></table></figure>
+<p>选项与参数：</p>
+<ul>
+<li><code>-m</code>: 配置文件的权限，直接配置，不考虑默认权限(unmask)</li>
+<li><code>-p</code>: 递归的创建目录。</li>
+</ul>
+<h3 id="2-5-rmdir（删除空的目录）"><a href="#2-5-rmdir（删除空的目录）" class="headerlink" title="2.5 rmdir（删除空的目录）"></a>2.5 rmdir（删除空的目录）</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">rmdir [-p] 目录名称</span><br></pre></td></tr></table></figure>
+<p>选项与参数：</p>
+<ul>
+<li><code>-p</code>: 从该目录起，依次删除多级空目录，和上面的mkdir类似，可以直接一次性删除多级别&#x3D;目录。</li>
+</ul>
+<h3 id="2-6-cp（复制文件或目录）"><a href="#2-6-cp（复制文件或目录）" class="headerlink" title="2.6 cp（复制文件或目录）"></a>2.6 cp（复制文件或目录）</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">cp [-dfilprsu] &lt;source&gt;（来源档） &lt;destination&gt;（目标档）</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">如果把多个文件放到directory位置</span></span><br><span class="line">cp [options] &lt;source1&gt; &lt;source2&gt; .... &lt;directory&gt;</span><br></pre></td></tr></table></figure>
+<p>选项与参数：</p>
+<ul>
+<li><code>-d</code>: 若来源档为连接文件的属性(link file)，则复制连接档属性而非文件本身。</li>
+<li><code>-f</code>： 为强制的意思，若目标文件已经存在且无法开启，则移除后再尝试一次。</li>
+<li><code>-i</code>: 若目标档已经存在时，再覆盖时会先询问动作的进行。</li>
+<li><code>-l</code>: 进行硬式连接(hard link)的连接档创建，而非复制文件本身。</li>
+<li><code>-p</code>: 连同文件的属性一起复制过去，而非使用默认属性（备份的时候使用）</li>
+<li><code>-r</code>: 递归持续复制。</li>
+<li><code>-s</code>: 复制成为符号连结档(symbolic link),亦及捷径文件。</li>
+<li><code>-u</code>: 若destination比source旧才覆盖destination。</li>
+</ul>
+<h3 id="2-7-rm（移除文件或目录）"><a href="#2-7-rm（移除文件或目录）" class="headerlink" title="2.7 rm（移除文件或目录）"></a>2.7 rm（移除文件或目录）</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">rm [fir] 文件或目录</span><br></pre></td></tr></table></figure>
+<p>选项与参数：</p>
+<ul>
+<li><code>-f</code>: 忽略不存在的文件，不会出现井盖信息。</li>
+<li><code>-i</code>: 互动模式，在删除前会询问使用者。</li>
+<li><code>-r</code>: 递归删除</li>
+</ul>
+<h3 id="2-8-mv（移动文件与目录，或修改名称）"><a href="#2-8-mv（移动文件与目录，或修改名称）" class="headerlink" title="2.8 mv（移动文件与目录，或修改名称）"></a>2.8 mv（移动文件与目录，或修改名称）</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">mv [-fiu] &lt;source&gt; &lt;destination&gt;</span><br><span class="line">mv [options] &lt;source1&gt; &lt;source2&gt; ... &lt;directory&gt;</span><br></pre></td></tr></table></figure>
+<p>选项与参数：</p>
+<ul>
+<li><code>-f</code>: 如果目标文件已经存在，不会询问而直接覆盖。</li>
+<li><code>-i</code>: 如果目标文件已经存在，会询问是否覆盖。</li>
+</ul>
+]]></content>
+      <categories>
+        <category>basic_cs</category>
+        <category>note</category>
+      </categories>
+      <tags>
+        <tag>linux</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>git相关操作</title>
+    <url>/2024/04/02/git%E7%9B%B8%E5%85%B3%E6%93%8D%E4%BD%9C/</url>
+    <content><![CDATA[<h1 id="git的相关操作"><a href="#git的相关操作" class="headerlink" title="git的相关操作"></a>git的相关操作</h1><h2 id="基础"><a href="#基础" class="headerlink" title="基础"></a>基础</h2><ul>
+<li><code>git help &lt;command&gt;</code> 获取git命令的帮助信息</li>
+<li><code>git init</code> 创建一个新的git仓库，其数据会被存放在一个名为’.git的目录下’</li>
+<li><code>git status</code> 显示当前的仓库状态</li>
+<li><code>git add &lt;filename&gt;</code> 添加文件到暂存区<ul>
+<li><code>git add .</code> 把当前路径下的所有文件都添加到暂存你去（递归的），但是不包括’.gitignore’文件中声明的不被包含的文件</li>
+</ul>
+</li>
+<li><code>git commit</code> 创建一个新的提交</li>
+<li><code>git log</code> 显示历史日志</li>
+<li><code>git log --all --graph --decorate</code> 可视化历史记录（有向无环图）</li>
+<li><code>git diff &lt;filename&gt;</code> 显示与暂存区文件的差异</li>
+<li><code>git diff &lt;revisiokn&gt; &lt;filename&gt;</code> 显示某个文件两个版本之间的差异</li>
+<li><code>git checkout &lt;revision&gt;</code> 更新HEAD和目前的分支</li>
+</ul>
+<h2 id="分支和合并"><a href="#分支和合并" class="headerlink" title="分支和合并"></a>分支和合并</h2><ul>
+<li><code>git branch</code> 显示分支</li>
+<li><code>git branch &lt;name&gt;</code> 创建分支</li>
+<li><code>git checkout &lt;name&gt;</code> 切换到分支<ul>
+<li><code>git checkout -b &lt;name&gt;</code> 创建分支并切换到该分支</li>
+</ul>
+</li>
+<li><code>git merge &lt;revision&gt;</code> 合并分支到当前分支</li>
+<li><code>git mergetool</code> 使用工具来处理合并冲突</li>
+<li><code>git rebase</code> 将一系列补丁变基变为新的基线</li>
+</ul>
+<h2 id="远端操作"><a href="#远端操作" class="headerlink" title="远端操作"></a>远端操作</h2><ul>
+<li><code>git remote</code> 列出远端</li>
+<li><code>git remote add &lt;name&gt; &lt;url&gt;</code> 添加一个远端</li>
+<li><code>git push &lt;remote&gt; &lt;local branch&gt;:&lt;remote branch&gt;</code> 将对象传送至远端并更新远端引用</li>
+<li><code>git branch --set-upstream-to=&lt;remote&gt;/&lt;remote branch&gt;</code> 创建本地和远端分支的关联关系</li>
+<li><code>git fetch</code> 从远端获取对象&#x2F;索引</li>
+<li><code>git pull</code> 相当于<code>git fetch; git merge</code></li>
+<li><code>git clone</code> 从远端下载仓库</li>
+</ul>
+<h2 id="撤销"><a href="#撤销" class="headerlink" title="撤销"></a>撤销</h2><ul>
+<li><code>git commit --amend</code> 编辑提交的内容或信息</li>
+<li><code>git reset HEAD &lt;file&gt;</code> 恢复暂存的文件</li>
+<li><code>git checkout -- &lt;file&gt;</code> 丢弃修改</li>
+</ul>
+<h2 id="git高级操作"><a href="#git高级操作" class="headerlink" title="git高级操作"></a>git高级操作</h2><ul>
+<li><code>git config</code> 可以设置git的相关参数</li>
+<li><code>git clone --depth=1</code> 浅克隆，不包括完整的版本历史信息</li>
+<li><code>git add -p</code> 交互式暂存</li>
+<li><code>git rebase -i</code> 交互式边基</li>
+<li><code>git blame</code> 查看最后修改某行的人</li>
+<li><code>git stash</code> 暂时移除工作目录下的修改内容</li>
+<li><code>git bisect</code> 通过二分查找搜索历史记录</li>
+</ul>
+<h2 id="子模块"><a href="#子模块" class="headerlink" title="子模块"></a>子模块</h2><p>子模块就是当你的项目中存在着另外一个git仓库，这种时候，如果你希望能够保持另外一个git仓库的独立性，就需要吧“另外一个git仓库”给设置为当前项目的子模块。</p>
+<p>如果你非常希望能够删除子模块的话，直接进入到子模块文件夹中，删除<code>.git</code>文件夹就可以了。但是请务必注意是否符合相关的许可要求。</p>
+<h4 id="克隆"><a href="#克隆" class="headerlink" title="克隆"></a>克隆</h4><p>在克隆一个包含子模块的项目的时候，默认的<code>git clone</code>只会克隆下来子模块所在的目录，文件夹内部并没有文件。一般来说直接通过<code>git clone --recurse-submodules</code>来要求同时克隆子模块。</p>
+<h4 id="添加"><a href="#添加" class="headerlink" title="添加"></a>添加</h4><p>当在你的项目内部还额外通过<code>git clone</code>克隆下来了另外一个仓库的时候，应当使用</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">git submodule add &lt;submodule-url&gt; &lt;submodule-path&gt;</span><br></pre></td></tr></table></figure>
+<p>来把子模块添加到本项目中。可以在<code>.gitsubmodules</code>文件中看到相关的内容。</p>
+<h4 id="初始化和更新"><a href="#初始化和更新" class="headerlink" title="初始化和更新"></a>初始化和更新</h4><p>为了确保子模块能够被初始化和更新，还需要运行以下两个命令</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">git submodule init</span><br><span class="line">git submodule update</span><br></pre></td></tr></table></figure>
+
+<h4 id="同步"><a href="#同步" class="headerlink" title="同步"></a>同步</h4><p>在子模块中更改完后，在主项目中直接通过<code>git add &lt;submodule-path&gt;</code>来进行同步</p>
+<h4 id="更新"><a href="#更新" class="headerlink" title="更新"></a>更新</h4><p>只是单纯的在主项目中使用<code>git pull</code>并不会把你在子模块中的更新也推送到子模块对应的仓库中。</p>
+<p>一个普通的办法就是直接进入到子模块的目录下，手动进行<code>git push</code>，然后再回到主项目中执行推送。</p>
+<p>当然，也可以通过以下命令让git自动尝试推送子模块，然后再推送主项目</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">git push --recursive-submodules=on-demand</span><br></pre></td></tr></table></figure>
+
+<h2 id="P-S"><a href="#P-S" class="headerlink" title="P.S."></a>P.S.</h2><p>当遇到无法ssh无法push上github的时候，尝试在开代理的情况下，在<code>~/.ssh/config</code>中添加以下内容</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Host github.com</span><br><span class="line">    HostName ssh.github.com</span><br><span class="line">    Port 443</span><br></pre></td></tr></table></figure>
+<p>因为你的代理肯定都会照看到443端口的访问的，所以只要让ssh的时候也是走443端口就可以解决问题了。</p>
+]]></content>
+      <categories>
+        <category>basic_cs</category>
+        <category>note</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>Hello World</title>
+    <url>/2024/04/02/hello-world/</url>
+    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
+<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
+<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
+<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+]]></content>
   </entry>
   <entry>
     <title>HUST_CS_数据库整理</title>
@@ -5673,6 +5500,44 @@
       </tags>
   </entry>
   <entry>
+    <title>jetson_xavier_nx-ubuntu18-04-ros-melodic-yolov5-cpp实践</title>
+    <url>/2024/06/09/jetson_xavier_nx-ubuntu18-04-ros-melodic-yolov5-cpp%E5%AE%9E%E8%B7%B5/</url>
+    <content><![CDATA[<h2 id="ros换源"><a href="#ros换源" class="headerlink" title="ros换源"></a>ros换源</h2><p>原中科大源很多包都已经不再被维护了，使用清华源</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo sh -c <span class="string">&#x27;. /etc/lsb-release &amp;&amp; echo &quot;deb http://mirrors.tuna.tsinghua.edu.cn/ros/ubuntu/ $DISTRIB_CODENAME main&quot; &gt; /etc/apt/sources.list.d/ros-latest.list&#x27;</span></span><br><span class="line">sudo apt update</span><br></pre></td></tr></table></figure>
+
+<h2 id="opencv"><a href="#opencv" class="headerlink" title="opencv"></a>opencv</h2><p>因为jetson xavier nx自带的opencv没有支持cuda，为了能够使用cuda，需要源码编译opencv4.5。</p>
+<p>但是在我的情况下，我的ros的工作空间中有太多的文件已经依赖自带的opencv了，所以不能直接删除自带的opencv而完全替换为新的opencv4.5.4。因此需要能够同时允许系统自带opencv和支持cuda的opencv4.5.4</p>
+<h3 id="opencv4-5-4编译"><a href="#opencv4-5-4编译" class="headerlink" title="opencv4.5.4编译"></a>opencv4.5.4编译</h3><p>从opencv官网下载opencv4.5.4的源码，和对应的opencv_contribe的源码，解压。<br>为了不影响本来就有的opencv，在<code>/usr/local/</code>下自己新建一个<code>opencv4.5.4</code>的文件夹</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo <span class="built_in">mkdir</span> /usr/local/opencv4.5.4</span><br></pre></td></tr></table></figure>
+<p>进入到解压后的<code>opencv-4.5.4</code>文件夹中，自己新建一个<code>build</code>文件夹，进入其中，使用以下命令。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">cmake \</span><br><span class="line">-DCMAKE_BUILD_TYPE=Release \</span><br><span class="line">-DCMAKE_INSTALL_PREFIX=/usr/local/opencv4.5.4 \</span><br><span class="line">-DOPENCV_ENABLE_NONFREE=1 \</span><br><span class="line">-DBUILD_opencv_python2=1 \</span><br><span class="line">-DBUILD_opencv_python3=1 \</span><br><span class="line">-DWITH_FFMPEG=1 \</span><br><span class="line">-DCUDA_TOOLKIT_ROOT_DIR=/usr/local/cuda \</span><br><span class="line">-DCUDA_ARCH_BIN=7.2 \</span><br><span class="line">-DCUDA_ARCH_PTX=7.2 \</span><br><span class="line">-DWITH_CUDA=1 \</span><br><span class="line">-DENABLE_FAST_MATH=1 \</span><br><span class="line">-DCUDA_FAST_MATH=1 \</span><br><span class="line">-DWITH_CUBLAS=1 \</span><br><span class="line">-DOPENCV_GENERATE_PKGCONFIG=1 \</span><br><span class="line">-DOPENCV_EXTRA_MODULES_PATH=../../opencv_contrib-4.5.4/modules \</span><br><span class="line">..</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>其中，<code>CMAKE_INSTALL_PREFIX</code>就是希望把opencv按转到的目标路径，<code>OPENCV_EXTRA_MODULES_PATH</code>是对应的<code>opencv_contrib</code>中的module文件夹的相对路径。</p>
+<p>在<code>cmake</code>成功后，就可以<code>make</code>了。</p>
+<p>因为是在jetson板子上进行编译，所以需要的时间可能会非常长，又不想费精力去弄交叉编译了，所以要尽可能的利用多核，在我这里我使用<code>make -j6</code>因为nx有6个CPU核心，同时开了一个<code>tmux</code>窗口，这样可以防止不小心把make给挂了。</p>
+<p>在<code>make</code>结束后还需要<code>sudo make install</code>，把一些相关的库放到<code>/usr</code>等系统目录下。</p>
+<h3 id="对应cv-bridge的处理"><a href="#对应cv-bridge的处理" class="headerlink" title="对应cv_bridge的处理"></a>对应<code>cv_bridge</code>的处理</h3><p>melodic自带的cv_bridge和opencv4.5会有冲突，所以如果希望使用opencv4.5，需要自己在工作空间下下载源码vision_opencv，然后使用工作空间内的cv_bridge。</p>
+<p>为了能够使用opencv4.5，需要下载<a href="https://github.com/ros-perception/vision_opencv/tree/noetic">noetic 版本的vision_opencv</a>,并且修改<code>vision_opencv/cv_bridge</code>下的CMakeLists.txt</p>
+<figure class="highlight cmake"><table><tr><td class="code"><pre><span class="line"><span class="keyword">cmake_minimum_required</span>(VERSION <span class="number">3.0</span>.<span class="number">2</span>)</span><br><span class="line"><span class="keyword">project</span>(cv_bridge)</span><br><span class="line"></span><br><span class="line"><span class="keyword">set</span>(OpenCV_DIR <span class="string">&quot;/usr/loca/opencv4.5.4&quot;</span>)  <span class="comment"># 此处OpenCV_DIR修改为自己安装的opencv的路径</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">find_package</span>(catkin REQUIRED COMPONENTS rosconsole sensor_msgs)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(<span class="keyword">NOT</span> ANDROID)</span><br><span class="line">  <span class="keyword">find_package</span>(PythonLibs)</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span>(PYTHONLIBS_VERSION_STRING <span class="keyword">VERSION_LESS</span> <span class="string">&quot;3.8&quot;</span>)</span><br><span class="line">    <span class="comment"># Debian Buster</span></span><br><span class="line">    <span class="keyword">find_package</span>(Boost REQUIRED python3)</span><br><span class="line">  <span class="keyword">else</span>()</span><br><span class="line">    <span class="comment"># Ubuntu Focal</span></span><br><span class="line">    <span class="keyword">find_package</span>(Boost REQUIRED python)</span><br><span class="line">  <span class="keyword">endif</span>()</span><br><span class="line"><span class="keyword">else</span>()</span><br><span class="line"><span class="keyword">find_package</span>(Boost REQUIRED)</span><br><span class="line"><span class="keyword">endif</span>()</span><br><span class="line"></span><br><span class="line"><span class="keyword">set</span>(_opencv_version <span class="number">4</span>)</span><br><span class="line"><span class="keyword">find_package</span>(OpenCV <span class="number">4.5</span>.<span class="number">4</span> QUIET)  <span class="comment"># 为了明确指定希望使用的opencv的版本</span></span><br><span class="line"><span class="keyword">if</span>(<span class="keyword">NOT</span> OpenCV_FOUND)</span><br><span class="line">  <span class="keyword">message</span>(STATUS <span class="string">&quot;Did not find OpenCV 4, trying OpenCV 3&quot;</span>)</span><br><span class="line">  <span class="keyword">set</span>(_opencv_version <span class="number">3</span>)</span><br><span class="line"><span class="keyword">endif</span>()</span><br></pre></td></tr></table></figure>
+<p>但是仅仅修改以后，cmake虽然可以了，但是在编译的时候仍然会遇到报错“<br>&#x2F;home&#x2F;nvidia&#x2F;zal_ws&#x2F;src&#x2F;vision_opencv&#x2F;cv_bridge&#x2F;src&#x2F;module.hpp: In function ‘void* do_numpy_import()’:<br>&#x2F;usr&#x2F;include&#x2F;python2.7&#x2F;numpy&#x2F;__multiarray_api.h:1537:144: error: return-statement with no value, in function returning ‘void*’ [-fpermissive]<br> #define import_array() {if (_import_array() &lt; 0) {PyErr_Print(); PyErr_SetString(PyExc_ImportError, “numpy.core.multiarray failed to import”); return NUMPY_IMPORT_ARRAY_RETVAL; } }<br>”</p>
+<p>根据报错信息，直接去修改源码：</p>
+<p>进入<code>/vision_opencv/cv_bridge/src/module.hpp</code>，把<code>do_numpy_import</code>函数的声明修改为</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="type">static</span> <span class="type">void</span> <span class="title">do_numpy_import</span><span class="params">( )</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">import_array</span>( );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>再次<code>catkin_make</code>，成功编译。</p>
+<h3 id="在工作空间中指定需要的cv-bridge和opencv"><a href="#在工作空间中指定需要的cv-bridge和opencv" class="headerlink" title="在工作空间中指定需要的cv_bridge和opencv"></a>在工作空间中指定需要的cv_bridge和opencv</h3><p>在自己的<code>CMakeLists.txt</code>中明确指定需要的opencv版本,cv_bridge不需要专门指定，<code>catkin_make</code>的时候会优先使用工作空间内的<code>cv_bridge</code>的源码编译生成的包的。</p>
+<figure class="highlight cmake"><table><tr><td class="code"><pre><span class="line"><span class="keyword">set</span>(OpenCV_DIR <span class="string">&quot;/usr/local/opencv4.5.4&quot;</span>)  <span class="comment"># Opencv的安装路径</span></span><br><span class="line"><span class="keyword">find_package</span>(OpenCV <span class="number">4.5</span>.<span class="number">4</span> REQUIRED)</span><br><span class="line"></span><br><span class="line"><span class="keyword">find_package</span>(catkin REQUIRED COMPONENTS</span><br><span class="line">  cv_bridge</span><br><span class="line">  ... <span class="comment"># 其它需要的包</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>接下来，在代码中，就可以正常的导入<code>opencv4.5</code>和<code>cv_bridge</code>了。</p>
+]]></content>
+      <categories>
+        <category>airhust</category>
+        <category>project</category>
+      </categories>
+      <tags>
+        <tag>ros</tag>
+        <tag>opencv</tag>
+        <tag>jetson</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>nmcli相关命令</title>
     <url>/2024/09/13/nmcli%E7%9B%B8%E5%85%B3%E5%91%BD%E4%BB%A4/</url>
     <content><![CDATA[<h1 id="nmcli相关命令"><a href="#nmcli相关命令" class="headerlink" title="nmcli相关命令"></a>nmcli相关命令</h1><h2 id="section"><a href="#section" class="headerlink" title="section"></a>section</h2><p>nmcli总共有八大部分的参数</p>
@@ -5757,6 +5622,141 @@
       <tags>
         <tag>nnmcli</tag>
         <tag>network</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>vim的相关操作</title>
+    <url>/2024/04/02/vim%E7%9A%84%E7%9B%B8%E5%85%B3%E6%93%8D%E4%BD%9C/</url>
+    <content><![CDATA[<h1 id="Vim的相关操作"><a href="#Vim的相关操作" class="headerlink" title="Vim的相关操作"></a>Vim的相关操作</h1><h2 id="Vim的操作模式："><a href="#Vim的操作模式：" class="headerlink" title="Vim的操作模式："></a>Vim的操作模式：</h2><ul>
+<li>正常模式：在文本中四处移动光标进行修改</li>
+<li>插入模式：插入文本</li>
+<li>替换模式：替换文本</li>
+<li>可视化（一般，行，块）模式：选中文本块</li>
+<li>命令模式：用于执行命令</li>
+</ul>
+<p>在默认设置下，Vim会在左下角显示当前的模式。Vim启动时的默认模式是正常模式。</p>
+<p>你可以按下<code>&lt;ESC&gt;</code>从任何其它模式返回正常模式。在正常模式，键入<code>i</code>进入插入模式，<code>R</code>进入替换模式，<code>v</code>进入可视（一般）模式，<code>V</code>进入可视（行）模式，<code>^v</code>进入可视（块）模式，<code>:</code>进入命令模式。</p>
+<h2 id="缓存，标签页，窗口"><a href="#缓存，标签页，窗口" class="headerlink" title="缓存，标签页，窗口"></a>缓存，标签页，窗口</h2><p>Vim会维护一系列打开的文件，成为“缓存”。一个Vim会话包含一系列标签页，每个标签页包含一系列窗口（分割面板）。每个窗口显示一个缓存。跟网页浏览器等其它程序不一样，缓存和窗口不是一一对应的关系；窗口只是视角。一个缓存可以在多个窗口打开，甚至在同一个标签页内的多个窗口打开。</p>
+<ul>
+<li>组合键<code>^w+s</code>会上下分割当前打开的文件。</li>
+<li><code>:sp &lt;filename&gt;</code>会上下分割当前文件和新打开的文件<filename></li>
+<li>组合键<code>^w+v</code>会左右分割当前打开的文件。</li>
+<li><code>:vsp &lt;filename&gt;</code>会左右分割当前打开的文件和新打开的文件<filename></li>
+<li><code>^w+h</code> 将当前光标定位到左边的屏幕。</li>
+<li><code>^w+l</code> 将当前光标定位到右边的屏幕。</li>
+<li><code>^w+j</code> 将当前光标移动到下面的屏幕。</li>
+<li><code>^w+k</code> 将当前光标移动到上面的屏幕。</li>
+<li><code>^w+H</code> 将当前的分屏移动到左边。</li>
+<li><code>^w+L</code> 将当前的分屏移动到右边。</li>
+<li><code>^w+J</code> 将当前的分屏移动到下边。</li>
+<li><code>^w+K</code> 将当前的分屏移动到上边。</li>
+<li><code>^w+c</code> 关闭当前的分屏。</li>
+<li><code>^w+q</code> 关闭当前的分屏，如果是最后一个则将退出Vim。</li>
+</ul>
+<h2 id="Vim的退出"><a href="#Vim的退出" class="headerlink" title="Vim的退出"></a>Vim的退出</h2><ul>
+<li><code>:w</code> 保存当前对文件的修改，但是不退出文件</li>
+<li><code>:w!</code> 强制保存但是不退出文件</li>
+<li><code>:w &lt;file&gt;</code> 保存当前的文件修改到<file>文件当中。</li>
+<li><code>:q!</code> 退出文件，对文件的修改不做保存。</li>
+<li><code>qa!</code> 退出所有的文件，并且不保存。</li>
+<li><code>:wq</code> 保存并退出。</li>
+<li><code>:e &lt;file&gt;</code> 打开<file>文件。</li>
+<li><code>:e!</code> 放弃对文件的所有修改，恢复文件到上次保存的位置。</li>
+<li><code>:saveas &lt;file&gt;</code> 另存为<file></li>
+<li><code>:bn</code>和<code>:bp</code> 当打开多个文件的时候可以进行上一个文件或者下一个文件的切换。</li>
+</ul>
+<h2 id="Vim的插入"><a href="#Vim的插入" class="headerlink" title="Vim的插入"></a>Vim的插入</h2><ul>
+<li><code>i</code> 是在光标所在的字符之前插入需要录入的文本。</li>
+<li><code>I</code> 是在光标所在的行首插入需要录入的文本。</li>
+<li><code>a</code> 是在光标所在的字符之后插入需要录入的文本。</li>
+<li><code>A</code> 是在光标所在的行末插入需要录入的文本。</li>
+<li><code>s</code> 是删除光标所在处的字符然后插入文本。</li>
+<li><code>S</code> 是删除光标所在行，在当前行的行首插入文本。</li>
+</ul>
+<h2 id="Vim的命令模式"><a href="#Vim的命令模式" class="headerlink" title="Vim的命令模式"></a>Vim的命令模式</h2><h3 id="行号"><a href="#行号" class="headerlink" title="行号"></a>行号</h3><ul>
+<li><code>:set nu</code> 显示行号。</li>
+<li><code>:set nonu</code> 不显示行号。</li>
+<li><code>:&lt;n&gt;</code> 定位到第<n>行</li>
+</ul>
+<h3 id="关键字查找"><a href="#关键字查找" class="headerlink" title="关键字查找"></a>关键字查找</h3><ul>
+<li><code>/&#123;目标字符串&#125;</code> 查找文本中匹配的目标字符串，查到以后按<code>n</code>会去寻找下一个匹配，<code>N</code>会去寻找上一个匹配。</li>
+</ul>
+<h3 id="删除"><a href="#删除" class="headerlink" title="删除"></a>删除</h3><ul>
+<li>在命令模式下<code>dd</code>会删除本行。</li>
+<li><code>:&lt;n1&gt;,&lt;n2&gt;d</code> 从第<n1>行一直删除到<n2>行（两边都闭区间）</li>
+</ul>
+<h3 id="Vim处理文本替换"><a href="#Vim处理文本替换" class="headerlink" title="Vim处理文本替换"></a>Vim处理文本替换</h3><ul>
+<li><code>:&#123;作用范围&#125;s/&#123;目标&#125;/&#123;替换&#125;/&#123;替换的标志&#125;</code>,其中作用范围分为当前行、全文、选区等。</li>
+<li>例如：<ul>
+<li><code>:s/zempty/handsome/g</code> 将会把当前光标所在行的zempty替换成handsome</li>
+<li><code>%s/zempty/handsome/g</code> 将会把全文中的zempty替换成handsome</li>
+<li><code>&lt;n1&gt;,&lt;n2&gt;s/zempty/handsome/g</code> 把<n1>行到<n2>行的所有zempty替换为handsome。</li>
+</ul>
+</li>
+<li>替换标志中，<code>g</code>代表global全局替换，空替换只替换从光标位置开始的第一次，<code>i</code>表示大小写不敏感，<code>I</code>表示大小写敏感，<code>c</code>表示需要确认。</li>
+</ul>
+<h3 id="Vim执行Linux命令"><a href="#Vim执行Linux命令" class="headerlink" title="Vim执行Linux命令"></a>Vim执行Linux命令</h3><p><code>:!&lt;command&gt;</code> 将执行<command>命令</p>
+<h2 id="Vim的正常模式"><a href="#Vim的正常模式" class="headerlink" title="Vim的正常模式"></a>Vim的正常模式</h2><ul>
+<li><code>h,j,k,l</code>分别代表左右下上。</li>
+<li>在当前行上移动光标<ul>
+<li><code>0</code> 移动到行头</li>
+<li><code>^</code> 移动到本行的第一个不是blank的字符</li>
+<li><code>$</code> 移动到行尾</li>
+<li><code>g_</code> 移动到本行最后一个不是blank字符的位置</li>
+<li><code>w</code> 光标移动到下一个单词的开头</li>
+<li><code>e</code> 光标移动到下一个单词的结尾</li>
+<li><code>f&lt;c&gt;</code> 光标移动到本行下一个为<c>的字符处</li>
+</ul>
+</li>
+<li>跨行移动光标<ul>
+<li><code>nG</code> 光标定位到第N行行首</li>
+<li><code>gg</code> 光标定位到第一行的行首</li>
+<li><code>G</code> 光标定位到最后一行的行首</li>
+<li><code>H</code> 光标定位到最后一行的行首</li>
+</ul>
+</li>
+</ul>
+<h2 id="Vim的基础文本操作"><a href="#Vim的基础文本操作" class="headerlink" title="Vim的基础文本操作"></a>Vim的基础文本操作</h2><ul>
+<li>删除<ul>
+<li><code>d</code>就是删除的意思</li>
+<li><code>dw</code> 删除一个单词</li>
+<li><code>d&lt;n&gt;w</code> 删除<n>个单词</li>
+<li><code>dd</code> 删除整行</li>
+<li><code>&lt;n&gt;dd</code> 删除光标处开始的<n>行</li>
+<li><code>d$</code> 删除光标到本行的借位</li>
+<li><code>dH</code> 删除屏幕显示的第一行文本到光标所在</li>
+<li><code>dG</code> 删除光标所在行到文本结束</li>
+</ul>
+</li>
+<li>复制<ul>
+<li><code>y</code>就是复制的意思</li>
+<li><code>yw</code> 复制一个单词</li>
+<li><code>yy</code> 复制整行</li>
+</ul>
+</li>
+<li>粘贴<ul>
+<li><code>p</code> 就是粘贴的意思，在光标后粘贴</li>
+<li><code>P</code> 在光标前粘贴</li>
+</ul>
+</li>
+<li>撤销<ul>
+<li><code>u</code> 撤销刚才的操作</li>
+<li><code>^r</code> 恢复撤销操作</li>
+</ul>
+</li>
+<li>删除字符串操作和替换<ul>
+<li><code>x</code> 删除光标当前所在的字符</li>
+<li><code>r</code> 替换光标当前所在的字符</li>
+</ul>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>basic_cs</category>
+        <category>note</category>
+      </categories>
+      <tags>
+        <tag>vim</tag>
       </tags>
   </entry>
 </search>
