@@ -152,7 +152,12 @@
 <h4 id="更新"><a href="#更新" class="headerlink" title="更新"></a>更新</h4><p>只是单纯的在主项目中使用<code>git pull</code>并不会把你在子模块中的更新也推送到子模块对应的仓库中。</p>
 <p>一个普通的办法就是直接进入到子模块的目录下，手动进行<code>git push</code>，然后再回到主项目中执行推送。</p>
 <p>当然，也可以通过以下命令让git自动尝试推送子模块，然后再推送主项目</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">git push --recursive-submodules=on-demand</span><br></pre></td></tr></table></figure>]]></content>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">git push --recursive-submodules=on-demand</span><br></pre></td></tr></table></figure>
+
+<h2 id="P-S"><a href="#P-S" class="headerlink" title="P.S."></a>P.S.</h2><p>当遇到无法ssh无法push上github的时候，尝试在开代理的情况下，在<code>~/.ssh/config</code>中添加以下内容</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Host github.com</span><br><span class="line">    HostName ssh.github.com</span><br><span class="line">    Port 443</span><br></pre></td></tr></table></figure>
+<p>因为你的代理肯定都会照看到443端口的访问的，所以只要让ssh的时候也是走443端口就可以解决问题了。</p>
+]]></content>
       <categories>
         <category>basic_cs</category>
         <category>note</category>
