@@ -79,8 +79,12 @@
 <li><code>-i</code>: 如果目标文件已经存在，会询问是否覆盖。</li>
 </ul>
 ]]></content>
+      <categories>
+        <category>basic_cs</category>
+        <category>note</category>
+      </categories>
       <tags>
-        <tag>basic_cs</tag>
+        <tag>linux</tag>
       </tags>
   </entry>
   <entry>
@@ -135,7 +139,24 @@
 <li><code>git stash</code> 暂时移除工作目录下的修改内容</li>
 <li><code>git bisect</code> 通过二分查找搜索历史记录</li>
 </ul>
-]]></content>
+<h2 id="子模块"><a href="#子模块" class="headerlink" title="子模块"></a>子模块</h2><p>子模块就是当你的项目中存在着另外一个git仓库，这种时候，如果你希望能够保持另外一个git仓库的独立性，就需要吧“另外一个git仓库”给设置为当前项目的子模块。</p>
+<p>如果你非常希望能够删除子模块的话，直接进入到子模块文件夹中，删除<code>.git</code>文件夹就可以了。但是请务必注意是否符合相关的许可要求。</p>
+<h4 id="克隆"><a href="#克隆" class="headerlink" title="克隆"></a>克隆</h4><p>在克隆一个包含子模块的项目的时候，默认的<code>git clone</code>只会克隆下来子模块所在的目录，文件夹内部并没有文件。一般来说直接通过<code>git clone --recurse-submodules</code>来要求同时克隆子模块。</p>
+<h4 id="添加"><a href="#添加" class="headerlink" title="添加"></a>添加</h4><p>当在你的项目内部还额外通过<code>git clone</code>克隆下来了另外一个仓库的时候，应当使用</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">git submodule add &lt;submodule-url&gt; &lt;submodule-path&gt;</span><br></pre></td></tr></table></figure>
+<p>来把子模块添加到本项目中。可以在<code>.gitsubmodules</code>文件中看到相关的内容。</p>
+<h4 id="初始化和更新"><a href="#初始化和更新" class="headerlink" title="初始化和更新"></a>初始化和更新</h4><p>为了确保子模块能够被初始化和更新，还需要运行以下两个命令</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">git submodule init</span><br><span class="line">git submodule update</span><br></pre></td></tr></table></figure>
+
+<h4 id="同步"><a href="#同步" class="headerlink" title="同步"></a>同步</h4><p>在子模块中更改完后，在主项目中直接通过<code>git add &lt;submodule-path&gt;</code>来进行同步</p>
+<h4 id="更新"><a href="#更新" class="headerlink" title="更新"></a>更新</h4><p>只是单纯的在主项目中使用<code>git pull</code>并不会把你在子模块中的更新也推送到子模块对应的仓库中。</p>
+<p>一个普通的办法就是直接进入到子模块的目录下，手动进行<code>git push</code>，然后再回到主项目中执行推送。</p>
+<p>当然，也可以通过以下命令让git自动尝试推送子模块，然后再推送主项目</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">git push --recursive-submodules=on-demand</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>basic_cs</category>
+        <category>note</category>
+      </categories>
   </entry>
   <entry>
     <title>Hello World</title>
@@ -282,8 +303,12 @@
 </li>
 </ul>
 ]]></content>
+      <categories>
+        <category>basic_cs</category>
+        <category>note</category>
+      </categories>
       <tags>
-        <tag>basic_cs</tag>
+        <tag>vim</tag>
       </tags>
   </entry>
   <entry>
@@ -314,8 +339,14 @@
 <figure class="highlight cmake"><table><tr><td class="code"><pre><span class="line"><span class="keyword">set</span>(OpenCV_DIR <span class="string">&quot;/usr/local/opencv4.5.4&quot;</span>)  <span class="comment"># Opencv的安装路径</span></span><br><span class="line"><span class="keyword">find_package</span>(OpenCV <span class="number">4.5</span>.<span class="number">4</span> REQUIRED)</span><br><span class="line"></span><br><span class="line"><span class="keyword">find_package</span>(catkin REQUIRED COMPONENTS</span><br><span class="line">  cv_bridge</span><br><span class="line">  ... <span class="comment"># 其它需要的包</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure>
 <p>接下来，在代码中，就可以正常的导入<code>opencv4.5</code>和<code>cv_bridge</code>了。</p>
 ]]></content>
+      <categories>
+        <category>airhust</category>
+        <category>project</category>
+      </categories>
       <tags>
-        <tag>env</tag>
+        <tag>ros</tag>
+        <tag>opencv</tag>
+        <tag>jetson</tag>
       </tags>
   </entry>
   <entry>
@@ -1105,6 +1136,7 @@
 ]]></content>
       <tags>
         <tag>整理</tag>
+        <tag>系统</tag>
       </tags>
   </entry>
   <entry>
@@ -4099,8 +4131,12 @@
 <li>对一个节点加锁以为着这个节点所有后裔节点页被加同样类型的锁</li>
 </ul>
 ]]></content>
+      <categories>
+        <category>HUST</category>
+      </categories>
       <tags>
         <tag>整理</tag>
+        <tag>数据库</tag>
       </tags>
   </entry>
   <entry>
@@ -5628,104 +5664,94 @@
 ]]></content>
       <tags>
         <tag>整理</tag>
+        <tag>系统</tag>
       </tags>
   </entry>
   <entry>
-    <title>verilog学习记录</title>
-    <url>/2024/07/10/verilog%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95/</url>
-    <content><![CDATA[<h1 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h1><h4 id="Number-Format-数值形式"><a href="#Number-Format-数值形式" class="headerlink" title="Number Format 数值形式"></a>Number Format 数值形式</h4><h4 id="sized"><a href="#sized" class="headerlink" title="sized"></a><code>sized</code></h4><p>大小的形式如下，其中<code>size</code>只会以十进制表示</p>
-<figure class="highlight verilog"><table><tr><td class="code"><pre><span class="line">[size]&#x27;[base_format][number]</span><br></pre></td></tr></table></figure>
-<p>其中</p>
-<ul>
-<li><code>base_format</code>可以是十进制、十六进制和八进制来表示<code>number</code>部分是什么进制</li>
-<li><code>number</code>就是具体数字，十进制对应0<del>9，十六进制对应0</del>F</li>
-<li><code>number</code>部分允许使用下划线<code>_</code>来分隔方便阅读<br>eg：<figure class="highlight verilog"><table><tr><td class="code"><pre><span class="line"><span class="number">3&#x27;b010</span>;     <span class="comment">// 大小为3，二进制类型，具体数值010</span></span><br><span class="line"><span class="number">3&#x27;d2</span>        <span class="comment">// 大小为3，十进制类型，数值为2</span></span><br><span class="line"><span class="number">8&#x27;h70</span>;      <span class="comment">// 大小为8，十六进制类型，数值为0x70</span></span><br><span class="line"><span class="number">9&#x27;h1FA</span>;     <span class="comment">// 大小为9，十六进制类型，数值0x1FA</span></span><br></pre></td></tr></table></figure></li>
-</ul>
-<h4 id="Unsized"><a href="#Unsized" class="headerlink" title="Unsized"></a><code>Unsized</code></h4><p>没有进制类型的数据就是<code>Unsized</code>类型。没有明确size的数据有自动推断的位宽。</p>
-<figure class="highlight verilog"><table><tr><td class="code"><pre><span class="line"><span class="keyword">integer</span> a = <span class="number">5432</span>;       <span class="comment">// 进制类型没有指明，推断为十进制数值为5432</span></span><br><span class="line"><span class="keyword">integer</span> a = <span class="number">&#x27;h1AD7</span>&#x27;;    <span class="comment">// 大小没有指明，因为是int类型，所以存储为 `a = 32&#x27;h0000_1AD7`</span></span><br></pre></td></tr></table></figure>
+    <title>nmcli相关命令</title>
+    <url>/2024/09/13/nmcli%E7%9B%B8%E5%85%B3%E5%91%BD%E4%BB%A4/</url>
+    <content><![CDATA[<h1 id="nmcli相关命令"><a href="#nmcli相关命令" class="headerlink" title="nmcli相关命令"></a>nmcli相关命令</h1><h2 id="section"><a href="#section" class="headerlink" title="section"></a>section</h2><p>nmcli总共有八大部分的参数</p>
+<table>
+<thead>
+<tr>
+<th align="left">section</th>
+<th align="left">描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">help</td>
+<td align="left">获取帮助</td>
+</tr>
+<tr>
+<td align="left">general</td>
+<td align="left">获得网络管理器相关的状态和全局参数的值</td>
+</tr>
+<tr>
+<td align="left">networking</td>
+<td align="left">开启、重启、停止网络管理器</td>
+</tr>
+<tr>
+<td align="left">radio</td>
+<td align="left">管理无线设备和相关协议</td>
+</tr>
+<tr>
+<td align="left">connection</td>
+<td align="left">管理连接</td>
+</tr>
+<tr>
+<td align="left">device</td>
+<td align="left">管理网络设备</td>
+</tr>
+<tr>
+<td align="left">agent</td>
+<td align="left">配置和管理安全设置</td>
+</tr>
+<tr>
+<td align="left">monitor</td>
+<td align="left">监控网络的相关变化情况</td>
+</tr>
+</tbody></table>
+<h2 id="dev"><a href="#dev" class="headerlink" title="dev"></a>dev</h2><p>dev管理的是机器的硬件设备</p>
+<h4 id="检查设备联网情况"><a href="#检查设备联网情况" class="headerlink" title="检查设备联网情况"></a>检查设备联网情况</h4><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nmcli dev status</span><br></pre></td></tr></table></figure>
+<p>以上命令会打印出当前机器上所有可能用来联网的设备以及它是否有网络连接。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">cassius@ubuntu:~$ nmcli dev status</span><br><span class="line">DEVICE         TYPE      STATE         CONNECTION</span><br><span class="line">eth0           ethernet  connected     Wired connection 1</span><br><span class="line">wlan0          wifi      connected     AirHustA</span><br><span class="line">docker0        bridge    connected     docker0</span><br><span class="line">p2p-dev-wlan0  wifi-p2p  disconnected  --</span><br><span class="line">l4tbr0         bridge    unmanaged     --</span><br><span class="line">dummy0         dummy     unmanaged     --</span><br><span class="line">rndis0         ethernet  unmanaged     --</span><br><span class="line">usb0           ethernet  unmanaged     --</span><br><span class="line">lo             loopback  unmanaged     --</span><br></pre></td></tr></table></figure>
+<p>例如，在我的设备上显示以太网和无线网都有连接，并且docker通过桥接模式连接到宿主机。</p>
+<h4 id="查看可用的wifi"><a href="#查看可用的wifi" class="headerlink" title="查看可用的wifi"></a>查看可用的wifi</h4><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nmcli dev wifi list</span><br></pre></td></tr></table></figure>
+<p>以上命令就会打印出设备检测到的wifi。同一个wifi可能会被打印出来多次，因为wifi使用着不同的信道。</p>
+<h2 id="con"><a href="#con" class="headerlink" title="con"></a>con</h2><p>con是管理设备的相关连接配置，如定义IP地址、子网掩码、网关、DNS服务器等</p>
+<h4 id="查看联网状态"><a href="#查看联网状态" class="headerlink" title="查看联网状态"></a>查看联网状态</h4><p>如果只希望查看连了网的设备，可以通过以下命令查看</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nmcli con show</span><br></pre></td></tr></table></figure>
+<p>查看结果如下</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">cassius@ubuntu:~$ nmcli con show</span><br><span class="line">NAME                UUID                                  TYPE      DEVICE</span><br><span class="line">Wired connection 1  30b11a44-5fd9-3717-9b55-71879f7d85b2  ethernet  eth0</span><br><span class="line">AirHustA            ba28574e-ab8a-47bc-a0a2-631e0e1ee0ca  wifi      wlan0</span><br><span class="line">docker0             905202de-05c7-45a3-8d96-0d83022c3bcd  bridge    docker0</span><br></pre></td></tr></table></figure>
+<p>更进一步的，可以查看连接中的设备的更详细的信息，只要在show后面加上具体的设备名称，如在我的情况下，就应该是</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nmcli con show &#x27;Wired connection 1&#x27;</span><br></pre></td></tr></table></figure>
+<p>这里之所以需要加单引号是因为设备名称中有空格，如果没有空格这里就不需要加单引号了。</p>
+<h4 id="添加新的连接配置文件"><a href="#添加新的连接配置文件" class="headerlink" title="添加新的连接配置文件"></a>添加新的连接配置文件</h4><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nmcli con add con-name &lt;connection-name&gt; type wifi ifname wlan0 ssid &lt;wifi-name&gt; ipv4.method auto</span><br></pre></td></tr></table></figure>
+<p>通过以上命令，可以创建一个新的连接，通过wifi俩姐到一个叫做<code>&lt;connection-name&gt;</code>的wifi，并且指定ipv4地址通过DHCP方法获取。一般情况下，该指令需要sudo权限。</p>
+<p>虽然一般情况下连接的是wifi，但是如果要连接的是以太网的话，<code>type</code>后面跟的应该是<code>ethernet</code>， <code>ifname</code>后面也应该跟着以太网口的设备名，一般是<code>eth0</code></p>
+<h5 id="输入wifi密码"><a href="#输入wifi密码" class="headerlink" title="输入wifi密码"></a>输入wifi密码</h5><p>如果wifi是使用wpa2协议来保护的话，后续通过以下两条命令把wifi密码添加到配置文件中。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nmcli connection modify CS_INF wifi-sec.key-mgmt wpa-psk</span><br><span class="line">nmcli connection modify CS_INF wifi-sec.psk &lt;wifi-password&gt;</span><br></pre></td></tr></table></figure>
 
-<h4 id="Negative"><a href="#Negative" class="headerlink" title="Negative"></a><code>Negative</code></h4><p>负数就是前面加负号，但是在<code>base_format</code>和<code>number</code>之间不允许有负号</p>
-<figure class="highlight verilog"><table><tr><td class="code"><pre><span class="line">-<span class="number">6&#x27;d3</span>;      <span class="comment">// 以 3 的二进制补码形式存储的 8 位负数</span></span><br><span class="line">-<span class="number">6</span>&#x27;sd9;     <span class="comment">// 用于有符号数学</span></span><br><span class="line"><span class="number">8</span>&#x27;d-<span class="number">4</span>;      <span class="comment">// illegal</span></span><br></pre></td></tr></table></figure>
+<h5 id="开启热点"><a href="#开启热点" class="headerlink" title="开启热点"></a>开启热点</h5><p>热点本质上也只是一个本机的连接，所以也是通过nmcli来添加配置文件，就可以连接</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nmcli con add type wifi ifname &lt;wireless-dev-name&gt; con-name &lt;connection-name&gt; ssid &lt;hot-spot-name&gt; [autoconnect yes]</span><br></pre></td></tr></table></figure>
+<p>以上命令中，<code>&lt;wireless-dev-name&gt;</code>一般是诸如<code>wlp3s0</code>这样的设备名，注意不可能是<code>wifi</code></p>
+<h4 id="修改连接"><a href="#修改连接" class="headerlink" title="修改连接"></a>修改连接</h4><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nmcli con modify &lt;connection-name&gt; ipv4.method manual ipv4.address 10.0.0.10/8 ipv4.gateway 10.10.10.1</span><br></pre></td></tr></table></figure>
+<p>以上命令就相当于在系统设置中指定ip地址为手动模式，设置了ipv4地址为10.0.0.10，子网掩码为255.0.0.0，网关为10.10.10.1</p>
+<h5 id="自动连接"><a href="#自动连接" class="headerlink" title="自动连接"></a>自动连接</h5><p>如果希望设备每次能够自动尝试连接上某一个连接，可以使用</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nmcli con modify &lt;conection-name&gt; autoconnect yes</span><br></pre></td></tr></table></figure>
+<p>来要求设备每次都自动尝试连接到<code>&lt;connection-name&gt;</code>上</p>
+<h4 id="删除连接"><a href="#删除连接" class="headerlink" title="删除连接"></a>删除连接</h4><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nmcli con del &lt;connection-name&gt;</span><br></pre></td></tr></table></figure>
 
-<h3 id="Strings"><a href="#Strings" class="headerlink" title="Strings"></a>Strings</h3><p>和C语言没什么区别，双引号，不能换行</p>
-<h3 id="Identifiers"><a href="#Identifiers" class="headerlink" title="Identifiers"></a>Identifiers</h3><p>[a-z][A-Z][0-9],_,$，其中下划线和美元符号不能开头</p>
-<h3 id="keywords"><a href="#keywords" class="headerlink" title="keywords"></a>keywords</h3><p>略</p>
-<h2 id="数值表示"><a href="#数值表示" class="headerlink" title="数值表示"></a>数值表示</h2><h3 id="整数数值表示方法"><a href="#整数数值表示方法" class="headerlink" title="整数数值表示方法"></a>整数数值表示方法</h3><h4 id="指明位宽"><a href="#指明位宽" class="headerlink" title="指明位宽"></a>指明位宽</h4><figure class="highlight verilog"><table><tr><td class="code"><pre><span class="line"><span class="number">4&#x27;b1001</span>  <span class="comment">// 4bit数值</span></span><br><span class="line"><span class="number">32&#x27;h3022_c0de</span>  <span class="comment">// 32bit数值</span></span><br></pre></td></tr></table></figure>
-<p>其中，下划线<code>_</code>只是为了方便读</p>
-<h4 id="不指明位宽"><a href="#不指明位宽" class="headerlink" title="不指明位宽"></a>不指明位宽</h4><figure class="highlight verilog"><table><tr><td class="code"><pre><span class="line">counter = <span class="number">&#x27;d100</span> ;  <span class="comment">// 一般回根据编译器自动分频位宽，常见32bit</span></span><br><span class="line">counter = <span class="number">100</span>;</span><br><span class="line">counter = <span class="number">32&#x27;h64</span></span><br><span class="line"><span class="comment">// 三种形式一个意思</span></span><br></pre></td></tr></table></figure>
-<h4 id="负数表示"><a href="#负数表示" class="headerlink" title="负数表示"></a>负数表示</h4><p>在表示位宽的数字前面加一个减号来表示负数</p>
-<figure class="highlight verilog"><table><tr><td class="code"><pre><span class="line">-<span class="number">6&#x27;d15</span></span><br><span class="line">-<span class="number">15</span></span><br></pre></td></tr></table></figure>
-<h3 id="实数表示方法"><a href="#实数表示方法" class="headerlink" title="实数表示方法"></a>实数表示方法</h3><h4 id="十进制"><a href="#十进制" class="headerlink" title="十进制"></a>十进制</h4><figure class="highlight verilog"><table><tr><td class="code"><pre><span class="line"><span class="number">30</span><span class="variable">.123</span></span><br><span class="line"><span class="number">6</span><span class="variable">.0</span></span><br><span class="line"><span class="number">3</span><span class="variable">.0</span></span><br><span class="line"><span class="number">0</span><span class="variable">.001</span></span><br></pre></td></tr></table></figure>
-<p>科学计数法</p>
-<figure class="highlight verilog"><table><tr><td class="code"><pre><span class="line"><span class="number">1</span><span class="variable">.2e4</span></span><br><span class="line"><span class="number">1_0001</span>e4</span><br><span class="line"><span class="number">1</span>E-<span class="number">3</span></span><br></pre></td></tr></table></figure>
-<h3 id="字符串表示方法"><a href="#字符串表示方法" class="headerlink" title="字符串表示方法"></a>字符串表示方法</h3><p>verilog将字符串当作一系列的单字节ASCII字符队列</p>
-<figure class="highlight verilog"><table><tr><td class="code"><pre><span class="line"><span class="keyword">reg</span> [<span class="number">0</span>:<span class="number">12</span>*<span class="number">8</span>-<span class="number">1</span>] str;</span><br><span class="line"><span class="keyword">initial</span> <span class="keyword">begin</span></span><br><span class="line">    str = <span class="string">&quot;w3cschool.cn&quot;</span>;</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+<h4 id="断开连接"><a href="#断开连接" class="headerlink" title="断开连接"></a>断开连接</h4><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nmcli con down &lt;connection-name&gt;</span><br></pre></td></tr></table></figure>
 
-<h2 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a>数据类型</h2><h3 id="线网wire"><a href="#线网wire" class="headerlink" title="线网wire"></a>线网wire</h3><p>wire类型标识硬件单元之间的物理连线，由其连接的器件的输出端连续驱动。如果没有驱动原件连接到wire型变量，缺省值一般位”Z”</p>
-<figure class="highlight verilog"><table><tr><td class="code"><pre><span class="line"><span class="keyword">wire</span> interrupt;</span><br><span class="line"><span class="keyword">wire</span> flag1, flag2;</span><br><span class="line"><span class="keyword">wire</span> gnd = <span class="number">1&#x27;b0</span>;</span><br></pre></td></tr></table></figure>
-<h3 id="寄存器reg"><a href="#寄存器reg" class="headerlink" title="寄存器reg"></a>寄存器reg</h3><p>寄存器用来表示存储单元，它会保持数据原有的值，直到被改写</p>
-<figure class="highlight verilog"><table><tr><td class="code"><pre><span class="line"><span class="keyword">reg</span> clk_temp;</span><br><span class="line"><span class="keyword">reg</span> flag1, flag2;</span><br></pre></td></tr></table></figure>
-<p>例如，在always快中给，寄存器可能被综合成边沿触发器，在组合逻辑中可能被综合成wire型变量。寄存器不需要驱动源，也不一定需要时钟信号。在仿真时，寄存器的值可以在任意时刻通过赋值操作进行改写。</p>
-<figure class="highlight verilog"><table><tr><td class="code"><pre><span class="line"><span class="keyword">reg</span> rstn;</span><br><span class="line"><span class="keyword">initial</span> <span class="keyword">begin</span></span><br><span class="line">    rstn = <span class="number">1&#x27;b0</span>;</span><br><span class="line">    #<span class="number">100</span>;</span><br><span class="line">    rstn = <span class="number">1&#x27;b1</span>;</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="向量"><a href="#向量" class="headerlink" title="向量"></a>向量</h3><p>当位宽大于1时，wire或reg即可声明位向量的形式</p>
-<figure class="highlight verilog"><table><tr><td class="code"><pre><span class="line"><span class="keyword">reg</span> [<span class="number">3</span>:<span class="number">0</span>] counter;  <span class="comment">// 声明4bit位宽的寄存器counter</span></span><br><span class="line"><span class="keyword">wire</span> [<span class="number">32</span>-<span class="number">1</span>:<span class="number">0</span>] gpio_Data;  <span class="comment">// 声明32bit位宽的线型变量gpio_data</span></span><br><span class="line"><span class="keyword">wire</span> [<span class="number">8</span>:<span class="number">2</span>] addr; <span class="comment">// 声明7bit位宽的线型变量addr，位宽范围为8:2</span></span><br><span class="line"><span class="keyword">reg</span> [<span class="number">0</span>:<span class="number">31</span>] data;  <span class="comment">// 声明32bit位宽寄存器变量data，最高有效位为0</span></span><br></pre></td></tr></table></figure>
-<p>对于上面的变量，我们可以指定某一位或若干相邻位，作为其他逻辑使用</p>
-<figure class="highlight verilog"><table><tr><td class="code"><pre><span class="line"><span class="keyword">wire</span> [<span class="number">9</span>:<span class="number">0</span>] data_low = data[<span class="number">0</span>:<span class="number">9</span>];</span><br><span class="line">addr_tempp[<span class="number">3</span>:<span class="number">2</span>] = addr[<span class="number">8</span>:<span class="number">7</span>] + <span class="number">1&#x27;b1</span>;</span><br></pre></td></tr></table></figure>
-<p>verilog支持可变的向量域选择</p>
-<figure class="highlight verilog"><table><tr><td class="code"><pre><span class="line"><span class="keyword">reg</span> [<span class="number">31</span>:<span class="number">0</span>] data1;</span><br><span class="line"><span class="keyword">reg</span> [<span class="number">7</span>:<span class="number">0</span>] byte1 [<span class="number">3</span>:<span class="number">0</span>];</span><br><span class="line"><span class="keyword">integer</span> j;</span><br><span class="line">alwayrs@* <span class="keyword">begin</span></span><br><span class="line">    <span class="keyword">for</span>(j=<span class="number">0</span>;j&lt;=<span class="number">3</span>;j=j+<span class="number">1</span>) <span class="keyword">begin</span></span><br><span class="line">        byte1[j] = data1[(j+<span class="number">1</span>)*<span class="number">8</span>-<span class="number">1</span> : j*<span class="number">8</span>];</span><br><span class="line">        <span class="comment">//把data1[7:0]...data1[31:24]依次赋值给byte1[0][7:0] ... byte1[3][7:0]</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
-<p>对信号重新进行组合成新的向量时候，需要用大括号</p>
-<figure class="highlight verilog"><table><tr><td class="code"><pre><span class="line"><span class="keyword">wire</span> [<span class="number">31</span>:<span class="number">0</span>] temp1, temp2;</span><br><span class="line"><span class="keyword">assign</span> temp1 = &#123;byte1[<span class="number">0</span>][<span class="number">7</span>:<span class="number">0</span>], data1[<span class="number">31</span>:<span class="number">8</span>]&#125;;  <span class="comment">// 数据拼接</span></span><br><span class="line"><span class="keyword">assign</span> temp2 = &#123;<span class="number">32</span>&#123;<span class="number">1&#x27;b0</span>&#125;&#125;;  <span class="comment">// 赋值32位的数值0</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="整数，实数，时间寄存器变量"><a href="#整数，实数，时间寄存器变量" class="headerlink" title="整数，实数，时间寄存器变量"></a>整数，实数，时间寄存器变量</h3><p>实际上也属于寄存器类型</p>
-<h4 id="整数-integer"><a href="#整数-integer" class="headerlink" title="整数 integer"></a>整数 integer</h4><h4 id="实数-real"><a href="#实数-real" class="headerlink" title="实数 real"></a>实数 real</h4><h4 id="时间-time"><a href="#时间-time" class="headerlink" title="时间 time"></a>时间 time</h4><p>verilog使用特殊的时间寄存器time型变量，对仿真时间进行保存。调用系统函数<code>$time</code>获取当前仿真时间</p>
-<h3 id="数组"><a href="#数组" class="headerlink" title="数组"></a>数组</h3><p>在verilog中，允许声明reg, wire, integer, time, real以及向量类型的数组<br>数组维数没有限制。线网数组也可以用于连接实例模块的接口。数组中的每个元素都可以作为标量或者向量，以同样的方式来是应用，形如<code>&lt;数组名&gt;[&lt;下标&gt;]</code>。</p>
-<figure class="highlight verilog"><table><tr><td class="code"><pre><span class="line"><span class="keyword">integer</span> flag[<span class="number">7</span>:<span class="number">0</span>]; <span class="comment">// 8个整数组成的数组</span></span><br><span class="line"><span class="keyword">reg</span> [<span class="number">3</span>:<span class="number">0</span>] coiunter [<span class="number">3</span>:<span class="number">0</span>];  <span class="comment">// 4个4bit计数器组成的数组</span></span><br><span class="line"><span class="keyword">wire</span> [<span class="number">7</span>:<span class="number">0</span>] addr_bus [<span class="number">3</span>:<span class="number">0</span>];  <span class="comment">// 有4个8bit wire类型变量组成的数组</span></span><br><span class="line"><span class="keyword">wire</span> data_bite[<span class="number">7</span>:<span class="number">0</span>][<span class="number">5</span>:<span class="number">0</span>];  <span class="comment">// 声明1bit wire型变量的二维数组</span></span><br><span class="line"><span class="keyword">reg</span> [<span class="number">31</span>:<span class="number">0</span>] data_4d[<span class="number">11</span>:<span class="number">0</span>][<span class="number">3</span>:<span class="number">0</span>][<span class="number">255</span>:<span class="number">0</span>]; <span class="comment">// 声明4维的32bit数据变量数组</span></span><br><span class="line"><span class="comment">// 赋值操作</span></span><br><span class="line">flag [<span class="number">1</span>] = <span class="number">32&#x27;d0</span>  <span class="comment">// 将flag数组中第二个元素赋值为32bit的0值</span></span><br><span class="line">counter[<span class="number">3</span>] = <span class="number">4&#x27;hf</span>;  <span class="comment">// 讲数组counter中第4个元素的值赋值为4bit 十六进制数f，等效于</span></span><br><span class="line">counter[<span class="number">3</span>][<span class="number">3</span>:<span class="number">0</span>] = <span class="number">4&#x27;hf</span>;  <span class="comment">// 可省略宽度</span></span><br><span class="line"><span class="keyword">assign</span> addr_bus[<span class="number">0</span>] = <span class="number">8&#x27;b0</span>;  <span class="comment">// 将数组addr_bus中第一个元素的值赋值为0</span></span><br><span class="line"><span class="keyword">assign</span> data_bit[<span class="number">0</span>][<span class="number">1</span>] = <span class="number">1&#x27;b1</span>;  <span class="comment">// 讲数组data_bit的第1行2列的元素赋值为1，不能省略第二个访问标号</span></span><br><span class="line">data_4d[<span class="number">0</span>][<span class="number">0</span>][<span class="number">0</span>][<span class="number">0</span>][<span class="number">15</span>:<span class="number">0</span>] = <span class="number">15&#x27;d3</span>;  <span class="comment">// 将数组data_4d中标号为[0][0][0][0]的寄存器i单元的15~0bit赋值为3</span></span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>数组与向量的区别<br>向量是一个单独的原件，位宽为n；<br>数组由多个原件组成，其中每个原件的位宽为n或1</p>
-</blockquote>
-<h3 id="存储器"><a href="#存储器" class="headerlink" title="存储器"></a>存储器</h3><p>存储器变量就是一种寄存器数组，可用来描述RAM或ROm行为</p>
-<figure class="highlight verilog"><table><tr><td class="code"><pre><span class="line"><span class="keyword">reg</span> membit[<span class="number">0</span>:<span class="number">255</span>];  <span class="comment">// 256bit的1bit寄存器</span></span><br><span class="line"><span class="keyword">reg</span> [<span class="number">7</span>:<span class="number">0</span>] mem[<span class="number">0</span>:<span class="number">1023</span>];</span><br><span class="line">mem[<span class="number">511</span>] = <span class="number">8&#x27;b0</span>;</span><br></pre></td></tr></table></figure>
-
-<h3 id="参数"><a href="#参数" class="headerlink" title="参数"></a>参数</h3><p>参数用来表示常量，用关键字parameter声明，只能赋值一次。</p>
-<figure class="highlight verilog"><table><tr><td class="code"><pre><span class="line"><span class="keyword">parameter</span> data_width = <span class="number">10&#x27;d32</span>;</span><br><span class="line"><span class="keyword">parameter</span> i=<span class="number">1</span>, j=<span class="number">2</span>, k=<span class="number">3</span>;</span><br><span class="line"><span class="keyword">parameter</span> mem_size = data_width * <span class="number">10</span>;</span><br></pre></td></tr></table></figure>
-<p>但是，通过实例化的方式，可以更改参数在模块中的值。</p>
-<p>局部参数用<code>localparam</code>来声明，其作用和用法与parameter相同，区别在于它的值不能被改变。所以当参数值在本模块中调用的时候，可以用<code>localparam</code>来说明。</p>
-<h3 id="字符串"><a href="#字符串" class="headerlink" title="字符串"></a>字符串</h3><p>字符串保存在reg类型的变量中，每个字符占用一个字节。因此寄存器变量的宽度应该足够大，以保证不会溢出。</p>
-<figure class="highlight verilog"><table><tr><td class="code"><pre><span class="line"><span class="keyword">reg</span> [<span class="number">0</span>: <span class="number">12</span>*<span class="number">8</span>-<span class="number">1</span>] str;</span><br><span class="line"><span class="keyword">initial</span> <span class="keyword">begin</span></span><br><span class="line">    str = <span class="string">&quot;hello world&quot;</span>;</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="verilog表达式"><a href="#verilog表达式" class="headerlink" title="verilog表达式"></a>verilog表达式</h2><h3 id="操作数"><a href="#操作数" class="headerlink" title="操作数"></a>操作数</h3><figure class="highlight verilog"><table><tr><td class="code"><pre><span class="line"><span class="keyword">module</span> test;</span><br><span class="line"></span><br><span class="line"><span class="comment">// real</span></span><br><span class="line"><span class="keyword">real</span> a, b, c</span><br><span class="line">c = a + b;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 寄存器</span></span><br><span class="line"><span class="keyword">reg</span> [<span class="number">3</span>:<span class="number">8</span>] cprmu_1, cprmu_2 ;</span><br><span class="line"><span class="keyword">always</span> @(<span class="keyword">posedge</span> clk) <span class="keyword">begin</span></span><br><span class="line">    cprmu_2 = cprmu_1 ^ cprmu_2;</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 函数</span></span><br><span class="line"><span class="keyword">reg</span> flag1;</span><br><span class="line">flag = calculate_result(A, B)</span><br><span class="line"></span><br><span class="line"><span class="keyword">endmodule</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="操作符"><a href="#操作符" class="headerlink" title="操作符"></a>操作符</h3><h4 id="算数操作符"><a href="#算数操作符" class="headerlink" title="算数操作符"></a>算数操作符</h4><p>如果操作数某一位为X，则计算结果也会全部出现X</p>
-<p>对变量进行声明时，要根据变量的操作符对变量的位宽进行合理声明，不要让结果溢出。</p>
-<p>负数表示时候，可以直接在十进制数前面增加一个符号，也可以指定位宽。因为负数使用二进制补码来表示，不指定位宽来表示i附属时候，会自动分位宽，进而导致意想不到的结果。</p>
-<h4 id="按位操作符"><a href="#按位操作符" class="headerlink" title="按位操作符"></a>按位操作符</h4><p>同或<code>~^</code></p>
-<ul>
-<li>按位操作符对两个操作数的每1bit数据进行按位操作</li>
-<li>如果2个操作数位宽不相等，则用0向左扩展补充较短的操作数</li>
-<li>取反操作符只有一个操作数，它对操作数的每1bit数据进行取反操作</li>
-</ul>
-<h4 id="归约操作符"><a href="#归约操作符" class="headerlink" title="归约操作符"></a>归约操作符</h4><p>只有一个操作数，对这个向量操作数逐位进行操作，最终产生一个1bit结果</p>
-<figure class="highlight verilog"><table><tr><td class="code"><pre><span class="line">A = <span class="number">4&#x27;b1010</span>;</span><br><span class="line">&amp;A;  <span class="comment">// 结果为1&amp;0&amp;1&amp;0 = 1&#x27;b0,可用来判断变量A是否全为1</span></span><br><span class="line">~|A;  <span class="comment">// 结果为~(1|0|1|0) = 1&#x27;b0,可用来判断变量A是否全为0</span></span><br><span class="line">^A;  <span class="comment">// 结果为1^0^1^0 = 1&#x27;b0;</span></span><br></pre></td></tr></table></figure>
-<h4 id="移位操作符"><a href="#移位操作符" class="headerlink" title="移位操作符"></a>移位操作符</h4><p>逻辑左移<code>&lt;&lt;</code>,逻辑右移<code>&gt;&gt;</code>,算数左移<code>&lt;&lt;&lt;</code>,算数右移<code>&gt;&gt;&gt;</code></p>
-<h4 id="拼接操作符"><a href="#拼接操作符" class="headerlink" title="拼接操作符"></a>拼接操作符</h4><p>用大括号<code>&#123;, &#125;</code>来表示，用于将多个操作数（向量）拼接成新的操作数（向量），信号间用逗号隔开</p>
-<p>拼接操作数必须指定位宽，常数也需要指定</p>
-<figure class="highlight verilog"><table><tr><td class="code"><pre><span class="line">A = <span class="number">4&#x27;b1010</span>;</span><br><span class="line">B = <span class="number">1&#x27;b1</span>;</span><br><span class="line">Y1 = &#123;B, A[<span class="number">3</span>:<span class="number">2</span>],A[<span class="number">0</span>], <span class="number">4&#x27;h3</span>&#125;;  <span class="comment">// 结果为Y1 = &#x27;b1100_0011</span></span><br><span class="line">Y2 = &#123;<span class="number">4</span>&#123;B&#125;, <span class="number">3&#x27;d4</span>&#125;;  <span class="comment">// 结果为Y2 = 7&#x27;b111_1100</span></span><br><span class="line">Y3 = &#123;<span class="number">32</span>&#123;<span class="number">1&#x27;b0</span>&#125;&#125;;  <span class="comment">// 结果为Y3 = 32&#x27;h0，长用作寄存器初始化时匹配位宽的赋初值</span></span><br></pre></td></tr></table></figure>
-<h4 id="条件操作符"><a href="#条件操作符" class="headerlink" title="条件操作符"></a>条件操作符</h4><p>和C语言的三木运算符相同</p>
-<h1 id="编译指令"><a href="#编译指令" class="headerlink" title="编译指令"></a>编译指令</h1><h1 id="连续赋值"><a href="#连续赋值" class="headerlink" title="连续赋值"></a>连续赋值</h1><p>连续赋值语句是Verilog数据流建模的基本语句，用于对wire型变量进行赋值</p>
-<figure class="highlight verilog"><table><tr><td class="code"><pre><span class="line"><span class="keyword">assign</span> LHS_target = RHS_expression;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>说明<ul>
-<li><code>LHS_target</code>必须是一个标量或者线型向量，而不能是寄存器类型</li>
-<li><code>LHS_expression</code>的类型没有要求，可以是标量或线型或存器向量，也可以是函数调用</li>
-<li>只要<code>RHS_expression</code>表达式的操作数由事件发生（值的变化）时，<code>RHS_expression</code>就会立刻重新计算，同时赋值给<code>LHS_expression</code></li>
-</ul>
-</li>
-<li>Verilog还提供了另一种对wire型赋值的简单方法，即在wire型变量声明的时候同时对其赋值。wire型变量只能被赋值依次，因此该种连续赋值方式也只能有一次。</li>
-</ul>
-]]></content>
+<h4 id="连接"><a href="#连接" class="headerlink" title="连接"></a>连接</h4><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nmcli con up &lt;connection-name&gt;</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>basic_cs</category>
+        <category>note</category>
+      </categories>
       <tags>
-        <tag>整理</tag>
+        <tag>nnmcli</tag>
+        <tag>network</tag>
       </tags>
   </entry>
 </search>
