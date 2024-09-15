@@ -871,7 +871,6 @@
 ]]></content>
       <categories>
         <category>basic_cs</category>
-        <category>note</category>
       </categories>
       <tags>
         <tag>linux</tag>
@@ -944,13 +943,13 @@
 <p>当然，也可以通过以下命令让git自动尝试推送子模块，然后再推送主项目</p>
 <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">git push --recursive-submodules=on-demand</span><br></pre></td></tr></table></figure>
 
-<h2 id="P-S"><a href="#P-S" class="headerlink" title="P.S."></a>P.S.</h2><p>当遇到无法ssh无法push上github的时候，尝试在开代理的情况下，在<code>~/.ssh/config</code>中添加以下内容</p>
+<h2 id="git-diff"><a href="#git-diff" class="headerlink" title="git diff"></a><code>git diff</code></h2><p>用来做比较的命令。在linux上系统本身还有一个<code>diff</code>命令用来比较两个不同的文件，但是<code>git diff</code>是用来进行仓库级别的比较。在windows上除了使用在线代码比较之外，还推荐使用软件<code>winMerge</code>来进行文件夹级别的比较，可以找出文件夹下每个文件的不同，在文件上也提供行级别的比较。</p>
+<h2 id="附加小方法"><a href="#附加小方法" class="headerlink" title="附加小方法"></a>附加小方法</h2><p>在Windows上,有时会遇到无法ssh无法push上github的时候，尝试在开代理的情况下，在<code>~/.ssh/config</code>中添加以下内容</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Host github.com</span><br><span class="line">    HostName ssh.github.com</span><br><span class="line">    Port 443</span><br></pre></td></tr></table></figure>
 <p>因为你的代理肯定都会照看到443端口的访问的，所以只要让ssh的时候也是走443端口就可以解决问题了。</p>
 ]]></content>
       <categories>
         <category>basic_cs</category>
-        <category>note</category>
       </categories>
   </entry>
   <entry>
@@ -5528,7 +5527,6 @@
 <p>接下来，在代码中，就可以正常的导入<code>opencv4.5</code>和<code>cv_bridge</code>了。</p>
 ]]></content>
       <categories>
-        <category>airhust</category>
         <category>project</category>
       </categories>
       <tags>
@@ -5617,7 +5615,6 @@
 <h4 id="连接"><a href="#连接" class="headerlink" title="连接"></a>连接</h4><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nmcli con up &lt;connection-name&gt;</span><br></pre></td></tr></table></figure>]]></content>
       <categories>
         <category>basic_cs</category>
-        <category>note</category>
       </categories>
       <tags>
         <tag>nnmcli</tag>
@@ -5753,10 +5750,80 @@
 ]]></content>
       <categories>
         <category>basic_cs</category>
-        <category>note</category>
       </categories>
       <tags>
         <tag>vim</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>MAR论文阅读</title>
+    <url>/2024/09/14/MAR%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/</url>
+    <content><![CDATA[<h1 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h1><ul>
+<li>autoregressive模型是否真的需要使用VQ  –&gt; 不需要</li>
+<li>原因：不关心值是否连续还是离散，所以只要能够得到每个token的概率分布就可以了</li>
+<li>提出：为每个token生成一个概率向量 $\mathcal{z}$,使用去噪网络（e.g. MLP）来训练$x \sim p(x|\mathcal{z})$的模型，因为这个可以代替<code>cross-entropy loss</code>,所以成为<code>diffusion loss</code></li>
+<li>优势：<ul>
+<li>VQ不好训，离散的质量整不成。</li>
+<li>图片生成中的一个新的好的：<em>modeling<br>the interdependence of tokens by autoregression, jointly with the per-token distribution by diffusion</em></li>
+</ul>
+</li>
+</ul>
+<h1 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h1><h2 id="回顾离散值的token"><a href="#回顾离散值的token" class="headerlink" title="回顾离散值的token"></a>回顾离散值的token</h2><ol>
+<li>必须要<code>loss function</code>来评估估计值和真是分布。  –&gt; 交叉熵就可以</li>
+<li>采样器控制diversity</li>
+</ol>
+<p>离散不重要，重要的是分布。</p>
+<h2 id="diffusion-loss"><a href="#diffusion-loss" class="headerlink" title="diffusion loss"></a>diffusion loss</h2><p>其它：diffusion model用来针对像素的分布。</p>
+<p>mar：用来针对每个token的分布</p>
+<h3 id="loss-function"><a href="#loss-function" class="headerlink" title="loss function"></a>loss function</h3><h3 id="sampler"><a href="#sampler" class="headerlink" title="sampler"></a>sampler</h3><p><strong>temparature很重要</strong></p>
+<h2 id="diffusion-loss-for-autoregressive-models"><a href="#diffusion-loss-for-autoregressive-models" class="headerlink" title="diffusion loss for autoregressive models"></a>diffusion loss for autoregressive models</h2><h2 id="unifying-autoregressive-and-masked-generative-models"><a href="#unifying-autoregressive-and-masked-generative-models" class="headerlink" title="unifying autoregressive and masked generative models"></a>unifying autoregressive and masked generative models</h2><p>双向注意力也可以执行自回归</p>
+<p>自回归值要求根据目前给定的tokens预测下一个token，但是没有限制之前的token与下一个token之间应该如何相关联</p>
+<p>–&gt; 使用MAE-style encoder处理已有的tokens生成一个序列，再用MAE decoder 来处理这个生成序列，<em>就能够实现自监督学习了</em></p>
+<ul>
+<li>不同：loss再这里只计算那些 unknown tokens</li>
+<li>优势：”all tokens see each other, unknown tokens see all known tokens”。比普通注意力更好的<code>full attention</code></li>
+<li>劣势：无法使用kv cache加速推理。不过可以依次生成多个tokens，减少推理时候的生成步骤</li>
+</ul>
+<h4 id="casual-VS-bidirectional-attention"><a href="#casual-VS-bidirectional-attention" class="headerlink" title="casual VS bidirectional attention"></a>casual VS bidirectional attention</h4><ul>
+<li>casual的每个token只向前看  -&gt; 训练的时候一次计算所有的loss</li>
+<li>bidirectional每个token都看得见其它所有token<ul>
+<li>mae：mask tokens在中间层，只计算unknown tokens的loss， “better communication across tokens”</li>
+</ul>
+</li>
+</ul>
+<h4 id="generalized-autoregressive-models"><a href="#generalized-autoregressive-models" class="headerlink" title="generalized autoregressive models"></a>generalized autoregressive models</h4><ul>
+<li>raster-order: 一个一个向后生成token</li>
+<li>random-order: 随机顺序生成token</li>
+<li>masked autoregressive: 使用多个随机顺序的token，生成多个tokens<ul>
+<li>MAR是一个随机顺序的自回归模型，用来能够同时预测（生成）多个tokens</li>
+<li>MAR的temprature是用来对每一个token的分布进行取样的</li>
+<li>MAGE是取样于预测出来的token的位置。  -&gt;  会导致训练时间和推理时间没有很好的关系（大概这么个意思）</li>
+</ul>
+</li>
+</ul>
+<h1 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h1><h2 id="diffusion-loss-1"><a href="#diffusion-loss-1" class="headerlink" title="diffusion loss"></a>diffusion loss</h2><h3 id="diffusion-process"><a href="#diffusion-process" class="headerlink" title="diffusion process"></a>diffusion process</h3><ul>
+<li>process是<a href="https://proceedings.mlr.press/v139/nichol21a.html">DDPM</a></li>
+<li>噪声是$cos$</li>
+<li>去噪网络</li>
+</ul>
+<h3 id="去噪多层感知机"><a href="#去噪多层感知机" class="headerlink" title="去噪多层感知机"></a>去噪多层感知机</h3><p>残差模块做出来的小MLP。每个都是<code>LayerNorm</code>，</p>
+<h2 id="autoregressive-and-masked-autoregressive-image-generation"><a href="#autoregressive-and-masked-autoregressive-image-generation" class="headerlink" title="autoregressive and masked autoregressive image generation"></a>autoregressive and masked autoregressive image generation</h2><ul>
+<li>tokenizer: LDM</li>
+<li>transformer: ViT,在收到tokens序列之后，添加位置嵌入，尾追class tokens。然后用transform上这个序列。<ul>
+<li>32 blocks, 1024 width ~400M params</li>
+</ul>
+</li>
+<li>autoregressive baseline: 使用普通的注意力机制，输入序列移位一个token（就是刚刚的cls）。trangular masking. temperature sampling. kv-cache提速</li>
+<li>masked autoregressive models: 双向注意力。mask ratio[21,4,29], [0.7,1.0]。 70% unknown tokens. 64 padding [cls]</li>
+</ul>
+]]></content>
+      <categories>
+        <category>AI</category>
+      </categories>
+      <tags>
+        <tag>AI</tag>
+        <tag>MAR</tag>
+        <tag>note</tag>
       </tags>
   </entry>
 </search>
