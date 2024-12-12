@@ -785,6 +785,9 @@
   MathJax.Hub.Config({ tex2jax: {inlineMath: [['$', '$']]}, messageStyle: "none" });
 </script>
 ]]></content>
+      <categories>
+        <category>HUST</category>
+      </categories>
       <tags>
         <tag>整理</tag>
         <tag>系统</tag>
@@ -5505,6 +5508,9 @@
 <li>CRC编码实验中，对16位汉字进行编码，选择生成多项式7位，余数6位，能够区分一位错和两位错，直接通过余数区分。</li>
 </ul>
 ]]></content>
+      <categories>
+        <category>HUST</category>
+      </categories>
       <tags>
         <tag>整理</tag>
         <tag>系统</tag>
@@ -9355,5 +9361,12 @@
 </li>
 </ul>
 ]]></content>
+      <categories>
+        <category>HUST</category>
+      </categories>
+      <tags>
+        <tag>整理</tag>
+        <tag>网络</tag>
+      </tags>
   </entry>
 </search>
