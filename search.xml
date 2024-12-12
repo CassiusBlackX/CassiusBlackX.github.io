@@ -5819,8 +5819,116 @@
       </tags>
   </entry>
   <entry>
-    <title></title>
-    <url>/2024/12/03/HUST-CS-%E8%AE%A1%E7%BD%91%E6%95%B4%E7%90%86/</url>
+    <title>bittorrent原理自学</title>
+    <url>/2024/11/21/bittorrent%E5%8E%9F%E7%90%86%E8%87%AA%E5%AD%A6/</url>
+    <content><![CDATA[<h1 id="种子文件"><a href="#种子文件" class="headerlink" title="种子文件"></a>种子文件</h1><h2 id="编码"><a href="#编码" class="headerlink" title="编码"></a>编码</h2><p>一个种子文件实际上是包含<code>字符串</code>, <code>整数</code>, <code>列表</code>, <code>字典</code>进行编码后的文件。</p>
+<ul>
+<li>字符串：字符串由一个标识长度的十进制数字，紧接着一个冒号和字符串本身组成</li>
+<li>整数：整数由一个小写字母<code>i</code>开头，小写字母<code>e</code>结尾拼接而成，数字使用十进制<ul>
+<li><code>i2e</code>: 对应2</li>
+<li><code>i-2e</code>: 对应-2</li>
+<li><code>i0e</code>: 对应0，除0外，其它数字不能以0开头，同时也不允许<code>i-0e</code></li>
+</ul>
+</li>
+<li>列表：列表由小写字母<code>l</code>开头，小写字母<code>e</code>结束<ul>
+<li>eg: <code>l4:spam4:eggse</code>，对应&#96;[‘spam’, ‘eggs’]</li>
+</ul>
+</li>
+<li>字典：字典由小写字母<code>d</code>开头，小写字母<code>e</code>结束<ul>
+<li>eg: <code>d3:cow3:moo4:spam4:eggse</code>, 对应<code>&#123;&#39;cow&#39;: &#39;moo&#39;, &#39;spam&#39;: &#39;eggs&#39;&#125;</code></li>
+</ul>
+</li>
+</ul>
+<p>分析完以上编码格式以后，就可以把一个种子文件解析为json格式来方便阅读。</p>
+<blockquote>
+<p>理论上种子应该是这样的格式</p>
+</blockquote>
+]]></content>
+  </entry>
+  <entry>
+    <title>airhust视觉追踪入门</title>
+    <url>/2024/09/21/airhust%E8%A7%86%E8%A7%89%E8%BF%BD%E8%B8%AA%E5%85%A5%E9%97%A8/</url>
+    <content><![CDATA[<h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><h2 id="任务简介"><a href="#任务简介" class="headerlink" title="任务简介"></a>任务简介</h2><h2 id="yolo简介"><a href="#yolo简介" class="headerlink" title="yolo简介"></a>yolo简介</h2><h2 id="提前准备"><a href="#提前准备" class="headerlink" title="提前准备"></a>提前准备</h2><ol>
+<li>conda环境</li>
+<li>python基础语法</li>
+<li>tmux的基本用法</li>
+</ol>
+<h1 id="云端环境部署"><a href="#云端环境部署" class="headerlink" title="云端环境部署"></a>云端环境部署</h1><h2 id="darknet-yolo"><a href="#darknet-yolo" class="headerlink" title="darknet-yolo"></a><a href="https://pjreddie.com/darknet/yolo/">darknet-yolo</a></h2><h3 id="克隆和编译darknet仓库"><a href="#克隆和编译darknet仓库" class="headerlink" title="克隆和编译darknet仓库"></a>克隆和编译darknet仓库</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">git clone https://github.com/pjreddie/darknet</span><br><span class="line">cd darknet</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>知识点补充： <code>git</code>是一个版本管理器。一些常用的git命令是必须要能够掌握的。</p>
+</blockquote>
+<p>进入到<code>darknet</code>文件夹以后，可以看到文件夹的结构如下</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">/darknet</span><br><span class="line">    cfg/ 模型参数配置文件</span><br><span class="line">    data/ 训练相关参数</span><br><span class="line">    examples/</span><br><span class="line">    include/</span><br><span class="line">    python/</span><br><span class="line">    scripts/</span><br><span class="line">    src/</span><br><span class="line">    LICENSE*</span><br><span class="line">    Makefile  工程项目构建文件</span><br><span class="line">    README.md  最重要，必须认真阅读！</span><br></pre></td></tr></table></figure>
+<h4 id="README-md"><a href="#README-md" class="headerlink" title="README.md"></a>README.md</h4><p>一般来说，在上手一个github项目的时候，必须先阅读的是这个项目中的<code>README.md</code>文件，该文件会告诉你本项目中的一些基础、必要的说明，甚至还有一些情况下会直接告诉你如何快速开始、如何跑起本项目的一个测试用例等。</p>
+<h4 id="Makefile"><a href="#Makefile" class="headerlink" title="Makefile"></a>Makefile</h4><p><code>make</code>是一个工程项目构建文件。实际作用类似<code>cmake</code>。当然，这里其实倒反天罡了，正确的描述应该是cmake像make，因为make比cmake早很多。现在cmake使用的会比make更频繁一些，也是因为make的语法比较抽象，不是特别容易写和读。相比之下cmake就会简单很多。当然，如果仔细观察过cmake之后的build文件夹的话，会发现里面其实仍然是有Makefile的。</p>
+<p>在这里我们必须要去修改Makefile文件，不然如果使用默认编译的话是无法在较快的时间内训练出一个能够使用的模型的。</p>
+<figure class="highlight makefile"><table><tr><td class="code"><pre><span class="line">GPU=0</span><br><span class="line">CUDNN=0</span><br><span class="line">OPENCV=0</span><br><span class="line">OPENMP=0</span><br><span class="line">DEBUG=0</span><br></pre></td></tr></table></figure>
+<p>先来看前面几行，这里就是编译时候的简单配置。0就是不使用，1就是使用。在以上几个参数中，<code>GPU</code>是必须要设置成为1的，否则如果使用CPU的话，又烧电脑，又训不出来有用的东西。</p>
+<p><code>CUDNN</code>是nvidia开发的一个深度学习加速库，理论上来说可以加速训练的速度，当然，这里不是必须的。但是如果感兴趣可以自己尝试去为服务器配置cudnn。</p>
+<p><code>OPENCV</code>是目前最广泛使用的计算机视觉库，在后续的视觉相关任务中是必然绕不开的一部分。但是在这里不一定需要打开，这里使用opencv最主要的目的一般是提高darknet对于数据集图片格式的兼容性，但是在绝大多数情况下是不会遇到非常古怪格式的数据集的。</p>
+<p>接下来还必须修改<code>ARCH</code>参数。这个参数是和你使用的设备是强相关的。你使用的是什么显卡，在这里就应该使用该显卡架构对应的参数。如果遇到不确定的，就根据显卡的名称去网上查。</p>
+<p>在以上参数都改好了以后，就可以直接编译了，在这里我们可是直接使用命令<code>make</code>就可以了。需要注意的是，使用make命令的前提是Makefile文件必须和运行make指令时候所在的路径一致，否则make命令会找不到Makefile的</p>
+<h4 id="cfg-data"><a href="#cfg-data" class="headerlink" title="cfg&amp;data"></a>cfg&amp;data</h4><p>接下来修改模型相关的配置文件，进入到文件夹<code>cfg/</code>下。首先我们要改参数<code>batch</code>。batch参数是一次性进行训练、推理的图片数量，这个参数如果太大可能会超出GPU的显存，但是适当大一些可以提高训练速度。至于其它参数一般来说也不需要修改，当然，也可以参照着网上的一些解说，适当的自己尝试着去修改。</p>
+<p>然后最重要的就是修改classes参数。我们需要明确的告诉yolo，我们希望训练的模型是希望能够检测多少个类别的模型，对应的参数名称是<code>yolo/classes</code>，但是仅修改classes是不够的，还需要把和classes强相关的<code>convolutional/filters</code>参数给修改，对应公式是<br>$$ filters &#x3D; 3 \times ( 5 + len(classes)) $$<br>并且应当注意，在yolov3.cfg中，这样的参数有三组。</p>
+<p>然后我们需要自己写一个属于我们本次项目的.data文件，具体的写法可以参照着<code>cfg/</code>下的其它.data文件来写。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">classes = $&#123;num_classes&#125;</span><br><span class="line">train = $&#123;path-to-trainlist.txt&#125;</span><br><span class="line">valid = $&#123;path-to-val&#125;</span><br><span class="line">backup = $&#123;path-to-backup-dir&#125;</span><br><span class="line">names = $&#123;path-to-.names-file&#125;</span><br></pre></td></tr></table></figure>
+<p>最后，我们还需要写一个适合我们比赛项目中会用到的.names文件。对应着我们每一个类的名字。在这里需要非常注意的是.names文件中每个类的名字和对应的行数，在后面会影响我们的数据集的标注。</p>
+<h3 id="数据集的处理"><a href="#数据集的处理" class="headerlink" title="数据集的处理"></a>数据集的处理</h3><p>一个完整的“数据集”，其实应该同时包括图片和标签，这样才能够训练。</p>
+<h4 id="labelimg"><a href="#labelimg" class="headerlink" title="labelimg"></a>labelimg</h4><p>labelimg是一款数据集标注工具。我们需要使用pip来安装。但是同时因为labelimg已经比较具有“年代感”了，所以对于太新版本的python不是特别适应。这就是我们需要conda的时候了。conda可以方便的创建多个python虚拟环境，每个虚拟环境之间互相不影响，在我们当前的需求下非常适用。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">conda create -n labelimg python=3.6</span><br></pre></td></tr></table></figure>
+<p>以上命令可以帮助我们创建一个名为<code>labelimg</code>的虚拟环境，根据命令提示，</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">conda activate labelimg</span><br></pre></td></tr></table></figure>
+<p>然后使用命令</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">pip install labelImg</span><br></pre></td></tr></table></figure>
+<p>最后使用<code>lablimg</code>启动。</p>
+<h4 id="xml格式的标签转yolo格式的标签"><a href="#xml格式的标签转yolo格式的标签" class="headerlink" title="xml格式的标签转yolo格式的标签"></a>xml格式的标签转yolo格式的标签</h4><h4 id="生成trainlist-txt"><a href="#生成trainlist-txt" class="headerlink" title="生成trainlist.txt"></a>生成trainlist.txt</h4><h3 id="训练"><a href="#训练" class="headerlink" title="训练"></a>训练</h3><h4 id="获取预训练权重"><a href="#获取预训练权重" class="headerlink" title="获取预训练权重"></a>获取预训练权重</h4><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">wget https://pjreddie.com/media/files/darknet53.conv.74</span><br></pre></td></tr></table></figure>
+<h4 id="开始训练"><a href="#开始训练" class="headerlink" title="开始训练"></a>开始训练</h4><p>使用tmux新开一个窗口，然后运行</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">./darknet detector train cfg/$&#123;your-.data-file&#125; cfg/$&#123;your-cfg-file&#125; darknet53.conv.74</span><br></pre></td></tr></table></figure>
+
+<h2 id="yolov5"><a href="#yolov5" class="headerlink" title="yolov5"></a>yolov5</h2><p>yolov5是一个比darknet要新很多的一个仓库,可以从仓库的更新时间就可以发现.一般来说,yolov5相比darknet可以有更快的推理速度和更高的精度.</p>
+<p>当然,实际上yolo到了这个地步以后,已经不仅仅有yolov5了,同时还有yolov7,yolov8,yolox等等版本.但是这些版本使用的都是python,而且在使用上来说和yolov5区别不大,所以本次我们只详细介绍yolov5</p>
+<h3 id="部署"><a href="#部署" class="headerlink" title="部署"></a>部署</h3><p>从github上克隆<a href="https://github.com/ultralytics/yolov5.git">yolov5</a></p>
+<p>同之前提到过的一样.当克隆下来一个仓库以后,仍然非常建议从README.md开始入手这个仓库.但是在这里我们就不仔细阅读了.我们主要辨析一下yolov5和darknet的区别.</p>
+<p>首先,因为yolov5几乎完全都是使用python构成的,所以这里我们最好创建一个conda虚拟环境,专门用来做yolo相关的东西.</p>
+<p>创建conda虚拟环境</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">conda create -n yolo python=3.10</span><br></pre></td></tr></table></figure>
+<p>安装虚拟环境yolo所需要的相关依赖</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">pip install -r requirements.txt</span><br></pre></td></tr></table></figure>
+
+<h3 id="数据集的处理-1"><a href="#数据集的处理-1" class="headerlink" title="数据集的处理"></a>数据集的处理</h3><p>所有yolo使用的数据集的格式都是一样的.但是不同的是darknet在训练的时候需要使用<code>trainlist.txt</code>来找到所有的训练图片和对应标注,在yolov5中,需要使用的是yaml格式的文件.</p>
+<p>数据集中的图片和标签的摆放需要使用符合yolov5的默认规范,否则就得自己手动去改源码,这样是比较麻烦的,但是也不至于不推荐.多看看大佬的代码也是好的.</p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">path:</span> <span class="string">/path/to/dataset</span></span><br><span class="line"><span class="attr">train:</span> <span class="string">images/train</span></span><br><span class="line"><span class="attr">val:</span> <span class="string">images/val</span></span><br><span class="line"></span><br><span class="line"><span class="attr">names:</span> </span><br><span class="line">  <span class="attr">0:</span> <span class="string">$&#123;your_classes&#125;</span></span><br><span class="line">  <span class="attr">1:</span> <span class="string">$&#123;your_classes&#125;</span></span><br><span class="line">  <span class="attr">2:</span> <span class="string">$&#123;your_classes&#125;</span></span><br><span class="line">  <span class="attr">3:</span> <span class="string">$&#123;your_classes&#125;</span></span><br><span class="line"><span class="attr">nc:</span> <span class="string">$&#123;num_classes&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>在训练yolo的时候,需要自己写一个如上格式的yaml文件,用来告诉yolo训练数据集的基本信息.</p>
+<p>其中,<code>path</code>就是数据集的路径,数据集路径下的文件树必须要是以下形式的</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">/dataset</span><br><span class="line">    /images</span><br><span class="line">        /train</span><br><span class="line">        /val</span><br><span class="line">    /labels</span><br><span class="line">        /train</span><br><span class="line">        /val</span><br></pre></td></tr></table></figure>
+<p>并且要保证images中的图片和labels中的标签是互相对应的.train和val中的图片、标签也要是对应的才可以.</p>
+<h3 id="训练-1"><a href="#训练-1" class="headerlink" title="训练"></a>训练</h3><p>yolov5的训练不需要自己手动去下载预训练权重文件,在训练的时候yolov5会自动检测是否有预训练权重文件,当然也可以做到在已经训练过的模型上继续训练.</p>
+<p>训练的一般命令是如下格式的</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">python train.py --data /path/to/mydata.yaml --epochs 1000 --weights &#x27; &#x27; --cfg yolov5n.yaml --batch-size 32</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>data</code>后面就是要跟着自己写的yaml文件</li>
+<li><code>epochs</code>就是训练轮数.这里设置一个比较大的值也挺好的,因为yolo自己会根据学习率、损失率来自动判断什么时候停止,防止模型过拟合,也可以防止浪费一些不必要的时间.</li>
+<li><code>weights</code>是权重文件的路径,如果是使用官方的预训练权重文件的话这里就什么都不用填.</li>
+<li><code>cfg</code>后面跟这都是对模型的细致描述.yolov5整体上来说虽然是yolo的一大版本,但是内部还是有一些不同的模型,具体可以查看README.md里面的说明.一般来说更大的模型会有更好的精度,但是不可避免的推理时间也会更长.需要注意的是,出了在<code>mydata.yaml</code>中指定了模型的目标推理类型数量之后,还得渠道对应的<code>yolov5n.yaml</code>中的对应位置也要修改推理类型数量.</li>
+<li><code>batch-size</code>就是每次同时训练多少张图片,只要不要让显存爆炸就可以了</li>
+</ul>
+<h1 id="端侧部署"><a href="#端侧部署" class="headerlink" title="端侧部署"></a>端侧部署</h1><h2 id="darknet-ros"><a href="#darknet-ros" class="headerlink" title="darknet_ros"></a>darknet_ros</h2><p>端侧部署，darknet_ros的部署应该是根据着脚本文件一步一步修改过来。</p>
+<p>首先，在<code>darknet_ros.launch</code>中，可以看到两个非常显眼的两个文件名，<code>ros.yaml</code>和<code>yolov2-tiny.yaml</code>。那么让我们进入到两个文件分别一探究竟。</p>
+<h3 id="ros-yaml"><a href="#ros-yaml" class="headerlink" title="ros.yaml"></a><code>ros.yaml</code></h3><p><code>ros.yaml</code>中，我们可以发现是一些<code>darknet_ros</code>程序本身相关的参数设置。在没有特殊情况下不要动这个文件。</p>
+<h3 id="yolov2-tiny-yaml"><a href="#yolov2-tiny-yaml" class="headerlink" title="yolov2-tiny.yaml"></a><code>yolov2-tiny.yaml</code></h3><p><code>yolov2-tiny.yaml</code>就是我们需要修改的文件了。</p>
+<p>在其中可以看到又有两个值得注意的文件名。cfg文件和weights文件。</p>
+<p>联想到我们之前在云端训练darknet_ros的时候，我们就修改过了cfg文件夹中的关于模型参数的文件，所以这里我们应当把我们当时在云端部署模型时候训练对应的cfg文件复制到端侧设备上，并把yaml文件中的config_file的name改为我们自己使用的文件名。</p>
+<p>同理，weights文件就是darknet训练出来的权重文件，我们也应当做和cfg文件相似的操作。</p>
+<p>参数<code>threshold</code>是用来调整yolo的置信度的。当yolo对于一个框的可信度低于<code>threshold</code>的时候，yolo将不会显示这个框，也不会发布这个框的任何消息，减少干扰。这个参数的调整应当结合比赛的实际情况。如果在一个较插的情况下，应该宁可自己在后续的程序中多手动过滤一些不必要的信息，也要防止直接识别不出来。</p>
+<p>最后，names部分也应当直接复制之前在云端训练时候的names文件部分的内容。</p>
+<p>这里需要提醒大家注意的是，不管你在云侧上面获得了怎么样的训练效果，或者是你使用<code>darknet detect</code>命令测试了多少张图片，大家都应当始终要把模型落实到开发板上来。根据我们过往的经验总结，在云侧使用<code>darknet detect</code>命令获得的效果和在开发板上实际的效果通常是不太一样的。</p>
+]]></content>
+  </entry>
+  <entry>
+    <title>HUST-CS-计算机网络</title>
+    <url>/2024/12/12/HUST-CS-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/</url>
     <content><![CDATA[<h1 id="计算机网络和因特网"><a href="#计算机网络和因特网" class="headerlink" title="计算机网络和因特网"></a>计算机网络和因特网</h1><h4 id="什么是因特网"><a href="#什么是因特网" class="headerlink" title="什么是因特网"></a>什么是因特网</h4><ul>
 <li>因特网是世界范围的计算机网络</li>
 <li>因特网向是应用程序提供服务的基础设置，提供统一的套接字编程接口</li>
@@ -9246,114 +9354,6 @@
 </ul>
 </li>
 </ul>
-]]></content>
-  </entry>
-  <entry>
-    <title>bittorrent原理自学</title>
-    <url>/2024/11/21/bittorrent%E5%8E%9F%E7%90%86%E8%87%AA%E5%AD%A6/</url>
-    <content><![CDATA[<h1 id="种子文件"><a href="#种子文件" class="headerlink" title="种子文件"></a>种子文件</h1><h2 id="编码"><a href="#编码" class="headerlink" title="编码"></a>编码</h2><p>一个种子文件实际上是包含<code>字符串</code>, <code>整数</code>, <code>列表</code>, <code>字典</code>进行编码后的文件。</p>
-<ul>
-<li>字符串：字符串由一个标识长度的十进制数字，紧接着一个冒号和字符串本身组成</li>
-<li>整数：整数由一个小写字母<code>i</code>开头，小写字母<code>e</code>结尾拼接而成，数字使用十进制<ul>
-<li><code>i2e</code>: 对应2</li>
-<li><code>i-2e</code>: 对应-2</li>
-<li><code>i0e</code>: 对应0，除0外，其它数字不能以0开头，同时也不允许<code>i-0e</code></li>
-</ul>
-</li>
-<li>列表：列表由小写字母<code>l</code>开头，小写字母<code>e</code>结束<ul>
-<li>eg: <code>l4:spam4:eggse</code>，对应&#96;[‘spam’, ‘eggs’]</li>
-</ul>
-</li>
-<li>字典：字典由小写字母<code>d</code>开头，小写字母<code>e</code>结束<ul>
-<li>eg: <code>d3:cow3:moo4:spam4:eggse</code>, 对应<code>&#123;&#39;cow&#39;: &#39;moo&#39;, &#39;spam&#39;: &#39;eggs&#39;&#125;</code></li>
-</ul>
-</li>
-</ul>
-<p>分析完以上编码格式以后，就可以把一个种子文件解析为json格式来方便阅读。</p>
-<blockquote>
-<p>理论上种子应该是这样的格式</p>
-</blockquote>
-]]></content>
-  </entry>
-  <entry>
-    <title>airhust视觉追踪入门</title>
-    <url>/2024/09/21/airhust%E8%A7%86%E8%A7%89%E8%BF%BD%E8%B8%AA%E5%85%A5%E9%97%A8/</url>
-    <content><![CDATA[<h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><h2 id="任务简介"><a href="#任务简介" class="headerlink" title="任务简介"></a>任务简介</h2><h2 id="yolo简介"><a href="#yolo简介" class="headerlink" title="yolo简介"></a>yolo简介</h2><h2 id="提前准备"><a href="#提前准备" class="headerlink" title="提前准备"></a>提前准备</h2><ol>
-<li>conda环境</li>
-<li>python基础语法</li>
-<li>tmux的基本用法</li>
-</ol>
-<h1 id="云端环境部署"><a href="#云端环境部署" class="headerlink" title="云端环境部署"></a>云端环境部署</h1><h2 id="darknet-yolo"><a href="#darknet-yolo" class="headerlink" title="darknet-yolo"></a><a href="https://pjreddie.com/darknet/yolo/">darknet-yolo</a></h2><h3 id="克隆和编译darknet仓库"><a href="#克隆和编译darknet仓库" class="headerlink" title="克隆和编译darknet仓库"></a>克隆和编译darknet仓库</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">git clone https://github.com/pjreddie/darknet</span><br><span class="line">cd darknet</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>知识点补充： <code>git</code>是一个版本管理器。一些常用的git命令是必须要能够掌握的。</p>
-</blockquote>
-<p>进入到<code>darknet</code>文件夹以后，可以看到文件夹的结构如下</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">/darknet</span><br><span class="line">    cfg/ 模型参数配置文件</span><br><span class="line">    data/ 训练相关参数</span><br><span class="line">    examples/</span><br><span class="line">    include/</span><br><span class="line">    python/</span><br><span class="line">    scripts/</span><br><span class="line">    src/</span><br><span class="line">    LICENSE*</span><br><span class="line">    Makefile  工程项目构建文件</span><br><span class="line">    README.md  最重要，必须认真阅读！</span><br></pre></td></tr></table></figure>
-<h4 id="README-md"><a href="#README-md" class="headerlink" title="README.md"></a>README.md</h4><p>一般来说，在上手一个github项目的时候，必须先阅读的是这个项目中的<code>README.md</code>文件，该文件会告诉你本项目中的一些基础、必要的说明，甚至还有一些情况下会直接告诉你如何快速开始、如何跑起本项目的一个测试用例等。</p>
-<h4 id="Makefile"><a href="#Makefile" class="headerlink" title="Makefile"></a>Makefile</h4><p><code>make</code>是一个工程项目构建文件。实际作用类似<code>cmake</code>。当然，这里其实倒反天罡了，正确的描述应该是cmake像make，因为make比cmake早很多。现在cmake使用的会比make更频繁一些，也是因为make的语法比较抽象，不是特别容易写和读。相比之下cmake就会简单很多。当然，如果仔细观察过cmake之后的build文件夹的话，会发现里面其实仍然是有Makefile的。</p>
-<p>在这里我们必须要去修改Makefile文件，不然如果使用默认编译的话是无法在较快的时间内训练出一个能够使用的模型的。</p>
-<figure class="highlight makefile"><table><tr><td class="code"><pre><span class="line">GPU=0</span><br><span class="line">CUDNN=0</span><br><span class="line">OPENCV=0</span><br><span class="line">OPENMP=0</span><br><span class="line">DEBUG=0</span><br></pre></td></tr></table></figure>
-<p>先来看前面几行，这里就是编译时候的简单配置。0就是不使用，1就是使用。在以上几个参数中，<code>GPU</code>是必须要设置成为1的，否则如果使用CPU的话，又烧电脑，又训不出来有用的东西。</p>
-<p><code>CUDNN</code>是nvidia开发的一个深度学习加速库，理论上来说可以加速训练的速度，当然，这里不是必须的。但是如果感兴趣可以自己尝试去为服务器配置cudnn。</p>
-<p><code>OPENCV</code>是目前最广泛使用的计算机视觉库，在后续的视觉相关任务中是必然绕不开的一部分。但是在这里不一定需要打开，这里使用opencv最主要的目的一般是提高darknet对于数据集图片格式的兼容性，但是在绝大多数情况下是不会遇到非常古怪格式的数据集的。</p>
-<p>接下来还必须修改<code>ARCH</code>参数。这个参数是和你使用的设备是强相关的。你使用的是什么显卡，在这里就应该使用该显卡架构对应的参数。如果遇到不确定的，就根据显卡的名称去网上查。</p>
-<p>在以上参数都改好了以后，就可以直接编译了，在这里我们可是直接使用命令<code>make</code>就可以了。需要注意的是，使用make命令的前提是Makefile文件必须和运行make指令时候所在的路径一致，否则make命令会找不到Makefile的</p>
-<h4 id="cfg-data"><a href="#cfg-data" class="headerlink" title="cfg&amp;data"></a>cfg&amp;data</h4><p>接下来修改模型相关的配置文件，进入到文件夹<code>cfg/</code>下。首先我们要改参数<code>batch</code>。batch参数是一次性进行训练、推理的图片数量，这个参数如果太大可能会超出GPU的显存，但是适当大一些可以提高训练速度。至于其它参数一般来说也不需要修改，当然，也可以参照着网上的一些解说，适当的自己尝试着去修改。</p>
-<p>然后最重要的就是修改classes参数。我们需要明确的告诉yolo，我们希望训练的模型是希望能够检测多少个类别的模型，对应的参数名称是<code>yolo/classes</code>，但是仅修改classes是不够的，还需要把和classes强相关的<code>convolutional/filters</code>参数给修改，对应公式是<br>$$ filters &#x3D; 3 \times ( 5 + len(classes)) $$<br>并且应当注意，在yolov3.cfg中，这样的参数有三组。</p>
-<p>然后我们需要自己写一个属于我们本次项目的.data文件，具体的写法可以参照着<code>cfg/</code>下的其它.data文件来写。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">classes = $&#123;num_classes&#125;</span><br><span class="line">train = $&#123;path-to-trainlist.txt&#125;</span><br><span class="line">valid = $&#123;path-to-val&#125;</span><br><span class="line">backup = $&#123;path-to-backup-dir&#125;</span><br><span class="line">names = $&#123;path-to-.names-file&#125;</span><br></pre></td></tr></table></figure>
-<p>最后，我们还需要写一个适合我们比赛项目中会用到的.names文件。对应着我们每一个类的名字。在这里需要非常注意的是.names文件中每个类的名字和对应的行数，在后面会影响我们的数据集的标注。</p>
-<h3 id="数据集的处理"><a href="#数据集的处理" class="headerlink" title="数据集的处理"></a>数据集的处理</h3><p>一个完整的“数据集”，其实应该同时包括图片和标签，这样才能够训练。</p>
-<h4 id="labelimg"><a href="#labelimg" class="headerlink" title="labelimg"></a>labelimg</h4><p>labelimg是一款数据集标注工具。我们需要使用pip来安装。但是同时因为labelimg已经比较具有“年代感”了，所以对于太新版本的python不是特别适应。这就是我们需要conda的时候了。conda可以方便的创建多个python虚拟环境，每个虚拟环境之间互相不影响，在我们当前的需求下非常适用。</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">conda create -n labelimg python=3.6</span><br></pre></td></tr></table></figure>
-<p>以上命令可以帮助我们创建一个名为<code>labelimg</code>的虚拟环境，根据命令提示，</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">conda activate labelimg</span><br></pre></td></tr></table></figure>
-<p>然后使用命令</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">pip install labelImg</span><br></pre></td></tr></table></figure>
-<p>最后使用<code>lablimg</code>启动。</p>
-<h4 id="xml格式的标签转yolo格式的标签"><a href="#xml格式的标签转yolo格式的标签" class="headerlink" title="xml格式的标签转yolo格式的标签"></a>xml格式的标签转yolo格式的标签</h4><h4 id="生成trainlist-txt"><a href="#生成trainlist-txt" class="headerlink" title="生成trainlist.txt"></a>生成trainlist.txt</h4><h3 id="训练"><a href="#训练" class="headerlink" title="训练"></a>训练</h3><h4 id="获取预训练权重"><a href="#获取预训练权重" class="headerlink" title="获取预训练权重"></a>获取预训练权重</h4><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">wget https://pjreddie.com/media/files/darknet53.conv.74</span><br></pre></td></tr></table></figure>
-<h4 id="开始训练"><a href="#开始训练" class="headerlink" title="开始训练"></a>开始训练</h4><p>使用tmux新开一个窗口，然后运行</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">./darknet detector train cfg/$&#123;your-.data-file&#125; cfg/$&#123;your-cfg-file&#125; darknet53.conv.74</span><br></pre></td></tr></table></figure>
-
-<h2 id="yolov5"><a href="#yolov5" class="headerlink" title="yolov5"></a>yolov5</h2><p>yolov5是一个比darknet要新很多的一个仓库,可以从仓库的更新时间就可以发现.一般来说,yolov5相比darknet可以有更快的推理速度和更高的精度.</p>
-<p>当然,实际上yolo到了这个地步以后,已经不仅仅有yolov5了,同时还有yolov7,yolov8,yolox等等版本.但是这些版本使用的都是python,而且在使用上来说和yolov5区别不大,所以本次我们只详细介绍yolov5</p>
-<h3 id="部署"><a href="#部署" class="headerlink" title="部署"></a>部署</h3><p>从github上克隆<a href="https://github.com/ultralytics/yolov5.git">yolov5</a></p>
-<p>同之前提到过的一样.当克隆下来一个仓库以后,仍然非常建议从README.md开始入手这个仓库.但是在这里我们就不仔细阅读了.我们主要辨析一下yolov5和darknet的区别.</p>
-<p>首先,因为yolov5几乎完全都是使用python构成的,所以这里我们最好创建一个conda虚拟环境,专门用来做yolo相关的东西.</p>
-<p>创建conda虚拟环境</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">conda create -n yolo python=3.10</span><br></pre></td></tr></table></figure>
-<p>安装虚拟环境yolo所需要的相关依赖</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">pip install -r requirements.txt</span><br></pre></td></tr></table></figure>
-
-<h3 id="数据集的处理-1"><a href="#数据集的处理-1" class="headerlink" title="数据集的处理"></a>数据集的处理</h3><p>所有yolo使用的数据集的格式都是一样的.但是不同的是darknet在训练的时候需要使用<code>trainlist.txt</code>来找到所有的训练图片和对应标注,在yolov5中,需要使用的是yaml格式的文件.</p>
-<p>数据集中的图片和标签的摆放需要使用符合yolov5的默认规范,否则就得自己手动去改源码,这样是比较麻烦的,但是也不至于不推荐.多看看大佬的代码也是好的.</p>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">path:</span> <span class="string">/path/to/dataset</span></span><br><span class="line"><span class="attr">train:</span> <span class="string">images/train</span></span><br><span class="line"><span class="attr">val:</span> <span class="string">images/val</span></span><br><span class="line"></span><br><span class="line"><span class="attr">names:</span> </span><br><span class="line">  <span class="attr">0:</span> <span class="string">$&#123;your_classes&#125;</span></span><br><span class="line">  <span class="attr">1:</span> <span class="string">$&#123;your_classes&#125;</span></span><br><span class="line">  <span class="attr">2:</span> <span class="string">$&#123;your_classes&#125;</span></span><br><span class="line">  <span class="attr">3:</span> <span class="string">$&#123;your_classes&#125;</span></span><br><span class="line"><span class="attr">nc:</span> <span class="string">$&#123;num_classes&#125;</span></span><br></pre></td></tr></table></figure>
-
-<p>在训练yolo的时候,需要自己写一个如上格式的yaml文件,用来告诉yolo训练数据集的基本信息.</p>
-<p>其中,<code>path</code>就是数据集的路径,数据集路径下的文件树必须要是以下形式的</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">/dataset</span><br><span class="line">    /images</span><br><span class="line">        /train</span><br><span class="line">        /val</span><br><span class="line">    /labels</span><br><span class="line">        /train</span><br><span class="line">        /val</span><br></pre></td></tr></table></figure>
-<p>并且要保证images中的图片和labels中的标签是互相对应的.train和val中的图片、标签也要是对应的才可以.</p>
-<h3 id="训练-1"><a href="#训练-1" class="headerlink" title="训练"></a>训练</h3><p>yolov5的训练不需要自己手动去下载预训练权重文件,在训练的时候yolov5会自动检测是否有预训练权重文件,当然也可以做到在已经训练过的模型上继续训练.</p>
-<p>训练的一般命令是如下格式的</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">python train.py --data /path/to/mydata.yaml --epochs 1000 --weights &#x27; &#x27; --cfg yolov5n.yaml --batch-size 32</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><code>data</code>后面就是要跟着自己写的yaml文件</li>
-<li><code>epochs</code>就是训练轮数.这里设置一个比较大的值也挺好的,因为yolo自己会根据学习率、损失率来自动判断什么时候停止,防止模型过拟合,也可以防止浪费一些不必要的时间.</li>
-<li><code>weights</code>是权重文件的路径,如果是使用官方的预训练权重文件的话这里就什么都不用填.</li>
-<li><code>cfg</code>后面跟这都是对模型的细致描述.yolov5整体上来说虽然是yolo的一大版本,但是内部还是有一些不同的模型,具体可以查看README.md里面的说明.一般来说更大的模型会有更好的精度,但是不可避免的推理时间也会更长.需要注意的是,出了在<code>mydata.yaml</code>中指定了模型的目标推理类型数量之后,还得渠道对应的<code>yolov5n.yaml</code>中的对应位置也要修改推理类型数量.</li>
-<li><code>batch-size</code>就是每次同时训练多少张图片,只要不要让显存爆炸就可以了</li>
-</ul>
-<h1 id="端侧部署"><a href="#端侧部署" class="headerlink" title="端侧部署"></a>端侧部署</h1><h2 id="darknet-ros"><a href="#darknet-ros" class="headerlink" title="darknet_ros"></a>darknet_ros</h2><p>端侧部署，darknet_ros的部署应该是根据着脚本文件一步一步修改过来。</p>
-<p>首先，在<code>darknet_ros.launch</code>中，可以看到两个非常显眼的两个文件名，<code>ros.yaml</code>和<code>yolov2-tiny.yaml</code>。那么让我们进入到两个文件分别一探究竟。</p>
-<h3 id="ros-yaml"><a href="#ros-yaml" class="headerlink" title="ros.yaml"></a><code>ros.yaml</code></h3><p><code>ros.yaml</code>中，我们可以发现是一些<code>darknet_ros</code>程序本身相关的参数设置。在没有特殊情况下不要动这个文件。</p>
-<h3 id="yolov2-tiny-yaml"><a href="#yolov2-tiny-yaml" class="headerlink" title="yolov2-tiny.yaml"></a><code>yolov2-tiny.yaml</code></h3><p><code>yolov2-tiny.yaml</code>就是我们需要修改的文件了。</p>
-<p>在其中可以看到又有两个值得注意的文件名。cfg文件和weights文件。</p>
-<p>联想到我们之前在云端训练darknet_ros的时候，我们就修改过了cfg文件夹中的关于模型参数的文件，所以这里我们应当把我们当时在云端部署模型时候训练对应的cfg文件复制到端侧设备上，并把yaml文件中的config_file的name改为我们自己使用的文件名。</p>
-<p>同理，weights文件就是darknet训练出来的权重文件，我们也应当做和cfg文件相似的操作。</p>
-<p>参数<code>threshold</code>是用来调整yolo的置信度的。当yolo对于一个框的可信度低于<code>threshold</code>的时候，yolo将不会显示这个框，也不会发布这个框的任何消息，减少干扰。这个参数的调整应当结合比赛的实际情况。如果在一个较插的情况下，应该宁可自己在后续的程序中多手动过滤一些不必要的信息，也要防止直接识别不出来。</p>
-<p>最后，names部分也应当直接复制之前在云端训练时候的names文件部分的内容。</p>
-<p>这里需要提醒大家注意的是，不管你在云侧上面获得了怎么样的训练效果，或者是你使用<code>darknet detect</code>命令测试了多少张图片，大家都应当始终要把模型落实到开发板上来。根据我们过往的经验总结，在云侧使用<code>darknet detect</code>命令获得的效果和在开发板上实际的效果通常是不太一样的。</p>
 ]]></content>
   </entry>
 </search>
