@@ -5507,6 +5507,10 @@
 </li>
 <li>CRC编码实验中，对16位汉字进行编码，选择生成多项式7位，余数6位，能够区分一位错和两位错，直接通过余数区分。</li>
 </ul>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({ tex2jax: {inlineMath: [['$', '$']]}, messageStyle: "none" });
+</script>
 ]]></content>
       <categories>
         <category>HUST</category>
@@ -9386,6 +9390,3017 @@
       <tags>
         <tag>整理</tag>
         <tag>网络</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>HUST-CS-操作系统</title>
+    <url>/2025/01/07/HUST-CS-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/</url>
+    <content><![CDATA[<h1 id="绪论"><a href="#绪论" class="headerlink" title="绪论"></a>绪论</h1><h3 id="多道程程序设计技术"><a href="#多道程程序设计技术" class="headerlink" title="多道程程序设计技术"></a>多道程程序设计技术</h3><ul>
+<li>定义: 在计算机主存中同时存放几道相互独立的程序，这些程序在管理程序控制之下，相互穿插的运行。当某道程序因为某种原因不能继续运行下去时候(如等待外设),管理程序便将另一道程序投入运行</li>
+<li>特征<ul>
+<li>多道(内存中村南方多个相互独立的程序)</li>
+<li>宏观上并行(相互穿插运行)</li>
+<li>微观上穿行(CPU上永远只能执行单个程序)</li>
+</ul>
+</li>
+<li>硬件基础: 内存大、中断</li>
+</ul>
+<h3 id="分时技术"><a href="#分时技术" class="headerlink" title="分时技术"></a>分时技术</h3><ul>
+<li>定义: 吧处理机时间划分称很短的时间片，轮流分配给各个应用程序使用，如果某个程序在分配的时间片用完之前计算还未完成，该程序就暂停执行，等待下一次获得时间片后再继续计算</li>
+<li>特点<ul>
+<li>联机交互</li>
+<li>独占使用</li>
+<li>响应时间块</li>
+</ul>
+</li>
+</ul>
+<h2 id="操作系统"><a href="#操作系统" class="headerlink" title="操作系统"></a>操作系统</h2><ul>
+<li>定义: 一个大型的软件系统，负责计算机系统软硬件资源分配，控制和协调并发活动，提供给用户和其它软件方便的接口环境，使用户获得良好的工作环境</li>
+<li>特点<ul>
+<li>并发</li>
+<li>共享</li>
+<li>虚拟</li>
+<li>不确定</li>
+</ul>
+</li>
+</ul>
+<h1 id="操作系统的物质基础、结构和用户接口"><a href="#操作系统的物质基础、结构和用户接口" class="headerlink" title="操作系统的物质基础、结构和用户接口"></a>操作系统的物质基础、结构和用户接口</h1><h2 id="物质基础"><a href="#物质基础" class="headerlink" title="物质基础"></a>物质基础</h2><h3 id="CPU特权级"><a href="#CPU特权级" class="headerlink" title="CPU特权级"></a>CPU特权级</h3><ul>
+<li>CPU特权级的意义：保护操作系统</li>
+<li>分类<ul>
+<li>管理态(supervisor mode， 内核态): 操作系统的管理程序执行时机器所处的状态，又称处理机的特权态。在此状态下处理机可以使用全部指令（包括一组特权指令）、使用全部系统资源（包括整个存储区域）</li>
+<li>用户态(user mode): 用户程序执行时机器所处的状态成为用户态。在此状态下禁止使用特权指令，不能直接取用资源与改变机器状态，并且只允许用户程序访问自己的存储区域</li>
+</ul>
+</li>
+<li>CPU特权指令<ul>
+<li>I&#x2F;O指令(如x86的in&#x2F;out指令)</li>
+<li>MMIO地址空间访问指令</li>
+<li>改变机器状态寄存器(MSR)的指令</li>
+</ul>
+</li>
+</ul>
+<h3 id="中断"><a href="#中断" class="headerlink" title="中断"></a>中断</h3><ul>
+<li>定义：某个事件（电源掉电、运算溢出、IO）发生时，系统中止现行程序的运行、引出处理事件程序对该事件进行处理，处理完毕后返回断点继续执行的过程</li>
+<li>发现中断信号<ul>
+<li>发现中断源并向CPU发出中断信号的硬件称为中断装置，IRR是中断装置中的一个寄存器，称中断请求寄存器</li>
+<li>IRR中的每一位对应一个中断源，当某个中断源产生中断请求时相应的位被置1.中断装置可以接收多个外部中断源的中断请求，并进行优先级判断，将当前优先级最高的中断请求送到CPU的INTR端</li>
+<li>CPU执行完一条指令后检查INTR端，如果发现有中断请求，再从中断装置获取该中断的中断号</li>
+</ul>
+</li>
+<li>中断响应<ul>
+<li>定义: 中止先行程序执行，自动引出中断处理程序，也称中断进入</li>
+<li>中断响应是由硬件完成的</li>
+<li>过程：<ul>
+<li>保留程序断点及处理机有关信息</li>
+<li>自动转入相应的中断处理程序执行</li>
+</ul>
+</li>
+<li>中断进入的实质: 交换指令地址及处理机的状态信息(PSW)</li>
+</ul>
+</li>
+<li>程序状态字PSW<ul>
+<li>反应程序执行时机器所处的现行状态的代码，包括: 指令地址、指令执行情况、处理机状态、应屏蔽的中断等。</li>
+<li>PSW的主要作用是实现程序状态的保护和恢复，每个程序都有一个与其执行相关的PSW，每个处理机都有一个PSW寄存器</li>
+<li>由于寄存器组织方式不同，大多数计算机的处理器中可能找不到一个称为PSW的寄存器，但总有一组控制与状态寄存器实际上起到这个作用</li>
+</ul>
+</li>
+<li>如何保证将来还能回到当前程序被中断的点继续执行: 保护现场和恢复现场<ul>
+<li>现场: 在中断的那一时刻能确保程序继续运行的有关信息<ul>
+<li>后继指令所在的主存的单元号</li>
+<li>程序运行所处的状态</li>
+<li>指令执行情况</li>
+<li>程序执行的中间结果</li>
+</ul>
+</li>
+<li>保护现场: 当中断发生时，必须立即把现场信息保存在主存中</li>
+<li>恢复现场: 程序重新运行之前，把保留的该程序的现场信息从主存中送至相应的指令计数器、通用寄存器或一些特殊的寄存器中</li>
+</ul>
+</li>
+<li>中断响应的一般过程<ul>
+<li>中断进入(硬件实现)<ul>
+<li>切换指令地址，改变处理器状态</li>
+</ul>
+</li>
+<li>中断保护<ul>
+<li>保护应用程序的执行现场到特定内存区域</li>
+<li>在高优先级实现中断的处理</li>
+<li>调用特定中断返回指令</li>
+</ul>
+</li>
+<li>中断返回<ul>
+<li>从特定内存区域恢复执行现场</li>
+<li>回到中断发生前的优先级</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>向量中断<ul>
+<li>定义: 当中断发生时，由中断源自己引导处理机进入中断服务程序的中断过程称为向量中断</li>
+<li>中断向量: 每类中断类型都有自己的中断向量，包含：中断服务例程的入口地址和程序状态字</li>
+<li>中断向量表: 主存中用于存放中断向量服务地址的一组存储单元组成的表</li>
+</ul>
+</li>
+<li>中断分类<ul>
+<li>中断请求(Interrupt ReQuest, IRQ)<ul>
+<li>IRQ是Intel术语体系中的对应概念，RISCV术语中称为interrupt</li>
+<li>由处理机外部事件引起的中断，称为外部中断</li>
+<li>e.g. I&#x2F;O中断、时钟中断、机器故障中断</li>
+</ul>
+</li>
+<li>异常(exception)<ul>
+<li>由处理机内部异常状态事件引起的中断</li>
+<li>e.g. 除零错误、用户态下用内核态指令、地址访问异常</li>
+</ul>
+</li>
+<li>系统调用(syscall)<ul>
+<li>程序为了使用操作系统的服务自愿执行访管指令产生中断</li>
+<li>e.g. x86机器中的int指令，RISCV中的ecall指令</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="left"></th>
+<th align="left">IRQ</th>
+<th align="left">exception</th>
+<th align="left">syscall</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">产生原因</td>
+<td align="left">CPU以外的外部设备产生的异步事件</td>
+<td align="left">当前程序的执行所导致的同步事件</td>
+<td align="left">当前执行的程序需要调用OS功能</td>
+</tr>
+<tr>
+<td align="left">处理时机</td>
+<td align="left">指令执行的间隙</td>
+<td align="left">发生异常的指令执行过程中</td>
+<td align="left">访管指令执行完成</td>
+</tr>
+<tr>
+<td align="left">返回地址</td>
+<td align="left">下一条指令</td>
+<td align="left">发生异常的那条指令</td>
+<td align="left">下一条指令</td>
+</tr>
+<tr>
+<td align="left">e.g.</td>
+<td align="left">键盘输入、磁盘数据传输</td>
+<td align="left">除0错、非法内存访问</td>
+<td align="left">x86中的int指令，RISCV中的ecall指令</td>
+</tr>
+</tbody></table>
+<h3 id="时钟"><a href="#时钟" class="headerlink" title="时钟"></a>时钟</h3><ul>
+<li>三种常见的时钟硬件<ul>
+<li>可编程间隔定时器(Programmable Interval Itmer, PIT)<ul>
+<li>晶体振荡器产生精确周期信号，被送到计数器，数值递减，0的时候产生时钟中断。如果希望周期产生，那么会从一个存储器中复制初值，然后循环。</li>
+<li>周期性的中断被称为时钟滴答(clock tick)</li>
+</ul>
+</li>
+<li>实时时钟(Real Time Clock, RTC)<ul>
+<li>在PC断电后仍保存事件</li>
+<li>通过主板上的电池供电，与CMOS RAM集成到一块芯片上，称为CMOS Timer</li>
+<li>可在系统初启时读入并转换位相对于某一基准事件的事件滴答数</li>
+</ul>
+</li>
+<li>时间戳计数器(Time Stamp Counter, TSC)<ul>
+<li>某系处理器包含的64位寄存器</li>
+<li>在每一个振荡信号到时，计数器递增</li>
+<li>可为操作系统提供更精确的时间度量</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="DMA"><a href="#DMA" class="headerlink" title="DMA"></a>DMA</h3><ul>
+<li>特点<ul>
+<li>传输过程中无需CPU参与控制</li>
+<li>需要中断支持</li>
+<li>用于DMA的内存地址必须连续</li>
+<li>传输过程占用总线资源</li>
+</ul>
+</li>
+</ul>
+<h2 id="操作系统的结构"><a href="#操作系统的结构" class="headerlink" title="操作系统的结构"></a>操作系统的结构</h2><h3 id="内核"><a href="#内核" class="headerlink" title="内核"></a>内核</h3><ul>
+<li>定义: 为了处理多道程序系统中的并发性、共享性和随机性，使用户程序能协调的工作，必须由一个软件能对硬件处理器及有关资源进行改造，以便为程序的运行提供良好的运行环境，这个部分就是操作系统内核kernel</li>
+<li>基本功能：<ul>
+<li>中断处理</li>
+<li>进程调度</li>
+<li>原语管理</li>
+</ul>
+</li>
+<li>特征<ul>
+<li>内核是由中断驱动的</li>
+<li>内核的执行是连续的</li>
+<li>内核在屏蔽中断状态下执行</li>
+<li>内核可以使用特权指令</li>
+</ul>
+</li>
+<li>结构分类<ul>
+<li>单内核结构<ul>
+<li>所有操作系统组件全部放在内核中，全部运行在内核态</li>
+<li>优点: 系统结构简单，代码执行效率高; 缺点: 内核庞大，难以维护、调试</li>
+<li>UNIX, Linux</li>
+</ul>
+</li>
+<li>微内核结构<ul>
+<li>只将操作系统核心组件放在内核中，将外围组件放在用户态运行</li>
+<li>优点: OS内核非常小，容易保证稳定; 缺点: 采用IPC通讯，效率偏低</li>
+<li>Windows NT, 鸿蒙</li>
+</ul>
+</li>
+<li>伴生内核结构<ul>
+<li>在同一台机器上运行多个OS,一个主，其它伴生</li>
+<li>docker容器，云端虚拟机</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h5 id="微内核结构"><a href="#微内核结构" class="headerlink" title="微内核结构"></a>微内核结构</h5><ul>
+<li>微内核结构的操作系统分为两大部分<ul>
+<li>微内核: 核心功能(中断处理、进程&#x2F;线程管理、低级存储器管理)</li>
+<li>服务进程：文件服务、存储管理服务</li>
+</ul>
+</li>
+<li>操作系统以C&#x2F;S形式为用户程序提供服务<ul>
+<li>内核把用户请求服务的消息传给服务进程</li>
+<li>服务进程接收并执行用户服务的请求</li>
+<li>内核用消息把结果返回给用户</li>
+</ul>
+</li>
+<li>优点：<ul>
+<li>可靠、可扩充、可移植</li>
+</ul>
+</li>
+<li>缺点<ul>
+<li>系统开销大(消息收发、上下文切换)</li>
+</ul>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="left">单内核</th>
+<th align="left">微内核</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">用户进程调用库或内核调用，进入操作系统服务例程。操作系统服务例程是在用户进程的上下文环境中执行的。</td>
+<td align="left">用户通过发送请求的方式让操作系统执行服务例程</td>
+</tr>
+</tbody></table>
+<h2 id="操作系统的生成和启动"><a href="#操作系统的生成和启动" class="headerlink" title="操作系统的生成和启动"></a>操作系统的生成和启动</h2><h3 id="操作系统的启动"><a href="#操作系统的启动" class="headerlink" title="操作系统的启动"></a>操作系统的启动</h3><ul>
+<li>将操作系统的必要部分装入主存并对系统进行初始化工作，最终使系统处于命令接收状态</li>
+<li>独立引导方式(滚雪球方式)<ul>
+<li>OS核心文件存储在系统本身的存储设备中，由系统自己将OS核心程序读入主存并运行，建立一个操作环境</li>
+<li>适用于微机和大多数系统</li>
+</ul>
+</li>
+<li>辅助下装方式<ul>
+<li>OS主要文件不放在系统本身的存储设备中，在系统启动后执行下装操作，从另外的计算机系统中将操作系统常驻部分传送到计算机中，使它形成一个操作环境</li>
+<li>用于多计算机系统、由主控机与前端机构成的系统以及分布式系统</li>
+</ul>
+</li>
+</ul>
+<h3 id="x86机器上的Linux的启动流程"><a href="#x86机器上的Linux的启动流程" class="headerlink" title="x86机器上的Linux的启动流程"></a>x86机器上的Linux的启动流程</h3><ul>
+<li>系统加电或复位</li>
+<li>BIOS启动<ul>
+<li>ROM中的引导程序放在固定位置: FFFF: 0000, CPU从这里开始执行</li>
+<li>硬件自检</li>
+<li>从硬盘读入零柱面零磁道1扇区(Master Boot Record, MBR)到固定位置，jmp到0000: 7C00，将控制权交给MBR中的Boot Loader程序(如GRUB)</li>
+</ul>
+</li>
+<li>Boot Loader(引导程序)<ul>
+<li>将Linux内核读入内存，jmp到内核的入口地址，将控制权交给OS的初始化程序</li>
+</ul>
+</li>
+<li>系统核心初始化<ul>
+<li>Setup.s的工作<ul>
+<li>检查调入内存中的代码</li>
+<li>获取内存容量信息，设置设备模式</li>
+<li>屏蔽中断，准备进入保护模式</li>
+<li>设置中断描述符表(IDT)，全局描述符表(GDT)；控制交给Heads</li>
+</ul>
+</li>
+<li>Heads的工作<ul>
+<li>调用Setup_IDT做准备工作</li>
+<li>检查CPU类型</li>
+<li>调用Setup_pageing进行页表初始化</li>
+<li>调用main.c中的Start_kernel()</li>
+</ul>
+</li>
+<li>Start_kernel()的工作<ul>
+<li>对与CPU、内存等最基本硬件相关部分进行初始化</li>
+<li>对IDT进行初始化</li>
+<li>为进程调度程序做准备</li>
+<li>设置基准时钟</li>
+<li>内核的内存分配</li>
+<li>对文件系统进行初始化</li>
+<li>建立init进程</li>
+</ul>
+</li>
+<li>init进程对每一个联机终端建立”getty”进程，getty 在终端上现实login, 等待用户登录</li>
+</ul>
+</li>
+</ul>
+<h3 id="操作系统的生成"><a href="#操作系统的生成" class="headerlink" title="操作系统的生成"></a>操作系统的生成</h3><ul>
+<li>定义<ul>
+<li>所谓系统生成，就是为了满足物理设备的约束和需要的系统功能，通过组装一批模块来产生一个清晰的、使用方便的操作系统的过程</li>
+<li>简单地说就是系统的安装，即将OS安装到启动装置(可以是磁盘，也可以是tftp服务器的某个目录)</li>
+</ul>
+</li>
+<li>系统生成的内容<ul>
+<li>Bootloader</li>
+<li>OS内核</li>
+<li>文件系统</li>
+<li>执行环境(如用户态lib等)</li>
+</ul>
+</li>
+</ul>
+<h2 id="程序的链接"><a href="#程序的链接" class="headerlink" title="程序的链接"></a>程序的链接</h2><h3 id="静态链接和动态链接"><a href="#静态链接和动态链接" class="headerlink" title="静态链接和动态链接"></a>静态链接和动态链接</h3><h4 id="静态链接"><a href="#静态链接" class="headerlink" title="静态链接"></a>静态链接</h4><p>一个源程序经过编译后，生成一个可重定位的目标模块，并产生内部符号表和外部调用表，供链接程序使用。</p>
+<ul>
+<li>内部符号表: 本模块可以被其它程序调用的入口点</li>
+<li>外部调用表: 本模块要调用的外部程序模块名</li>
+<li>链接程序需要做的工作<ul>
+<li>将各模块连接称为一个整体</li>
+<li>构造全程符号表，在其中填写模块的裸机地址</li>
+<li>查找各程序段的外部调用表，填入对应调用函数的地址</li>
+</ul>
+</li>
+<li>静态链接的缺点<ul>
+<li>静态链接需要将所需的外部函数链接到目标文件中生成一个可执行文件。若多个应用程序都调用了同一个库中的外部函数，则每个执行文件中都会包含这个外部函数对应的代码</li>
+</ul>
+</li>
+</ul>
+<h4 id="动态链接"><a href="#动态链接" class="headerlink" title="动态链接"></a>动态链接</h4><ul>
+<li>动态链接不需要将外部函数链接到目标文件中，而是在应用程序中需要调用外部函数的地方做记录，并说明要使用的外部函数名和引用入口号，形成函数调用链表</li>
+<li>所需支持： 动态链接库(DLL)</li>
+<li>OS的装在程序将应用程序和DLL装入主存后，装载程序会遍历函数调用链表，将DLL中函数在主存的入口(段: 偏移)填入链表中的每个节点</li>
+<li>缺点: 可执行文件的执行需要执行环境找到并加载所有它依赖的函数库</li>
+</ul>
+<h2 id="操作系统的用户接口"><a href="#操作系统的用户接口" class="headerlink" title="操作系统的用户接口"></a>操作系统的用户接口</h2><h4 id="Linux系统调用控制程序的功能"><a href="#Linux系统调用控制程序的功能" class="headerlink" title="Linux系统调用控制程序的功能"></a>Linux系统调用控制程序的功能</h4><ol>
+<li>取系统调用号，检验合法性</li>
+<li>建立调用堆栈，保护现场信息</li>
+<li>根据系统调用号定位核心函数地址</li>
+<li>根据通用寄存器内容，从用户栈中取入口参数</li>
+<li>核心函数执行，把结果返回给应用程序</li>
+<li>执行退栈操作，判别调度程序scheduler是否要被执行</li>
+</ol>
+<h1 id="进程及进程管理"><a href="#进程及进程管理" class="headerlink" title="进程及进程管理"></a>进程及进程管理</h1><h2 id="进程的引入"><a href="#进程的引入" class="headerlink" title="进程的引入"></a>进程的引入</h2><h4 id="顺序程序"><a href="#顺序程序" class="headerlink" title="顺序程序"></a>顺序程序</h4><ul>
+<li>程序的一次执行过程称为一个计算，由许多简单操作组成</li>
+<li>一个计算的若干操作必须按照严格的先后次序顺序地执行，这个计算过程就是程序的顺序执行过程</li>
+<li>特点<ul>
+<li>顺序性</li>
+<li>封闭性</li>
+<li>可再现性</li>
+</ul>
+</li>
+</ul>
+<h4 id="并发程序"><a href="#并发程序" class="headerlink" title="并发程序"></a>并发程序</h4><ul>
+<li>定义: 若干个程序段同时在系统中运行，这些程序段的执行在时间上是重叠的，一个程序段的执行尚未结束，另一个程序段的执行已经开始，即使这种重叠是很小的一部分，也称这几个程序段是并发执行的</li>
+<li>特点：<ul>
+<li>程序与计算不再一一对应</li>
+<li>程序并发执行的相互制约<ul>
+<li>间接的相互制约关系: 资源共享</li>
+<li>直接的相互制约关系: 公共变量</li>
+</ul>
+</li>
+<li>失去程序的封闭性和可再现性: 若一个程序的执行可以改变另一个程序的变量，那么后者的输出就可能有赖于各程序执行的相对速度，即失去了程序的封闭性特点<ul>
+<li>程序并发执行时的结果与各并发程序的相对速度有关，即给定相同的初始条件，若不加以控制，也可能得到不同的结果，此为与时间有关的错误</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="进程的定义"><a href="#进程的定义" class="headerlink" title="进程的定义"></a>进程的定义</h3><ul>
+<li>进程是指一个具有一定独立功能的程序关于某个数据集合的一次运行活动</li>
+<li>进程与程序的区别<ul>
+<li>程序是静态的概念，进程是动态的概念</li>
+<li>进程一个独立运行的活动单位</li>
+<li>进程是竞争系统资源的基本单位</li>
+<li>一个程序可以对应多个进程，一个进程至少包含一个程序</li>
+</ul>
+</li>
+</ul>
+<h3 id="进程的状态"><a href="#进程的状态" class="headerlink" title="进程的状态"></a>进程的状态</h3><ul>
+<li>运行状态(running)<ul>
+<li>该进程已获得运行所必需的资源，它的程序正在处理机上执行</li>
+</ul>
+</li>
+<li>等待状态(waiting)<ul>
+<li>进程正等待着某一事件的发生而暂时停止执行。这时，即使给它CPU控制权，它也无法执行</li>
+</ul>
+</li>
+<li>就绪状态(ready)<ul>
+<li>进程已获得除CPU之外的运行所必需的资源，一旦得到CPU控制权，立即可以运行</li>
+</ul>
+</li>
+</ul>
+<h3 id="进程描述"><a href="#进程描述" class="headerlink" title="进程描述"></a>进程描述</h3><ul>
+<li>进程控制块<ul>
+<li>描述进程与其它进程、系统资源的关系以及各进程在各不同时期所处的状态的数据结构，称为进程控制块(process control block, PCB)</li>
+<li>主要内容<ul>
+<li>进程标识符: 进程符号名内部id</li>
+<li>进程当前状态: 本进程目前处于何种状态</li>
+<li>当前队列指针next: 该项等级了处于同一状态下的下一个进程的PCB地址</li>
+<li>进程优先级: 反应了进程要求CPU的紧迫程度</li>
+<li>CPU现场保护区: 当进程由于某种原因释放处理机时，CPU现场信息被保存在PCB的该区域中</li>
+<li>通信信息: 进程间进行通信时所记录的有关信息</li>
+<li>家族联系: 指明本进程与家族的联系</li>
+<li>占有资源清单</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>进程的组成(进程映像)<ul>
+<li>程序与数据<ul>
+<li>描述进程本身应完成的功能</li>
+</ul>
+</li>
+<li>进程控制块PCB<ul>
+<li>进程的动态特征，该进程与其它进程和系统资源的关系</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="进程控制"><a href="#进程控制" class="headerlink" title="进程控制"></a>进程控制</h2><h3 id="进程控制的概念"><a href="#进程控制的概念" class="headerlink" title="进程控制的概念"></a>进程控制的概念</h3><ul>
+<li>进程控制的职责: 对系统中的进程实时有效的管理，负责进程状态的改变</li>
+<li>常用的进程控制原语<ul>
+<li>创建原语、撤销原语、等待原语、唤醒原语</li>
+</ul>
+</li>
+<li>进程的状态变化</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="left">创建进程的典型原因</th>
+<th align="left"></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">新建一个批处理任务</td>
+<td align="left">在一个批处理任务作业流中，当操作系统完成了上一个作业，从作业流中读出下一个作业时</td>
+</tr>
+<tr>
+<td align="left">交互式登录</td>
+<td align="left">用户通过一个交互式终端登录到某个系统中时</td>
+</tr>
+<tr>
+<td align="left">操作系统创建，以提供某种服务</td>
+<td align="left">现代操作系统往往需要创建某种服务以辅助用户进程完成其工作</td>
+</tr>
+<tr>
+<td align="left">被已经存在的进程所创建</td>
+<td align="left">例如为提高多核系统的资源利用率，某用户创建一个子进程</td>
+</tr>
+</tbody></table>
+<h4 id="Linux-fork"><a href="#Linux-fork" class="headerlink" title="Linux::fork()"></a>Linux::fork()</h4><p>Linux用fork()创建一个子进程，它从父进程继承整个进程的地址空间，包括: 进程上下文、进程堆栈、内存信息、打开的文件描述符、信号控制设置、进程优先级、进程组号、当前工作目录、根目录、资源限制、控制终端等</p>
+<ol>
+<li>为新进程分配一个新的PCB结构</li>
+<li>为子进程赋一个唯一的进程标识号PID</li>
+<li>为子进程做一个父进程上下文的裸机副本。这意味着父子进程将执行完全相同的代码</li>
+<li>增加与该进程相关联的文件表和索引节点表的引用数。这就意味着父进程打开的文件子进程可以继续使用。</li>
+<li>对父进程返回子进程的进程号，对子进程返回0</li>
+</ol>
+<h3 id="进程撤销"><a href="#进程撤销" class="headerlink" title="进程撤销"></a>进程撤销</h3><ul>
+<li>进程撤销原语的形式<ul>
+<li>进程完成任务或希望终止时使用进程撤销原语<code>exit()</code></li>
+</ul>
+</li>
+<li>进程撤销原语的功能<ul>
+<li>撤销当前运行的进程。将改进程的PCB结构归还到PCB资源池，所占用的资源归还给父进程，从总链队列中摘除它，然后转进程调度程序</li>
+</ul>
+</li>
+<li>进程撤销原语的实现<ul>
+<li>入口-&gt;由运行指针得当前进程的pid-&gt;释放本进程所占用的资源给父进程-&gt;该进程从总队列中摘下-&gt;释放PCB结构-&gt;转进程调度</li>
+</ul>
+</li>
+<li>进程撤销的主要原因<ul>
+<li>进程正常运行结束</li>
+<li>进程运行中处所，如执行了非法指令、在常态下执行了特权指令、运行时间超越了分给的最大时间段、申请的内存超过了系统能提供的最大量、越界错误等</li>
+<li>操作员或操作系统干预</li>
+<li>父进程撤销其子进程</li>
+<li>操作系统终止</li>
+</ul>
+</li>
+</ul>
+<h4 id="Linux-exit"><a href="#Linux-exit" class="headerlink" title="Linux::exit()"></a>Linux::exit()</h4><ul>
+<li>Linux用exit(status)撤销一个进程，它停止当前进程的运行，清楚其使用的内存空间，销毁其在内核中的各种数据结构，但仍保留其PCB结构，等待父进程回收</li>
+<li>进程的状态变为zombie</li>
+<li>若父进程正在等待它的终止，则父进程可立即得到其返回的整数status</li>
+<li>僵尸进程<ul>
+<li>若子进程调用<code>exit()</code>，而父进程并没有调用<code>wait()</code>或<code>waitpid()</code>获取子进程的状态信息，那么子进程的PCB仍然保存在系统中。这种进程称之为僵尸进程</li>
+</ul>
+</li>
+<li>孤儿进程<ul>
+<li>当一个父进程由于正常完成工作而退出或由于其它情况被终止，它的一个或多个子进程却还在运行，那么那些子进程将称为孤儿进程</li>
+<li>孤儿进程将被1号进程接管</li>
+<li>1号进程定期清除它接管的僵尸进程</li>
+</ul>
+</li>
+</ul>
+<h3 id="进程等待"><a href="#进程等待" class="headerlink" title="进程等待"></a>进程等待</h3><ul>
+<li>进程等待原语的形式<ul>
+<li>当进程需要等待某一事件完成时，它可以调用等待原语挂起自己</li>
+<li><code>susp(chan)</code></li>
+<li>入口参数<code>chan</code>: 进程等待的原因</li>
+</ul>
+</li>
+<li>进程等待原语的功能<ul>
+<li>中止调用进程的执行，并加入到等待chan的等待队列中；最后使控制转进程调度</li>
+<li>注意：并没有一个唯一特定的系统调用来将进程挂起，导致进程挂起的原因很多，所以很多系统调用例程都可能使用此原语讲当前进程挂起</li>
+</ul>
+</li>
+<li>进程等待原语的实现<ul>
+<li>入口-&gt;保护进程的CPU现场到PCB结构中-&gt;置该进程为“等待”状态-&gt;将该进程PCB结构插入到等待队列中-&gt;转进程调度</li>
+</ul>
+</li>
+<li>进程等待的原因<ul>
+<li>进程在执行过程中通过系统调用请求一些暂时得不到而必须等待的服务<ul>
+<li>读写文件、访问共享内存等，这些服务操作系统可能无法立即提供</li>
+<li>进程在执行过程中发出了I&#x2F;O请求，从而必须等待改I&#x2F;O请求的完成才能继续执行</li>
+<li>因为进程间通讯的原因，一个进程在执行过程中必须等待另一个进程的消息才能继续往下执行</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="Linux-wait"><a href="#Linux-wait" class="headerlink" title="Linux::wait"></a>Linux::wait</h4><ul>
+<li><code>wait()</code>: 等待子进程结束<ul>
+<li><code>pid=wait(int *status);</code></li>
+<li>wait函数使父进程暂停执行，直到它的一个子进程结束位置，该函数的返回值是中止运行的子进程PID。参数status所指向的变量存放子进程的退出码，即从子进程的main函数返回的值或子进程中exit函数的参数。</li>
+</ul>
+</li>
+<li><code>waitpid()</code>: 等待某个特定子进程结束<ul>
+<li><code>waitpid(pit_t pid, int* status, int options)</code></li>
+<li>pid为要等待的子进程的pid</li>
+<li>status的含义与wait中的status相同</li>
+</ul>
+</li>
+</ul>
+<h3 id="进程唤醒"><a href="#进程唤醒" class="headerlink" title="进程唤醒"></a>进程唤醒</h3><ul>
+<li>进程唤醒原语的形式<ul>
+<li>当处于等待状态的进程所期待的事件到来时，由发现者进程使用唤醒原语唤醒它</li>
+<li><code>wakeup(chan)</code></li>
+<li>入口参数chan: 进程等待的原因</li>
+</ul>
+</li>
+<li>进程唤醒原语的哦功能<ul>
+<li>当进程等待的事件发生时，唤醒等待该事件的进程</li>
+</ul>
+</li>
+<li>进程唤醒原语的实现<ul>
+<li>入口-&gt;找到该等待队列-&gt;将队列首进程移除此等待队列-&gt;将该进程置为“就绪”状态，并将其PCB结构插入到就绪队列中-&gt;返回</li>
+</ul>
+</li>
+<li>进程唤醒的时机<ul>
+<li>I&#x2F;O完成时会产生一个中断，在该中断的中断处理函数中会唤醒等待该I&#x2F;O的进程</li>
+<li>进程在等待某个被上锁的资源，当另一个进程通过系统调用来释放其施加在该资源上的锁的时候，系统调用服务例程会唤醒该进程</li>
+<li>进程在等待另一个进程的消息，当另一个进程通过系统调用向其发送消息时，系统调用服务例程会唤醒该进程</li>
+</ul>
+</li>
+</ul>
+<h3 id="进程切换"><a href="#进程切换" class="headerlink" title="进程切换"></a>进程切换</h3><ul>
+<li>进程切换的时机<ul>
+<li>操作系统必须先获取处理器的使用权</li>
+</ul>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="left">机制</th>
+<th align="left">原因</th>
+<th align="left">用途</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">中断</td>
+<td align="left">外部事件的发生</td>
+<td align="left">响应异步的外部事件</td>
+</tr>
+<tr>
+<td align="left">异常</td>
+<td align="left">当前指令无法继续执行</td>
+<td align="left">处理器错误（如除零错）或者异常事件（如缺页）</td>
+</tr>
+<tr>
+<td align="left">系统调用</td>
+<td align="left">由当前运行的进程主动发出请求</td>
+<td align="left">调用操作系统的服务例程</td>
+</tr>
+</tbody></table>
+<ul>
+<li>操作系统获得了处理器使用权后，一定会做进程切换吗？<ul>
+<li>处理机状态切换(操作系统获得使用权的过程)<ul>
+<li>设置程序计数器为中断处理例程的入口</li>
+<li>从用户态切换到内核态，开始中断处理例程(包含特权指令)的执行</li>
+</ul>
+</li>
+<li>处理机状态切换的开销很小，大多数情况下不会导致进程切换；但是如果当前进程的状态需要变为等待态或就绪态，就必须做进程切换</li>
+</ul>
+</li>
+<li>进程切换要做哪些事情<ul>
+<li>保存当前进程的上下文</li>
+<li>改变当前进程的进程控制块内容，包括其状态的改变、离开运行态的原因等</li>
+<li>将当前进程的控制块移到相应队列中，如就绪队列、事件等待队列等</li>
+<li>选则一个合适的进程开始执行</li>
+<li>更新被选则进程的控制块，将其状态置为运行态</li>
+<li>恢复被选则进程的上下文</li>
+</ul>
+</li>
+</ul>
+<h2 id="进程之间的相互制约关系"><a href="#进程之间的相互制约关系" class="headerlink" title="进程之间的相互制约关系"></a>进程之间的相互制约关系</h2><p>进程间可能存在的交互关系</p>
+<table>
+<thead>
+<tr>
+<th align="left">无交互</th>
+<th align="left">间接交互</th>
+<th align="left">直接交互</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">竞争系统资源</td>
+<td align="left">竞争临界资源</td>
+<td align="left">通过通讯协作</td>
+</tr>
+<tr>
+<td align="left">计算结果与其它进程无关。可能影响其它进程的时间特征</td>
+<td align="left">可能影响其它进程的计算结果。可能影响其它进程的时间特征</td>
+<td align="left">可能影响其它进程的计算结果。可能影响其它进程的时间特征</td>
+</tr>
+</tbody></table>
+<h3 id="进程互斥的概念"><a href="#进程互斥的概念" class="headerlink" title="进程互斥的概念"></a>进程互斥的概念</h3><ul>
+<li>临界资源<ul>
+<li>特点: 当两个进程共用一个变量时，它们必须顺序地使用，一个进程对公用变量操作完毕后，另一个进程才能去访问和修改这一变量</li>
+<li>定义: 一次仅允许一个进程使用的资源称为临界资源</li>
+<li>e.g. 硬件: 输入机、打印机、磁带机; 软件: 公用变量、数据、表格、队列等</li>
+</ul>
+</li>
+<li>临界区<ul>
+<li>临界区是进程中对公共变量(或存储区)进行审查与修改的程序段，称为相对于该公共变量的临界区</li>
+</ul>
+</li>
+<li>互斥<ul>
+<li>操作系统中，当某进程正在访问某一存储区域时，就不允许其它进程来读出或者修改该存储区的内容，否则，就会发生后果无法估计的错误。进程间的这种相互制约关系称为互斥。</li>
+<li>注意: 关于同一临界资源的临界区才需要互斥进入</li>
+</ul>
+</li>
+<li>进程同步的定义<ul>
+<li>并发进程在一些关键点上可能需要互相等待以互通消息，这种相互制约的等待于互通消息称为进程同步</li>
+</ul>
+</li>
+<li>临界区的访问规则<ul>
+<li>空闲则进入: 没有进程在临界区时，任何进程都可以进入临界区</li>
+<li>忙则等待: 有进程在临界区时，其它进程均不能进入临界区</li>
+<li>有限等待: 等待进入临界区的进程不能无限等待</li>
+<li>让权等待(可选): 不能进入临界区的进程应释放CPU</li>
+</ul>
+</li>
+</ul>
+<h2 id="进程同步机构"><a href="#进程同步机构" class="headerlink" title="进程同步机构"></a>进程同步机构</h2><h3 id="锁"><a href="#锁" class="headerlink" title="锁"></a>锁</h3><p>用变量w代表某种资源的状态，称为锁。</p>
+<ul>
+<li>检测w的值(0或1)</li>
+<li>如果w的值为1，继续检测</li>
+<li>如果w的值为0，将锁位置1(表示占用资源)，进入临界区执行</li>
+<li>临界资源使用完毕，将锁位置0</li>
+</ul>
+<h3 id="信号灯"><a href="#信号灯" class="headerlink" title="信号灯"></a>信号灯</h3><ul>
+<li>信号灯是一个确定的二元组(s, q)，s是一个具有非负数值的整型变量，q是一个初始状态为空的队列。操作系统利用信号灯对并发进程和共享资源进行控制和管理。<ul>
+<li>s &gt;&#x3D; 0，进程执行</li>
+<li>s &lt; 0，进程停止执行</li>
+<li>注意: 创建信号灯时应说明信号灯的意义和s的初值，且初值绝不能为负值</li>
+</ul>
+</li>
+<li>P操作<ul>
+<li>对信号灯s的P操作记为P(s)</li>
+<li>P(s)是一个不可分隔的原语操作，即取信号灯值减1，若相减结果为负，则调用P(s)的进程被阻，并插入到该信号灯的等待队列中，否则该进程继续执行</li>
+</ul>
+</li>
+<li>V操作<ul>
+<li>对信号灯s的V操作记为V(s)</li>
+<li>V(s)是一个不可分隔的原语操作，即取信号灯值加1，若相加结果大于零，进程继续执行，否则，唤醒在该信号灯等待队列上的第一个进程</li>
+</ul>
+</li>
+<li>注意事项<ul>
+<li>信号灯的初值不能为负值</li>
+<li>必须成对使用P和V操作: 遗漏P操作则不能保证互斥访问，遗漏V操作则不能再使用临界资源之后将其释放(给其它等待的进程)</li>
+<li>P、V操作不能次序错误、重复或遗漏</li>
+</ul>
+</li>
+</ul>
+<h2 id="进程通信"><a href="#进程通信" class="headerlink" title="进程通信"></a>进程通信</h2><ul>
+<li>进程通信是指进程之间传递信息及同步的机制</li>
+<li>IPC的基本形式为以下两个操作<ul>
+<li>发送消息: send(destination, message)</li>
+<li>接收消息: recieve(source, message)</li>
+</ul>
+</li>
+<li>基本通信流程<ul>
+<li>在通信进程间建立通信链路</li>
+<li>通过send&#x2F;receive交换信息</li>
+</ul>
+</li>
+<li>同步方式: 阻塞VS非阻塞<ul>
+<li>发送端阻塞，接收端非阻塞: 两端都阻塞，消息被接收后再将两端唤醒<ul>
+<li>常用于要求进程进行强同步的场合</li>
+</ul>
+</li>
+<li>发送端不阻塞，接收端阻塞: 发送端在发送完消息后继续执行，而接收端必须阻塞，直到接收到消息后才被唤醒<ul>
+<li>最广泛使用的方案</li>
+<li>问题: 可能导致消息重复发送，消耗系统资源，难以确定消息是否被接收</li>
+</ul>
+</li>
+<li>发送端不阻塞，接收端不阻塞: 两端都不等待<ul>
+<li>问题: 可能导致消息接收失败</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>寻址方式: 直接vs间接<ul>
+<li>直接通信: 发送&#x2F;接收消息时必须指明消息的接收&#x2F;发送进程<ul>
+<li><code>send(P, message)</code> 发送消息到进程P</li>
+<li><code>receive(Q, message)</code> 从进程Q接收消息</li>
+<li>通信双方必须同时存在</li>
+</ul>
+</li>
+<li>间接通信: 消息被发送到一个操作系统维护的消息队列（信箱）中，接收端从其中取出消息<ul>
+<li>每个消息队列具有一个唯一的标识</li>
+<li>只有使用相同消息队列的进程才能够通信</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="信箱的归属权-进程vs操作系统"><a href="#信箱的归属权-进程vs操作系统" class="headerlink" title="信箱的归属权: 进程vs操作系统"></a>信箱的归属权: 进程vs操作系统</h4><ul>
+<li>信箱属于创建它的进程<ul>
+<li>随着创建它的进程结束而结束</li>
+<li>e.g. 端口</li>
+</ul>
+</li>
+<li>信箱属于操作系统<ul>
+<li>与使用它的进程是否结束无关，必须通过明确的命令撤销</li>
+<li>e.g. 消息队列</li>
+</ul>
+</li>
+</ul>
+<h4 id="Linux-共享内存"><a href="#Linux-共享内存" class="headerlink" title="Linux: 共享内存"></a>Linux: 共享内存</h4><p>共享内存是把同一片物理内存区域同时映射到多个进程的地址空间的通信机制</p>
+<ul>
+<li>共享内存的创建<ul>
+<li><code>int shmget(key_t key, int size, int shmflg)</code></li>
+<li><code>key</code>: 键值，多个需要使用同一共享内存的进程用相同的key来创建或获取该共享内存</li>
+<li><code>size</code>: 共享内存的大小</li>
+<li><code>shmflg</code>: IPC_CREAT | 0666</li>
+</ul>
+</li>
+<li>共享内存的绑定<ul>
+<li><code>void *shmat(int shmid, char* shmaddr, int shmflg)</code></li>
+<li><code>shmid</code>: 共享内存句柄，shmget调用的返回值</li>
+<li>shmaddr: 一般用NULL</li>
+<li>shmflg: SHM_R | SHM_W</li>
+</ul>
+</li>
+<li>共享内存的释放<ul>
+<li><code>int shmctl(int shmid, int cmd, struct shmid_ds* buf)</code></li>
+<li><code>shmid</code>: 共享内存句柄，即shmget函数的返回值</li>
+<li><code>cmd</code>: 控制命令</li>
+<li><code>buf</code>: 一个结构指针，它指向共享内存模式和访问权限的结构</li>
+</ul>
+</li>
+</ul>
+<h4 id="Linux-信号量"><a href="#Linux-信号量" class="headerlink" title="Linux: 信号量"></a>Linux: 信号量</h4><ul>
+<li>信号量的创建<ul>
+<li><code>int semget(key_t key, int num_sems, int sem_flags)</code></li>
+<li><code>key</code>: 用来允许多个进程访问相同信号量的整数值，它们通过相同的key值来调用semget</li>
+<li><code>num_sems</code>: 所需要的信号量数目。Semget创建的是一个信号量数组，数组元素的个数即为num_sems</li>
+<li><code>sem_flags</code>: 一个标记集合，与open函数的标记十分类似。低九位是信号的权限，其作用与文件权限类似。另外，这些标记可以与IPC_CREATE进行或操作来创建新的信号量，一般用IPC_CREATE | 0666</li>
+</ul>
+</li>
+<li>信号量的控制<ul>
+<li><code>int semctl(int sem_id, int sem_num, int command, ...)</code></li>
+<li><code>sem_id</code>: 是由semget所获得的信号量标识符</li>
+<li><code>sem_num</code>: 是信号量数组元素的下标，即指定对第几个信号量进行控制</li>
+<li><code>command</code>: 要执行的动作，有多个不同的command值可用于semctl，常用的两个command值为<ul>
+<li>SETVAL: 用于为信号量赋初值，其值通过第四个参数指定</li>
+<li>IPC_RMID: 当信号量不再需要时用于删除一个信号量标识</li>
+</ul>
+</li>
+<li>如果有第四个参数，则是union semun，该联合定义如下<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">union</span> <span class="title">semun</span> &#123;</span></span><br><span class="line">  <span class="type">int</span> val;</span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">semid_ds</span>* <span class="title">buf</span>;</span></span><br><span class="line">  <span class="type">unsigned</span> <span class="type">short</span>* <span class="built_in">array</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li>信号量的操作<ul>
+<li><code>int semop(int sem_id, struct sembuf* sem_ops, size_t num_sem_ops)</code></li>
+<li><code>sem_id</code>: 要操作的信号量的标识符</li>
+<li><code>sem_ops</code>: 一个指向结构数组的指针，该结构包含操作的参数<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">sembuf</span>&#123;</span></span><br><span class="line">  <span class="type">short</span> sem_num;  <span class="comment">// 数组下标</span></span><br><span class="line">  <span class="type">short</span> sem_op;  <span class="comment">// 操作，-1或1</span></span><br><span class="line">  <span class="type">short</span> sem_flg;  <span class="comment">// 0 </span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><code>num_sem_ops</code>: 操作数量，一般为1</li>
+</ul>
+</li>
+</ul>
+<h4 id="Linux-信号"><a href="#Linux-信号" class="headerlink" title="Linux: 信号"></a>Linux: 信号</h4><ul>
+<li>信号机制是一种进程间的软件中断信号通知和异步处理机制</li>
+<li>信号机制是在软件层次上对中断机制的一种模拟</li>
+<li>进程在很多情况下会都接收到软中断信号<ul>
+<li>用户在终端按下某些特殊键: e.g. ^C,终端进程会发送SIGINT信号给前台进程</li>
+<li>硬件异常: e.g. 除零，CPU产生异常，内核处理完该已成后会发送SIGFPE信号给进程</li>
+<li>内核检测到某种软件条件: 如闹钟超时，会发送SIGALRM信号给进程</li>
+<li>显式调用kill函数或kill命令发送信号给某个进程</li>
+</ul>
+</li>
+</ul>
+<h4 id="信号机制的功能"><a href="#信号机制的功能" class="headerlink" title="信号机制的功能"></a>信号机制的功能</h4><ul>
+<li>预制对信号的处理方式<ul>
+<li>忽略: 忽略该信号不做处理，SIGKIL和SIGSTOP不能被忽略</li>
+<li>捕获: 通知内核在某种信号发生时，调用用户指定的函数进行处理</li>
+<li>执行默认动作: 编译器预置了各个信息的处理函数</li>
+</ul>
+</li>
+<li>信号发送: 发送进程把信号送到指定进程的信号域的某一位上，如果目标进程正在一个可被中断的优先级上睡眠，系统将其唤醒</li>
+<li>信号处理: 收到信号的进程在由核态返回到用户态前，按预置的处理方式完成对相应事件的处理</li>
+<li>不足: 传送的信息量小，只有一个信号类型</li>
+</ul>
+<h4 id="Linux-管道"><a href="#Linux-管道" class="headerlink" title="Linux: 管道"></a>Linux: 管道</h4><ul>
+<li>管道是进程间基于文件的一种间接通信机制</li>
+<li>管道是半双工的，数据只能单向流动</li>
+<li>管道对于管道两端的进程而言就是一个文件，写管道时内容添加在文件末尾，读管道则从文件头部读出</li>
+<li>无名管道<ul>
+<li>无名管道没有名字，只有一组文件描述符</li>
+<li>子进程从父进程继承文件描述符</li>
+<li>只能用于具有亲缘关系的进程间的通信</li>
+</ul>
+</li>
+<li>命名管道<ul>
+<li>管道有文件名，允许无亲缘关系的进程通过访问管道文件进行通信</li>
+</ul>
+</li>
+<li>与管道相关的系统调用<ul>
+<li>创建无名管道: <code>int pipefd[2]; int pipe(pipefd)</code><ul>
+<li><code>pipedf[0]</code>只能用于读，接收进程应关闭写入端，即<code>close(pipefd[1])</code></li>
+<li><code>pipefd[1]</code>只能用于写，发送进程应关闭读取端，即<code>close(pipefd[0])</code></li>
+</ul>
+</li>
+<li>将数据写入管道: <code>write()</code><ul>
+<li>管道长度受到限制，管道满时写操作将被阻塞，直到管道中的数据被读取</li>
+<li><code>fcntl()</code>可将管道写模式设置为非阻塞模式</li>
+</ul>
+</li>
+<li>从管道读取数据: <code>read()</code><ul>
+<li>数据被读取后将自动从管道中清楚，若管道中没有数据则读操作将被阻塞</li>
+<li><code>fcntl()</code>可将管道读模式设置为非阻塞模式</li>
+</ul>
+</li>
+<li>关闭管道: <code>close()</code><ul>
+<li>所有读端口都关闭时，在管道上进行写操作的进程将受到SIGPIPE信号</li>
+<li>所有写端口都关闭时，在管道上进行读操作的<code>read()</code>函数将返回0</li>
+</ul>
+</li>
+<li>创建命名管道<ul>
+<li><code>int mknod(char* pathname, mode_t mod, dev_t dev);</code></li>
+<li><code>int mkfifo(char* pathname, mode_t mode);</code></li>
+</ul>
+</li>
+<li>命名管道的使用<ul>
+<li>命名管道必须先调用<code>open()</code>将其打开，其它与无名管道相似</li>
+<li>以只读方式(O_RDONLY)打开时，进程将被阻塞直到有写方打开管道</li>
+<li>以只写方式(O_WRONLY)打开时，进程将被阻塞直到有读方打开管道</li>
+</ul>
+</li>
+<li>命名管道的删除<ul>
+<li><code>int unlink(char* pathname)</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="Linux-消息队列"><a href="#Linux-消息队列" class="headerlink" title="Linux: 消息队列"></a>Linux: 消息队列</h4><ul>
+<li>消息队列是消息的链接表，存放在内核中并由消息队列标识符表示</li>
+<li>每一条消息都由自己的消息类型，每种类型的消息都被对应的链表所维护</li>
+<li>消息队列的创建<ul>
+<li><code>int msgget(key_t key, int msgflg)</code></li>
+<li><code>key</code>: 键值，多个需要使用同一消息队列的进程用相同的key来创建或获取该消息队列</li>
+<li><code>msgflg: flag | mode</code><ul>
+<li><code>flag</code>: 可以是0或者IPC_CREATE(不存在就创建)</li>
+<li><code>mode</code>: 同文件权限一样</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>消息的发送<ul>
+<li><code>int msgsnd(int msqid, const void* msgp, size_t msgsz, int msgflg)</code></li>
+<li><code>msqid</code>: 消息队列ID</li>
+<li><code>msgp</code>: 存放消息的结构体<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">msgbuf</span> &#123;</span></span><br><span class="line">  <span class="type">long</span> mtype;  <span class="comment">// 消息的类型，必须&gt;0</span></span><br><span class="line">  <span class="type">char</span> mtext[<span class="number">1</span>];  <span class="comment">// 消息内容，长度可变</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><code>msgsz</code>: 要发送的消息的大小，不包括消息的类型占用的4个字节</li>
+<li><code>msgflg</code>: 如果是0，当消息队列为满时msgsnd会阻塞；如果是IPC_NOWAIT，当消息队列为满时不阻塞，立即返回</li>
+</ul>
+</li>
+<li>消息的接收<ul>
+<li><code>int msgrcv(int msqid, void* msgp, size_t msgsz, long msgtype, int msgflg);</code></li>
+<li><code>msqid</code>: 消息队列ID</li>
+<li><code>msgp</code>: 存放消息的结构体</li>
+<li><code>msgsz</code>: 要接收的消息的大小，不包括消息的类型占用的4个字节</li>
+<li><code>msgtyp</code>: 要接收的消息类型<ul>
+<li>&#x3D;0: 返回消息队列中的第一条消息</li>
+<li><blockquote>
+<p>0: 返回消息队列中类型等于msgtyp的第一条消息</p>
+</blockquote>
+</li>
+<li>&lt;0: 返回其类型小于或等于msgtyp绝对值的最小的一个消息</li>
+</ul>
+</li>
+<li><code>msgflg</code>: 如果是0，则没有指定类型的消息时会阻塞；如果是IPC_NOWAIT，则不阻塞，立即返回</li>
+</ul>
+</li>
+<li>消息队列的删除<ul>
+<li><code>int msgctl(int msqid, int cmd, struct msqid_ds* buf);</code></li>
+<li><code>msqid</code>: 消息队列ID</li>
+<li><code>cmd</code>: 控制命令，IPC_RMID表示删除</li>
+</ul>
+</li>
+</ul>
+<h2 id="线程"><a href="#线程" class="headerlink" title="线程"></a>线程</h2><ul>
+<li>动机: 允许多个合作的“进程”共享同一个地址空间，这样它们既可以并发执行，又可以方便的通信和共享数据</li>
+<li>传统的进程模型<ul>
+<li>进程是资源占用的基本单位: 进程拥有主存、I&#x2F;O通道、I&#x2F;O设备、文件等系统资源的使用权</li>
+<li>进程是调度&#x2F;执行的基本单位: 操作系统以进程为单位进行处理机的调度</li>
+<li>不足:<ul>
+<li>进程创建开销大</li>
+<li>进程切换开销大</li>
+<li>进程通信代价大</li>
+<li>进程之间的并发粒度较粗，并发度不高</li>
+<li>不适合客户&#x2F;服务器计算的要求</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>多线程方案的解决思路<ul>
+<li>把进程的两项功能: “独立分配资源”与“被调度执行”分离开来</li>
+<li>进程作为系统资源分配和保护的独立单位</li>
+<li>在进程内增加一类实体: 线程</li>
+<li>线程作为调度的基本单位</li>
+<li>同一进程内的线程共享相同的地址空间</li>
+</ul>
+</li>
+</ul>
+<h3 id="线程的定义"><a href="#线程的定义" class="headerlink" title="线程的定义"></a>线程的定义</h3><ul>
+<li><p>线程是进程中的一条执行路径</p>
+</li>
+<li><p>单个进程可创建多个同时存在的线程</p>
+</li>
+<li><p>每个线程又自己私用的堆栈和处理机执行环境</p>
+</li>
+<li><p>同一进程中的多个线程共享分配给该进程的内存</p>
+</li>
+<li><p>线程的特点</p>
+<ul>
+<li>优点<ul>
+<li>创建和撤销一个线程比创建一个进程的开销要小得多(10~100倍)</li>
+<li>因为共享地址空间和数据，线程间通信十分方便且高效</li>
+<li>同一个进程的线程间切换速度快(纳秒级)</li>
+<li>在进程内创建多线程，可以提高系统的并性处理能力，加快进程的处理速度</li>
+</ul>
+</li>
+<li>缺点<ul>
+<li>一个线程崩溃，会导致其所属进程内的所有线程崩溃</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>多核与多线程</p>
+<ul>
+<li>应用在多核处理器上所能取得的性能上的好处，实际上取决于它对多处理器资源的利用能力</li>
+<li>设<code>f</code>为程序中能并性的部分的运行事件在整个程序运行事件中的占比</li>
+<li><code>加速比</code> &#x3D; 在单处理器上执行程序的时间 &#x2F; 在N个处理器上执行程序的时间 &#x3D; $\frac{1}{1-f+\frac{f}{N}}$</li>
+</ul>
+</li>
+<li><p>线程的状态</p>
+<ul>
+<li>创建</li>
+<li>就绪</li>
+<li>运行</li>
+<li>等待</li>
+<li>终止</li>
+</ul>
+</li>
+</ul>
+<h4 id="线程的实现-用户级线程"><a href="#线程的实现-用户级线程" class="headerlink" title="线程的实现: 用户级线程"></a>线程的实现: 用户级线程</h4><ul>
+<li>所有线程管理的工作都由应用(进程)自己完成，内核不知道线程的存在</li>
+<li>缺点: 一个线程阻塞导致整个进程阻塞，且难以利用多核</li>
+</ul>
+<h4 id="线程的实现-内核级线程"><a href="#线程的实现-内核级线程" class="headerlink" title="线程的实现: 内核级线程"></a>线程的实现: 内核级线程</h4><ul>
+<li>所有线程的管理功能由操作系统内核来完成</li>
+<li>e.g. windows NT</li>
+<li>缺点: 线程控制时产生处理机状态切换</li>
+</ul>
+<h4 id="两种实现方式的对比"><a href="#两种实现方式的对比" class="headerlink" title="两种实现方式的对比"></a>两种实现方式的对比</h4><table>
+<thead>
+<tr>
+<th align="left"></th>
+<th align="left">用户级线程</th>
+<th align="left">核心级线程</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">管理</td>
+<td align="left">线程库</td>
+<td align="left">内核</td>
+</tr>
+<tr>
+<td align="left">调度单位</td>
+<td align="left">进程</td>
+<td align="left">线程</td>
+</tr>
+<tr>
+<td align="left">切换速度</td>
+<td align="left">同一进程内线程间切换，由线程库完成，速度较快</td>
+<td align="left">由内核完成，速度较慢</td>
+</tr>
+<tr>
+<td align="left">系统调用</td>
+<td align="left">内核视为整个用户进程的行为</td>
+<td align="left">内核只视为该进程的行为</td>
+</tr>
+<tr>
+<td align="left">阻塞</td>
+<td align="left">用户进程</td>
+<td align="left">线程</td>
+</tr>
+<tr>
+<td align="left">优点</td>
+<td align="left">线程切换不调用内核，切换速度较快，调度算法可由应用程序决定</td>
+<td align="left">对多处理器，可同时调度统一进程的多个线程；阻塞繁盛在线程级</td>
+</tr>
+<tr>
+<td align="left">缺点</td>
+<td align="left">阻塞发生在进程级；难以利用多处理器(多核)</td>
+<td align="left">同一进程内的线程切换速度慢</td>
+</tr>
+</tbody></table>
+<h4 id="Linux-线程创建"><a href="#Linux-线程创建" class="headerlink" title="Linux: 线程创建"></a>Linux: 线程创建</h4><ul>
+<li><code>pthread_create(pthread_t *thread, pthread_attr_t* attr, void *(*start_routine)(void*), void* arg);</code></li>
+<li><code>thread</code>指向返回线程标识符的指针</li>
+<li><code>attr</code>设置线程属性</li>
+<li><code>start_routine</code>线程运行函数地址</li>
+<li><code>arg</code>运行函数的参数</li>
+</ul>
+<h4 id="Linux-线程等待"><a href="#Linux-线程等待" class="headerlink" title="Linux: 线程等待"></a>Linux: 线程等待</h4><ul>
+<li><code>int pthread_join(pthread_t thread, void** thread_return);</code></li>
+<li><code>thread</code>为被等待的线程标识符</li>
+<li><code>thread_return</code>为一个用户定义的指针，它可以用来存储被等待线程的返回值。</li>
+<li>这个函数是一个线程阻塞的函数，调用它的函数将一直等待直到被等待的线程结束为止，当函数返回时，被等待线程的资源被回收</li>
+</ul>
+<h1 id="资源分配与调度"><a href="#资源分配与调度" class="headerlink" title="资源分配与调度"></a>资源分配与调度</h1><h2 id="资源管理概述"><a href="#资源管理概述" class="headerlink" title="资源管理概述"></a>资源管理概述</h2><ul>
+<li>资源管理目标<ul>
+<li>保证资源的高利用率</li>
+<li>在“合理”的时间内使所有顾客有获得所需资源的机会</li>
+<li>对不可共享的资源实时互斥使用</li>
+<li>防止由资源分配不当引起的死锁</li>
+</ul>
+</li>
+<li>资源管理功能<ul>
+<li>资源数据结构的描述<ul>
+<li>包含资源的物理名、逻辑名、类型、地址、分配状态等信息</li>
+</ul>
+</li>
+<li>确定资源的分配原则(调度原则)<ul>
+<li>决定资源应该分给谁，何时分配，分配多少等问题</li>
+</ul>
+</li>
+<li>实时资源分配<ul>
+<li>执行资源分配、资源回收工作</li>
+</ul>
+</li>
+<li>存取控制和安全保护<ul>
+<li>对资源的存取进行控制并对资源实施安全保护措施</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="虚拟资源"><a href="#虚拟资源" class="headerlink" title="虚拟资源"></a>虚拟资源</h3><ul>
+<li>操作系统对资源区分两种不同的概念<ul>
+<li>物理资源(实资源)</li>
+<li>虚拟资源(逻辑资源): 某些物理资源有限，采用其它物理资源改造成该类资源使用</li>
+</ul>
+</li>
+<li>虚拟技术的目的<ul>
+<li>方便用户使用</li>
+<li>资源可动态分配，提高资源利用率</li>
+</ul>
+</li>
+</ul>
+<p>计算机系统中的物理资源与虚拟资源分析</p>
+<table>
+<thead>
+<tr>
+<th align="left">资源类别</th>
+<th align="left">物理资源</th>
+<th align="left">虚拟(逻辑)</th>
+<th align="left">映射</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">处理机</td>
+<td align="left">CPU</td>
+<td align="left">进程</td>
+<td align="left">进程调度</td>
+</tr>
+<tr>
+<td align="left">存储器</td>
+<td align="left">主存</td>
+<td align="left">虚存(程序地址空间)</td>
+<td align="left">地址映射</td>
+</tr>
+<tr>
+<td align="left">设备</td>
+<td align="left">外部设备</td>
+<td align="left">逻辑设备&#x2F;虚拟设备</td>
+<td align="left">设备分配；动态映射</td>
+</tr>
+<tr>
+<td align="left">信息</td>
+<td align="left">物理文件</td>
+<td align="left">逻辑文件</td>
+<td align="left">磁盘空间分配，文件目录查找</td>
+</tr>
+</tbody></table>
+<h2 id="资源分配机构和策略"><a href="#资源分配机构和策略" class="headerlink" title="资源分配机构和策略"></a>资源分配机构和策略</h2><ul>
+<li>资源描述器<ul>
+<li>定义: 描述各类资源的最小分配单位的数据结构称为资源描述器</li>
+<li>e.g. 主存分配方法中，最小分配单位为主存分区</li>
+<li>内容: 资源名、资源类型、最小分配单位的大小、地址、分配标志、描述其链接信息、存取权限、密级、存取时间</li>
+</ul>
+</li>
+<li>资源信息块<ul>
+<li>定义: 描述某类资源的请求者、可用资源和资源分配程序等必要信息的数据结构</li>
+<li>内容<ul>
+<li>等待队列头指针-&gt;请求者队列</li>
+<li>可利用资源队列头指针-&gt;可利用资源队列</li>
+<li>资源分配程序入口地址-&gt;资源分配程序</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="资源分配策略"><a href="#资源分配策略" class="headerlink" title="资源分配策略"></a>资源分配策略</h3><ul>
+<li>先请求先服务<ul>
+<li>每一个新产生的请求均排在队尾</li>
+<li>当资源可用时，取队首元素，并满足其需要</li>
+<li>排序原则: 按请求的先后次序排序</li>
+</ul>
+</li>
+<li>优先调度<ul>
+<li>对每一个进程指定一个优先级</li>
+<li>每一个新产生的请求，按其优先级的高低插到相应的为止</li>
+<li>当资源可用时，取对手元素，并满足其需要</li>
+<li>排序原则: 按优先级的高低排序</li>
+</ul>
+</li>
+<li>针对设备特性的调度<ul>
+<li>e.g. 磁盘调度算法<ul>
+<li>最短寻道时间优先SSTF</li>
+<li>扫描算法SCAN</li>
+<li>循环扫描算法CSCAN</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="磁盘访问时间"><a href="#磁盘访问时间" class="headerlink" title="磁盘访问时间"></a>磁盘访问时间</h4><ul>
+<li>寻道时间$T_s$<ul>
+<li>把磁臂(磁头)移动到指定磁道上所经历的时间。该事件是启动磁臂的时间$s$与磁头移动$n$条磁道所花费的时间之和。$T_s &#x3D; m \times n + s$</li>
+<li>$m$是一常数，与磁盘驱动器的速度有关</li>
+</ul>
+</li>
+<li>旋转延迟时间$T_{\tau}$<ul>
+<li>指定扇区移动到磁头下面所经历的时间</li>
+</ul>
+</li>
+<li>传输时间$T_t$<ul>
+<li>把数据从磁盘读除或向磁盘写入数据所经历的时间。$T_t$的大小与每次所读&#x2F;写的字节数$b$和旋转速度有关。$T_t &#x3D; \frac{b}{rN}$</li>
+<li>其中，$r$为磁盘每秒钟的转数，$N$为一条磁道上的字节数。</li>
+</ul>
+</li>
+<li>访问时间$T_a$表示为$T_a &#x3D; T_s + T_T + T_t$</li>
+</ul>
+<h5 id="最短寻道时间优先-SSTF"><a href="#最短寻道时间优先-SSTF" class="headerlink" title="最短寻道时间优先(SSTF)"></a>最短寻道时间优先(SSTF)</h5><ul>
+<li>选则从当前磁头位置所需寻道时间最短的请求</li>
+<li>特点: 寻道性能比FCFS好，但不能保证寻道时间最短，而且可能引起某些请求的饥饿</li>
+</ul>
+<h5 id="扫描算法-SCAN"><a href="#扫描算法-SCAN" class="headerlink" title="扫描算法(SCAN)"></a>扫描算法(SCAN)</h5><ul>
+<li>磁头从磁盘的一端开始向另一端移动，沿途相应访问的请求，直到到达了磁盘的另一端，此时磁头反向移动并继续相应服务请求。有时也称为电梯算法</li>
+<li>特点: 寻道性能较好，避免了饥饿，但不利于远离磁头一端的访问请求</li>
+</ul>
+<h5 id="循环扫描算法-CSCAN"><a href="#循环扫描算法-CSCAN" class="headerlink" title="循环扫描算法(CSCAN)"></a>循环扫描算法(CSCAN)</h5><ul>
+<li>规定磁头从磁盘的一端开始向另一端单向移动，沿途相应访问的请求</li>
+<li>特点: 消除了对两端磁道请求的不公平</li>
+</ul>
+<h2 id="死锁"><a href="#死锁" class="headerlink" title="死锁"></a>死锁</h2><p>定义: 在两个或多个并发进程中，如果每个进程持有某种资源而又都等待着别的进程释放它或它们现在保持着的资源，否则就不能向前推进。此时，称这一组进程产生了死锁。</p>
+<h4 id="进程-资源分配图"><a href="#进程-资源分配图" class="headerlink" title="进程-资源分配图"></a>进程-资源分配图</h4><ul>
+<li>约定$P_i -&gt; R_j$为请求边，表示进程$P_i$申请资源$R_j$中的一个资源得不到满足而处于等待$R_j$类资源的状态，该有向边从进程开始指向方框边缘，表示进程$P_i$申请$R_j$类中的一个资源。</li>
+<li>$R_j -&gt; P_i$为分配边，表示$R_j$类中的一个资源已经倍进程$P_i$占用</li>
+</ul>
+<h3 id="产生死锁的必要条件"><a href="#产生死锁的必要条件" class="headerlink" title="产生死锁的必要条件"></a>产生死锁的必要条件</h3><ol>
+<li>互斥条件: 涉及的资源是非共享的，即为临界资源</li>
+<li>不剥夺条件(非抢占): 进程所获得的资源在未使用完毕之前，不能被其它进程强行夺走</li>
+<li>占有并等待(部分分配): 进程每次申请它所需要的一部分资源。在等待一新资源的同时，进程继续占用已分配到的资源</li>
+<li>环路条件(循环等待): 存在一种进程的循环链，链中的每一个进程已获得的资源同时被链中下一个进程所请求</li>
+</ol>
+<h3 id="解决死锁问题的策略"><a href="#解决死锁问题的策略" class="headerlink" title="解决死锁问题的策略"></a>解决死锁问题的策略</h3><ul>
+<li>破坏产生死锁的四个必要条件之一<ul>
+<li>预防死锁</li>
+<li>避免死锁</li>
+<li>死锁的检测与解除</li>
+</ul>
+</li>
+<li>死锁预防: 静态分配策略<ul>
+<li>在作业调度时为选中的作业分配它所需要的所有资源，资源一旦分配给该作业后，在其整个运行期间这些资源为它独占</li>
+<li>缺点<ul>
+<li>一个用户(进程)在程序运行之前很难提出将要使用的全部设备</li>
+<li>设备(资源)的浪费太大，有些资源在进程运行过程中可能只有很少的时间会用到，有的甚至根本不会用到，例如条件分支语句</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>死锁预防: 有序资源分配法<ul>
+<li>系统中所有资源都给定一个唯一的编号</li>
+<li>所有分配请求必须以上升的次序进行</li>
+<li>当遵守上升次序的规则时，若有资源可用，则予以分配；否则，请求者等待</li>
+<li>优点: 相对于静态分配法，提高了资源使用效率</li>
+<li>缺点: 进程实际使用资源的顺序不一定与资源的编号相一致</li>
+</ul>
+</li>
+<li>死锁避免: 银行家算法<ul>
+<li>对每个资源请求进行检查，看是否会导致不安全状态。若是，则拒绝该请求；否则便满足该请求</li>
+<li>检查状态是否安全的方法是看其是否有足够的资源满足一个距最大需求最近的客户，如此反复下去。如果所有投资最终都被收回，则该状态是安全状态，最初的请求可以批准</li>
+<li>按某种顺序并发进程都能获得最大资源而顺序完成的序列称为安全序列</li>
+</ul>
+</li>
+</ul>
+<h5 id="死锁的检测和解除"><a href="#死锁的检测和解除" class="headerlink" title="死锁的检测和解除"></a>死锁的检测和解除</h5><p>资源的分配不加任何限制，也不采取死锁避免措施。系统定时地运行一个”死锁检测“程序，判断系统内是否已经出现死，如果检测到系统已经发生了死锁，再采取措施解除它。</p>
+<h4 id="基于资源分配图检测系统死锁状态"><a href="#基于资源分配图检测系统死锁状态" class="headerlink" title="基于资源分配图检测系统死锁状态"></a>基于资源分配图检测系统死锁状态</h4><ul>
+<li>如果进程-资源分配图中无环路，则此时系统没有发生死锁</li>
+<li>如果进程-资源分配图中有环路，且每个资源类中仅有一个资源，则系统中发生了死锁，此时，环路是系统发生死锁的虫咬条件，环路中的进程便为死锁进程</li>
+<li>如果进程-资源分配图中有环路，且涉及的资源类中有多个资源，则环路的存在只是产生死锁的必要条件而不是充分条件</li>
+</ul>
+<h3 id="死锁的解除"><a href="#死锁的解除" class="headerlink" title="死锁的解除"></a>死锁的解除</h3><ul>
+<li>立即结束所有进程的执行，并重启操作系统</li>
+<li>撤销陷于死锁的所有进程</li>
+<li>逐个撤销陷于死锁的进程，回收其资源，直至死锁解除</li>
+<li>剥夺陷入死锁的进程占用 资源，但并不撤销它，直至死锁解除</li>
+<li>根据系统保存的checkpoint，让所有进程回退，直到足以解除死锁</li>
+</ul>
+<h1 id="处理机调度"><a href="#处理机调度" class="headerlink" title="处理机调度"></a>处理机调度</h1><h2 id="处理机的多级调度"><a href="#处理机的多级调度" class="headerlink" title="处理机的多级调度"></a>处理机的多级调度</h2><ul>
+<li>长期调度: 决定是否为作业创建新进程，并将其加入将待执行的进程集合中(作业调度)(宏观调度)</li>
+<li>中期调度: 决定是否将一个挂起进程加载进内存。(换入调度)(微观调度)</li>
+<li>短期调度: 决定哪个就绪进程&#x2F;线程将被处理器执行(进程调度)(微观调度)</li>
+</ul>
+<h2 id="作业调度"><a href="#作业调度" class="headerlink" title="作业调度"></a>作业调度</h2><h3 id="作业控制块"><a href="#作业控制块" class="headerlink" title="作业控制块"></a>作业控制块</h3><ul>
+<li>作业名</li>
+<li>资源要求<ul>
+<li>估计执行时间</li>
+<li>最迟完成时间</li>
+<li>要求的主存数量</li>
+<li>要求外设的类型及台数</li>
+<li>要求文件量和输出量</li>
+</ul>
+</li>
+<li>类型<ul>
+<li>控制方式(联机&#x2F;脱机)</li>
+<li>作业类型(计算型&#x2F;IO型)</li>
+</ul>
+</li>
+<li>资源使用情况<ul>
+<li>进入系统时间</li>
+<li>开始执行时间</li>
+<li>已执行时间</li>
+<li>主存地址</li>
+<li>外设台号</li>
+</ul>
+</li>
+<li>优先级</li>
+<li>状态</li>
+</ul>
+<h3 id="作业调度的目标"><a href="#作业调度的目标" class="headerlink" title="作业调度的目标"></a>作业调度的目标</h3><ul>
+<li>调度实质上式一个策略问题，设定的目标往往是相互冲突的<ul>
+<li>单位时间内运行尽可能多的作业</li>
+<li>使处理机尽可能保持”忙碌”</li>
+<li>使各种I&#x2F;O设备得以充分利用</li>
+<li>对所有的作业都是公平合理的</li>
+</ul>
+</li>
+<li>考虑因素<ul>
+<li>调度算法应与系统设计目标保持一致</li>
+<li>注意系统资源均衡使用</li>
+<li>保证提交的作业在截至时间内完成</li>
+<li>设法缩短作业平均周转时间</li>
+</ul>
+</li>
+</ul>
+<h3 id="作业调度算法性能的衡量指标"><a href="#作业调度算法性能的衡量指标" class="headerlink" title="作业调度算法性能的衡量指标"></a>作业调度算法性能的衡量指标</h3><ul>
+<li>周转时间<ul>
+<li>定义: 一个作业提交给计算机系统到该作业的结果返回给用户所需要的时间</li>
+<li>$t_i &#x3D; tc_i - ts_i$<ul>
+<li>$t_i$: 作业i的周转时间</li>
+<li>$ts_i$: 作业i的提交时间</li>
+<li>$tc_i$: 作业i的完成时间</li>
+</ul>
+</li>
+<li>意义: 说明作业i在系统中停留时间的长短</li>
+<li>平均周转时间: $t&#x3D;\frac{1}{n}\sum _{i&#x3D;1}^n t_i$</li>
+</ul>
+</li>
+<li>带权周转时间<ul>
+<li>定义: 一个作业的周转时间与其运行时间的比值</li>
+<li>$w_i &#x3D; \frac{t_i}{tr_i}$<ul>
+<li>$tr_i$为作业的实际运行时间</li>
+</ul>
+</li>
+<li>意义: 说明作业i在系统中相对等待时间</li>
+<li>平均带权周转时间$w&#x3D;\frac{1}{n}\sum _{i&#x3D;1}^n w_i$</li>
+</ul>
+</li>
+</ul>
+<h3 id="作业调度算法"><a href="#作业调度算法" class="headerlink" title="作业调度算法"></a>作业调度算法</h3><ul>
+<li>先来先服务调度算法(FCFS)<ul>
+<li>策略: 按作业来到的先后次序进行调度</li>
+<li>特点<ul>
+<li>优先考虑系统中等待时间最长的作业，不管运行特性</li>
+<li>简单，容易实现</li>
+<li>性能指标不稳定，波动大</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>短作业优先调度算法(SJF: Shortest Job First)<ul>
+<li>策略: 按照作业请求运行的时间长短进行调度，优先选则短作业</li>
+<li>特点: 容易实现，系统吞吐量高<ul>
+<li>只照顾短作业，而没有考虑长作业的利益；需要预知作业的运行时间</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>响应比高者优先调度算法(HRN: Highest Response Ratio Next)<ul>
+<li>响应时间&#x3D;开始执行时间-提交时间，可以反映作业等待了多久，等待时间长的就会更能够先执行</li>
+<li>在我们的版本中，响应时间&#x3D;周转时间</li>
+<li>响应比&#x3D;响应时间&#x2F;运行时间</li>
+<li>策略: 优先选则响应比高者作业运行</li>
+<li>特点: 前两种算法的一种折衷，既照顾了短作业，又不使作业等待时间过长</li>
+</ul>
+</li>
+</ul>
+<h2 id="进程调度"><a href="#进程调度" class="headerlink" title="进程调度"></a>进程调度</h2><h4 id="进程调度-分派结构"><a href="#进程调度-分派结构" class="headerlink" title="进程调度&#x2F;分派结构"></a>进程调度&#x2F;分派结构</h4><ul>
+<li>调度: 在众多处于就绪状态的进程中，按一定的原则选则一个进程</li>
+<li>分派: 当处理机空闲时，移除就绪队列中第一个进程，并赋予它使用处理机的权力</li>
+</ul>
+<h3 id="进程调度的功能"><a href="#进程调度的功能" class="headerlink" title="进程调度的功能"></a>进程调度的功能</h3><ul>
+<li>记录进程的有关情况和状态特征</li>
+<li>决定调度策略<ul>
+<li>优先调度原则: 进程就绪队列按进程优先级高低排序</li>
+<li>先来先服务原则: 进程就绪队列按进程来到的先后次序排序</li>
+</ul>
+</li>
+<li>实施处理机的分配和回收</li>
+</ul>
+<h4 id="CPU调度时机"><a href="#CPU调度时机" class="headerlink" title="CPU调度时机"></a>CPU调度时机</h4><ul>
+<li>当一个进程从运行态切换称等待态时</li>
+<li>当一个进程从运行状切换称就绪态时</li>
+<li>当一个进程终止时</li>
+</ul>
+<h3 id="进程调度方式"><a href="#进程调度方式" class="headerlink" title="进程调度方式"></a>进程调度方式</h3><ul>
+<li>进程调度方式是指当一个进程正在处理机上执行时，若有某个更为“重要而紧迫”的进程需要运行，系统如何分配处理机<ul>
+<li>非剥夺方式: 正在执行的进程继续执行，直到该进程完成或发生某事件而进入“完成”或“阻塞”状态时，才把处理机分配给“重要而紧迫”的进程</li>
+<li>剥夺方式: 当“重要而紧迫”的进程一到，便暂停正在执行的进程，立即把处理机分配给优先级更高的进程</li>
+</ul>
+</li>
+</ul>
+<h3 id="进程调度算法"><a href="#进程调度算法" class="headerlink" title="进程调度算法"></a>进程调度算法</h3><h4 id="优先数调度算法"><a href="#优先数调度算法" class="headerlink" title="优先数调度算法"></a>优先数调度算法</h4><ul>
+<li>预先确定各进程的优先数，系统把处理机的使用权赋予就绪队列中具备最高优先权(优先数和一定的优先级相对应)的就绪进程</li>
+<li>优先数的分类及确定<ul>
+<li>静态优先数<ul>
+<li>在进程被创建时确定，且一经确定后再整个进程运行期间不再改变</li>
+<li>确定<ul>
+<li>优先数根据进程所需使用的资源来计算</li>
+<li>优先数基于程序运行时间估计</li>
+<li>优先数基于进程的类型</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>动态优先数<ul>
+<li>进程优先数再进程运行期间可以改变</li>
+<li>确定<ul>
+<li>进程使用CPU超过一定数值时，降低优先数</li>
+<li>进程进行I&#x2F;O操作后，增加优先数</li>
+<li>进程等待时间超过一定数值时，提高优先数</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="循环轮转调度算法"><a href="#循环轮转调度算法" class="headerlink" title="循环轮转调度算法"></a>循环轮转调度算法</h4><ul>
+<li>当CPU空闲时，选取就绪队列首元素，赋予一个时间片，当时间片用完时，该进程转为就绪态并进入就绪队列末端</li>
+<li>时间片的取值<ul>
+<li>太小，多数进程不能再一个时间片内运行完毕，切换就会频繁，开销显著增大，从系统效率来看，时间片取大一点好</li>
+<li>太大，随着就绪队列里进程数目增加，轮转依次的总时间增大，对进程的响应速度变慢</li>
+<li>为了满足响应时间要求，要么限制就绪进程数量，要么采用动态时间片算法，根据分在状况，及时调整时间片的大小</li>
+</ul>
+</li>
+<li>简单循环轮转调度<ul>
+<li>就绪队列中的所有进程以等速度向前推进$q&#x3D;\frac{t}{n}$，t为响应时间，n为进入系统的进程数目</li>
+</ul>
+</li>
+<li>可变时间片轮转调度: 时间片的大小是可变的，系统可根据系统中当前的进程数来确定时间片的大小<ul>
+<li>理论上克服了系统中进程数很少时系统开销大的特点，但修改时间片的大小、统计系统进程的数量也需要消耗系统时间</li>
+<li>调整时间片大小的周期若太大，等于是固定时间片；太小，系统开销很大，得不偿失</li>
+</ul>
+</li>
+<li>多重时间片循环调度: 又称反馈循环队列或多队列策略。<ul>
+<li>将就绪进程分为两级或多级，系统相应建立两个或多个就绪进程队列，较高优先级的队列一般分配给较短的时间片</li>
+<li>处理器调度先从高级就绪进程队列中选取可占有处理器的进程，只有在其为空时，才从较低级的就绪进程队列中选取</li>
+</ul>
+</li>
+</ul>
+<h4 id="时间片与优先数混合调度"><a href="#时间片与优先数混合调度" class="headerlink" title="时间片与优先数混合调度"></a>时间片与优先数混合调度</h4><ul>
+<li>队列结构<ul>
+<li>I&#x2F;O等待队列: 一个进程如果请求I&#x2F;O: 则进入I&#x2F;O等待队列</li>
+<li>低优先级就绪队: 一个进程如果在运行中超过了它的时间片，就进入低优先就绪队列</li>
+<li>高优先就绪队列: 当进程从等待状态变为就绪状态时，则进入高优先就绪队列</li>
+</ul>
+</li>
+<li>调度算法: 采用优先调度与时间片调度相结合的调度策略<ul>
+<li>当CPU空闲时，若高优先就绪队列非空，则从高优先就绪队列中选则一个进程运行，分配时间片为100ms</li>
+<li>当CPU空闲时，若高优先就绪队列为空，则从低优先就绪队列中选则一个进程运行，分配时间片为500ms</li>
+<li>调度效果: 优先照顾了I&#x2F;O量大的进程</li>
+</ul>
+</li>
+</ul>
+<h3 id="Linux进程调度目标和特点"><a href="#Linux进程调度目标和特点" class="headerlink" title="Linux进程调度目标和特点"></a>Linux进程调度目标和特点</h3><ul>
+<li>调度策略<ul>
+<li>基于动态优先级和可变时间片的调度</li>
+<li>调度方式为可抢占式调度</li>
+</ul>
+</li>
+<li>调度目标<ul>
+<li>实现算法复杂度为O(1)级的调度</li>
+<li>提高交互性能</li>
+<li>保证公平</li>
+<li>实现SMP可扩展性</li>
+</ul>
+</li>
+<li>特点(多级反馈循环调度)<ul>
+<li>基于进程过去行为的启发式算法</li>
+<li>选则优先级高的进程先运行，相同优先级的进程按循环方式调度</li>
+<li>动态优先级依进程占有CPU的情况、休眠时间的长短来增、减</li>
+<li>系统根据进程优先级调整分配给它的时间片</li>
+<li>实施可抢占调度方式</li>
+</ul>
+</li>
+<li>可变优先级<ul>
+<li>基于优先级的调度: 优先级高的进程先运行，相同优先级的进程按轮转方式进行调度</li>
+<li>静态优先级<ul>
+<li>静态优先级的确定: 在进程创建时，新创建的进程继承父进程的静态优先级</li>
+<li>静态优先级的取值范围: 0-99对应实时进程，100-139对应普通进程(取值越小，优先级越高)</li>
+<li>静态优先级的改变: 用户可以通过系统调用改变nice值，从而改变自己拥有的静态优先级</li>
+</ul>
+</li>
+<li>动态优先级<ul>
+<li>每个进程有一个动态优先级，它是进程调度程序选择可运行进程所使用的参数，其取值范围是100(最高优先级)~139(最低优先级)(实时进程优先级不变)</li>
+<li>动态优先级的计算 动态优先级&#x3D;nax(100, min(静态优先级-bonus+5, 139))<ul>
+<li>bonus的取值范围是0~10</li>
+<li>bonus值小于5，表示降低动态优先级以示惩罚</li>
+<li>bonus值大于5，表示增加动态优先级以示奖励</li>
+<li>bonux的值也与进程的平均休眠时间有关</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>可变时间片<ul>
+<li>Linux系统的进程的调度目标: 优先照顾交互式进程，为其提供较长的时间片</li>
+<li>时间片的计算<ul>
+<li>基本时间片: 静态优先级本质上决定了进程的基本时间片</li>
+<li>静态优先级越高(值越小)，基本时间片越长</li>
+</ul>
+</li>
+<li>时间片处理的时机<ul>
+<li>创建新进程时的处理: 新创建的子进程和父进程均分父进程剩余的时间片</li>
+<li>进程用完时间片时的处理: 根据任务的静态优先级重新计算时间片</li>
+</ul>
+</li>
+<li>时间片的使用<ul>
+<li>一个进程拥有的时间片可分多次使用，放弃CPU时进入活动队列</li>
+<li>当一个进程的时间片耗尽时，认为是过期进程，进入过期队列</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>活动队列和过期队列<ul>
+<li>每个处理器维护两个优先级数组: 活动数组和过期数组</li>
+<li>活动数组上的可执行队列中的进程都有剩余时间片</li>
+<li>过期数组上的可执行队列中的进程都已耗尽时间片</li>
+<li>当一个进程的时间片耗尽时，被移至过期队列中；当活动数组上的可执行队列中的所有进程都已耗尽时间片，在活动数组和过期数组之间切换指针</li>
+</ul>
+</li>
+</ul>
+<h1 id="主存管理"><a href="#主存管理" class="headerlink" title="主存管理"></a>主存管理</h1><h2 id="主存管理概述"><a href="#主存管理概述" class="headerlink" title="主存管理概述"></a>主存管理概述</h2><h4 id="存储组织"><a href="#存储组织" class="headerlink" title="存储组织"></a>存储组织</h4><ul>
+<li>存储器的功能示保存数据，存储器的发展方向是告诉、大容量和小体积</li>
+<li>存储组织是指在存储计数和CPU寻址计数许可的范围内组织合理的存储结构<ul>
+<li>依据是访问速度匹配关系、容量要求和价格</li>
+<li>寄存器-内存-外存 结构</li>
+<li>寄存器-缓存-内存-外存 结构</li>
+<li>快速缓存<ul>
+<li>data cache</li>
+<li>TLB(Translation Lookaside buffer)</li>
+</ul>
+</li>
+<li>内存: DRAM, SDRAM等</li>
+<li>外存: 硬盘、光盘、软盘、磁带等</li>
+</ul>
+</li>
+</ul>
+<h4 id="程序的逻辑组织"><a href="#程序的逻辑组织" class="headerlink" title="程序的逻辑组织"></a>程序的逻辑组织</h4><ul>
+<li>一维地址结构<ul>
+<li>一个程序是一个连续、线性的地址结构</li>
+<li>确定线性地址空间中断 指令地址或操作数地址只需要一个信息</li>
+</ul>
+</li>
+<li>二维地址结构<ul>
+<li>一个程序由若干个分段组成，每个分段是一个连续的地址区</li>
+<li>确定线性地址空间中断指令地址或操作数地址需要两个信息，一是该信息所在的分段，另一个是该信息在段内的偏移量</li>
+</ul>
+</li>
+</ul>
+<h4 id="主存共享方式"><a href="#主存共享方式" class="headerlink" title="主存共享方式"></a>主存共享方式</h4><ul>
+<li>大小不等的区域<ul>
+<li>分区存储管理</li>
+<li>段式存储管理</li>
+</ul>
+</li>
+<li>大小相等的区域<ul>
+<li>页式存储管理</li>
+</ul>
+</li>
+<li>结合<ul>
+<li>段页式存储管理</li>
+</ul>
+</li>
+</ul>
+<h2 id="主存管理功能"><a href="#主存管理功能" class="headerlink" title="主存管理功能"></a>主存管理功能</h2><h4 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h4><ul>
+<li>物理地址(绝对地址、实地址): 物理地址式计算机主存单元的真实地址，又称为绝对地址或实地址</li>
+<li>主存空间: 物理地址的集合所对应的空间组成了主存空间</li>
+<li>逻辑地址(相对地址、虚地址): 用户的程序地址(指令地址或操作数地址)均为逻辑地址</li>
+<li>程序地址空间: 用户程序所有的逻辑地址集合对应的空间</li>
+</ul>
+<h3 id="主存管理功能-1"><a href="#主存管理功能-1" class="headerlink" title="主存管理功能"></a>主存管理功能</h3><ul>
+<li>地址映射</li>
+<li>主存分配</li>
+<li>存储保护</li>
+<li>主存扩充</li>
+</ul>
+<h4 id="地址映射"><a href="#地址映射" class="headerlink" title="地址映射"></a>地址映射</h4><ul>
+<li>定义: 将程序地址空间中使用的逻辑地址变换称主存中的物理地址的过程，称为地址映射</li>
+<li>时机和类别<ul>
+<li>编程或编译时确定地址映射关系: 在程序编写或程序编译时确定虚、实地址之间的对应关系，结果是一个不能浮动的程序模块</li>
+<li>在程序装入时确定地址映射关系: 在程序装入过程中随即进行的地址变换方式称为静态地址映射</li>
+<li>在程序运行时确定地址映射关系: 在程序执行期间，随着每条指令和数据的访问自动地连续地进行地址映射，这种地址变换方式称为动态地址映射</li>
+<li>静态地址映射与动态地址映射的区别</li>
+</ul>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="left">静态地址映射</th>
+<th align="left">动态地址映射</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">在程序装入过程中，进行地址映射</td>
+<td align="left">在程序执行期间进行地址映射</td>
+</tr>
+<tr>
+<td align="left">需软件(重定位装入程序)</td>
+<td align="left">需硬件地址变换机构(重定位寄存器)</td>
+</tr>
+<tr>
+<td align="left">需花费较多CPU时间</td>
+<td align="left">地址变换快</td>
+</tr>
+<tr>
+<td align="left">不灵活</td>
+<td align="left">灵活</td>
+</tr>
+</tbody></table>
+<h4 id="主存分配"><a href="#主存分配" class="headerlink" title="主存分配"></a>主存分配</h4><ul>
+<li>构造分配用的数据结构<ul>
+<li>主存资源信息块: 等待队列、空闲区队列、主存分配程序</li>
+<li>制定策略<ul>
+<li>分配策略: 在众多个请求者中选则一个请求者的原则</li>
+<li>放置策略: 在可用资源中，选则一个空闲区的原则</li>
+<li>调入策略: 信息装入主存的实际(预调策略&#x2F;请调策略)</li>
+<li>淘汰策略: 确定淘汰已占用的内存区的原则</li>
+</ul>
+</li>
+<li>实施主存分配与回收</li>
+</ul>
+</li>
+</ul>
+<h4 id="主存扩充"><a href="#主存扩充" class="headerlink" title="主存扩充"></a>主存扩充</h4><ul>
+<li>目标<ul>
+<li>用户编程不受内存容量限制</li>
+<li>用户编程不需知道内存寻址等细节</li>
+</ul>
+</li>
+<li>主存扩容的可行性<ul>
+<li>程序局部性原理: 程序在执行过程中的一个较短时间内，所执行的指令地址或操作数地址分别局限于一定的存储区域中</li>
+</ul>
+</li>
+<li>实现方法<ul>
+<li>程序的全部代码和数据存放在辅存中</li>
+<li>将程序当前执行所设计的那部分程序代码放入主存中</li>
+<li>程序执行时，当所需信息不在主存，由操作系统和硬件相配合来完成主存从辅存中调入信息，程序继续执行</li>
+</ul>
+</li>
+</ul>
+<h4 id="存储保护"><a href="#存储保护" class="headerlink" title="存储保护"></a>存储保护</h4><ul>
+<li>定义<ul>
+<li>在多用户环境中，主存储器按区分配给各用户程序使用</li>
+<li>为了互不影响，必须由硬件(软件配合)保证各用户程序只能在给定的存储区域内活动，</li>
+</ul>
+</li>
+<li>实现方法<ul>
+<li>界地址保护<ul>
+<li>上下界保护</li>
+<li>基地址、限长防护</li>
+</ul>
+</li>
+<li>存储键保护: 为每个进程的连续存储区域分配一个或若干位组成的存储保护键盘</li>
+</ul>
+</li>
+</ul>
+<h2 id="分区存储管理"><a href="#分区存储管理" class="headerlink" title="分区存储管理"></a>分区存储管理</h2><h3 id="固定分区"><a href="#固定分区" class="headerlink" title="固定分区"></a>固定分区</h3><ul>
+<li>操作系统在启动时将内存区域划分为若干个分区。分区总数和各分区的大小一旦确定，则整个系统运行阶段都保持不变。固态分区也称为静态分区</li>
+<li>分区说明表: 记录分区信息的树结构。存储管理程序在内存分配、释放、存储保护以及地址转换时都要查询和修改分区说明表中的信息</li>
+</ul>
+<h3 id="动态分区"><a href="#动态分区" class="headerlink" title="动态分区"></a>动态分区</h3><p>动态分区式指处理程序的过程中依用户请求的大小建立并分配分区</p>
+<h5 id="分区分配数据结构"><a href="#分区分配数据结构" class="headerlink" title="分区分配数据结构"></a>分区分配数据结构</h5><ul>
+<li>主存资源信息块(M_RIB)<ul>
+<li>等待队列头指针</li>
+<li>空闲区队列头指针</li>
+<li>主存分配程序入口地址</li>
+</ul>
+</li>
+<li>分区描述器(PD)<ul>
+<li>分配标志(flag): 0空闲，1已分配</li>
+<li>大小(size): 分区大小</li>
+<li>勾链字(next): 空闲区: 自由主存队列中的勾链字；已分配区: 此项为0</li>
+</ul>
+</li>
+</ul>
+<h4 id="动态分区的分配与回收"><a href="#动态分区的分配与回收" class="headerlink" title="动态分区的分配与回收"></a>动态分区的分配与回收</h4><ul>
+<li>分区分配思路<ul>
+<li>寻找空闲块: 依申请者所要求的主存区大小，分区分配程序在自由主存队列中找一个满足用户需要的空闲块</li>
+<li>若找到了所需的空闲区，有两种情况<ul>
+<li>空闲区与要求的大小相等，将该空闲区分配并从队列中摘除</li>
+<li>空闲区大于所要求的大小，将空闲区分为两部分: 一部分成已分配区，建立已分配区的描述器，剩下部分仍为空闲区</li>
+<li>返回所分配区域的首址</li>
+</ul>
+</li>
+<li>否则，告之不能满足要求</li>
+</ul>
+</li>
+<li>分区回收思路<ul>
+<li>检查释放分区(即为回收分区)在主存中的邻接情况<ul>
+<li>若上、下邻接空闲区，则合并，成为一个连续的空分区</li>
+</ul>
+</li>
+<li>若回收分区不与任何空闲区相邻接<ul>
+<li>建立一个新的空闲区，并加入到空闲区队列中</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="放置策略"><a href="#放置策略" class="headerlink" title="放置策略"></a>放置策略</h4><ul>
+<li>定义: 选则空闲区的策略</li>
+<li>常用策略<ul>
+<li>首次匹配(首次适应算法)</li>
+<li>最佳匹配(最佳适应算法)</li>
+<li>最坏匹配(最坏适应算法)</li>
+</ul>
+</li>
+</ul>
+<h5 id="首次适应算法"><a href="#首次适应算法" class="headerlink" title="首次适应算法"></a>首次适应算法</h5><ul>
+<li>定义: 将程序放置到第一个足够装入它的地址最低的空闲区</li>
+<li>空闲区队列结构: 空闲区地址由低到高排序</li>
+<li>特点<ul>
+<li>尽可能地利用低地址的空闲区，而尽量保存高地址的空闲区</li>
+</ul>
+</li>
+<li>问题<ul>
+<li>地址去的小分区多，降低查找效率</li>
+</ul>
+</li>
+</ul>
+<h5 id="最佳适应算法"><a href="#最佳适应算法" class="headerlink" title="最佳适应算法"></a>最佳适应算法</h5><ul>
+<li>定义: 将程序放置到主存中与它所需大小最接近的空闲区中</li>
+<li>空闲区队列结构: 按空闲区大小由小到大排序</li>
+<li>特点<ul>
+<li>尽可能地利用存储器中小的空闲区，而尽量保存大的空闲区</li>
+</ul>
+</li>
+<li>问题<ul>
+<li>碎片多，分配时查找效率降低，且内存利用率下降；回收分区时需要遍历整个空闲区链表</li>
+</ul>
+</li>
+</ul>
+<h5 id="最坏适应算法"><a href="#最坏适应算法" class="headerlink" title="最坏适应算法"></a>最坏适应算法</h5><ul>
+<li>定义: 将程序放置到主存中与它所需大小差距最大的空闲区中</li>
+<li>空闲区队列结构: 按空闲区大小由大到小排序</li>
+<li>特点<ul>
+<li>尽可能地利用存储器中的空闲区。分配时查找效率高</li>
+</ul>
+</li>
+<li>问题<ul>
+<li>分区大小难以满足大型程序的需要；回收分区时需要遍历整个空闲区链表</li>
+</ul>
+</li>
+</ul>
+<h4 id="碎片问题及拼接技术"><a href="#碎片问题及拼接技术" class="headerlink" title="碎片问题及拼接技术"></a>碎片问题及拼接技术</h4><ul>
+<li>碎片: 在已分配分区之间存在着的一些没有被充分利用的空闲区</li>
+<li>拼接技术: 移动存储器中某些已分配区中的信息，使本来分散的空闲区连城一个大的空闲区</li>
+</ul>
+<h3 id="分区存储管理的缺点"><a href="#分区存储管理的缺点" class="headerlink" title="分区存储管理的缺点"></a>分区存储管理的缺点</h3><ul>
+<li>程序必须整体装入</li>
+<li>需要分配连续的内存空间</li>
+<li>碎片问题</li>
+</ul>
+<h2 id="页式存储管理"><a href="#页式存储管理" class="headerlink" title="页式存储管理"></a>页式存储管理</h2><h3 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h3><ul>
+<li>页面: 程序的地址空间被分成大小相等的片，称为页面(page),又称为虚页。</li>
+<li>主存块: 主页被分成大小相等的片，称为主存块，又称为实页、页框(frame)</li>
+<li>页面与主存块的关系</li>
+<li>页表<ul>
+<li>定义: 为了实现从地址空间到物理主存的映像，系统建立的记录页与内存块之间对应关系的地址变换的机构称为页面映像表，简称页表</li>
+<li>组成<ul>
+<li>高速缓冲区: 旁路转换缓冲(Translation Lookaside Buffer, TLB)，或称为页表缓冲，CPU中用于存放页表项的告诉缓存。地址变换速度快，但成本较高</li>
+<li>主存区域: 地址变换速度比硬件慢，成本较低</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="页式地址变换"><a href="#页式地址变换" class="headerlink" title="页式地址变换"></a>页式地址变换</h3><ul>
+<li>页表: 记录页与块之间的对应关系</li>
+<li>虚地址结构: 当CPU给出的虚地址长度为16位，页面大小位1KB时，在分页系统中地址结构的格式为<ul>
+<li>页号P(15<del>10) + 页内位移w(9</del>0)</li>
+</ul>
+</li>
+<li>页式地址变换<ul>
+<li>CPU给出操作数地址</li>
+<li>由页分页机构自动把逻辑地址分为两部分，得到页号P和页内相对位移w</li>
+<li>根据页表始址寄存器指示的页表始地址，以页号为索引，找到p对应的块号b</li>
+<li>将块号b和页内位移量w拼接在一起，就形成了访问主存的物理地址</li>
+</ul>
+</li>
+<li>缺点:<ul>
+<li>每次取数据都需要访问两次内存</li>
+</ul>
+</li>
+<li>采用联想存储器加快查表速度<ul>
+<li>在联想存储器中存放正在运行的进程当前用到的页号和对应的块号，又称为快表</li>
+</ul>
+</li>
+</ul>
+<h4 id="二级页表"><a href="#二级页表" class="headerlink" title="二级页表"></a>二级页表</h4><ul>
+<li>每个页面中可以存放1K(1024)个页表项(4B)，这样每1K个连续的页表项位一组，整个页表则被划分位1K(1024)个组，离散的放在各个内存块中</li>
+<li>为离散的页表再建立一张页表，称为页目录表(一级页表、顶层页表)，它的大小正好一个页面</li>
+<li>二级页表地址结构: 一级页号: 二级页号: 页内偏移</li>
+<li>地址变换<ul>
+<li>按照地址结构将逻辑地址拆分称三个部分: 一级页号: 二级页号: 页内偏移</li>
+<li>根据一级页号查找页目录表，找到对应的二级页表再内存中存放位置</li>
+<li>根据页号查二级页表，找到最终想要访问的内存块号</li>
+<li>由内存块号和页内偏移量得到物理地址</li>
+</ul>
+</li>
+</ul>
+<h4 id="请调页面的机制"><a href="#请调页面的机制" class="headerlink" title="请调页面的机制"></a>请调页面的机制</h4><ul>
+<li>两种页式系统<ul>
+<li>简单页式系统: 装入一个程序的全部页面才能投入运行</li>
+<li>请求页式系统: 装入一个程序的部分页面即可投入运行</li>
+</ul>
+</li>
+<li>扩充页表项功能:<ul>
+<li>页号+主存块号+中断位+辅助地址</li>
+<li>中断位: 标识该页是否在主存，1不在主存；0在主存</li>
+<li>辅存地址: 该页在辅存的位置</li>
+</ul>
+</li>
+</ul>
+<h3 id="缺页处理"><a href="#缺页处理" class="headerlink" title="缺页处理"></a>缺页处理</h3><h4 id="淘汰机制与策略"><a href="#淘汰机制与策略" class="headerlink" title="淘汰机制与策略"></a>淘汰机制与策略</h4><ul>
+<li>用来选则淘汰哪一页的规则叫做淘汰策略&#x2F;置换策略</li>
+<li>扩充页表项功能: 页号+主存块号+中断位+辅存地址+引用位+改变位<ul>
+<li>引用位: 标识该页最近是否被访问: 0没被访问，1已被访问</li>
+<li>改变位: 标识该页是否被修改: 0未被修改，1已被修改</li>
+</ul>
+</li>
+<li>颠簸<ul>
+<li>主存和辅存之间的频繁页面置换的现象称为颠簸，又称抖动</li>
+<li>这将导致系统效率急剧下降</li>
+</ul>
+</li>
+<li>缺页中断率<ul>
+<li>假定程序p共有n页，系统分配m块，有$1&lt;&#x3D;n&lt;&#x3D;n$</li>
+<li>若程序p在运行中: 成功的访问次数为s，不成功的访问次数为f<ul>
+<li>缺页中断率:$f’ &#x3D; \frac{f}{s+f}$</li>
+<li>$f’ &#x3D; \mathscr{f}(r, m, p)$</li>
+<li>r: 置换算法; m: 系统分配的块数; p: 程序特征</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="SV39中的PDE-PTE格式"><a href="#SV39中的PDE-PTE格式" class="headerlink" title="SV39中的PDE&#x2F;PTE格式"></a>SV39中的PDE&#x2F;PTE格式</h4><table>
+<thead>
+<tr>
+<th align="left">reserved</th>
+<th align="left">PPN</th>
+<th align="left">RSW</th>
+<th align="left">D</th>
+<th align="left">A</th>
+<th align="left">G</th>
+<th align="left">Y</th>
+<th align="left">X</th>
+<th align="left">W</th>
+<th align="left">R</th>
+<th align="left">V</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">63~54</td>
+<td align="left">53~10</td>
+<td align="left">9~8</td>
+<td align="left">7</td>
+<td align="left">6</td>
+<td align="left">5</td>
+<td align="left">4</td>
+<td align="left">3</td>
+<td align="left">2</td>
+<td align="left">1</td>
+<td align="left">0</td>
+</tr>
+</tbody></table>
+<ul>
+<li>V: 该PDE&#x2F;PTE是否有效(V&#x3D;1时有效),即是否有对应的实页</li>
+<li>R(Read),W(Write),X(excutable): 只对PTE有意义，对PDE而言3个位都是0</li>
+<li>U(User): 表示该页是不是一个用户模式页</li>
+<li>G(Global): 表示该PDE&#x2F;PTE是不是全局的</li>
+<li>A(Access): 表示该页面是否被访问过</li>
+<li>D(Dirty): 表示该页的内容是否被修改</li>
+<li>RSW位: 保留位，一般由运行在S模式的代码(如操作系统来使用)</li>
+<li>PPN位: 物理页号</li>
+</ul>
+<h4 id="常用的置换算法"><a href="#常用的置换算法" class="headerlink" title="常用的置换算法"></a>常用的置换算法</h4><ul>
+<li>最佳算法(OPT算法)<ul>
+<li>当要调入一新页而必须先淘汰一旧页时，所淘汰的那一页应是以后不再要用的，或者是在最长的时间以后才会用到的那页</li>
+<li>不现实，不可能知道未来访问顺序</li>
+</ul>
+</li>
+<li>先进先出淘汰算法(FIFO算法)<ul>
+<li>总是选则在主存中停留时间最长(即最早进入主存)的一页淘汰<ul>
+<li>建立一个页面进入主存的先后次序表</li>
+<li>建立一个替换指针，指向最早进入主存的页面</li>
+<li>当需要置换一页时，选则替换指向的那一页，然后调整替换指针的内容</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>最久未使用淘汰算法(LRU算法)<ul>
+<li>总是选则最长时间未被使用的那一页淘汰</li>
+<li>用引用位考察页面的使用情况</li>
+<li>当访问页面时，将引用位置1，并记时</li>
+<li>当要淘汰一页时，选则时间最长的一页淘汰</li>
+<li>硬件方法: 采用时钟计数器，在页表中增加“最后访问时间”字段</li>
+<li>软件方法: 采用页号栈</li>
+</ul>
+</li>
+<li>LRU近似淘汰算法(CLOCK算法)<ul>
+<li>CLOCK算法并不知道哪个页面是最久未被使用页面，只是有一个引用位，进来的页面就是有效。当需要替换的时候，会把所有的之前的页面全部都引用位置0，最先进来的页就最先出去。</li>
+</ul>
+</li>
+</ul>
+<h2 id="段页式存储管理"><a href="#段页式存储管理" class="headerlink" title="段页式存储管理"></a>段页式存储管理</h2><h3 id="段式地址空间"><a href="#段式地址空间" class="headerlink" title="段式地址空间"></a>段式地址空间</h3><ul>
+<li>段: 分段式程序中自然划分的一组逻辑意义完整的信息集合，如代码段、数据段</li>
+<li>程序地址空间: 由若干逻辑分段组成，每个分段有自己的名字，并且是一个连续的地址区</li>
+<li>段式地址结构: 段号s + 段内位移w</li>
+<li>段式地址变换<ul>
+<li>取出程序地址(s, w)</li>
+<li>用s检索段表</li>
+<li>如w &lt; 0 或 w &gt;&#x3D; L，则主存越界</li>
+<li>(B+w)即为所需主存地址</li>
+</ul>
+</li>
+</ul>
+<p>分段和页面的区别</p>
+<table>
+<thead>
+<tr>
+<th align="left">分段</th>
+<th align="left">页面</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">信息的逻辑划分</td>
+<td align="left">信息的物理划分</td>
+</tr>
+<tr>
+<td align="left">段长式可变的</td>
+<td align="left">页的大小是固定的</td>
+</tr>
+<tr>
+<td align="left">用户可见</td>
+<td align="left">用户不可见</td>
+</tr>
+<tr>
+<td align="left">w字段的溢出将产生越界中断</td>
+<td align="left">w字段的溢出自动加入到页号中</td>
+</tr>
+</tbody></table>
+<h3 id="Linux系统的存储管理"><a href="#Linux系统的存储管理" class="headerlink" title="Linux系统的存储管理"></a>Linux系统的存储管理</h3><h4 id="Linux系统的段页式地址变换"><a href="#Linux系统的段页式地址变换" class="headerlink" title="Linux系统的段页式地址变换"></a>Linux系统的段页式地址变换</h4><ul>
+<li>Linux主要采用分页机制来实现虚拟存储器管理<ul>
+<li>Linux的分段机制使得所有的进程都使用相同的段寄存器值，这就使得内存管理变得简单，也就是说，所有的分段都使用相同的线性地址空间</li>
+</ul>
+</li>
+</ul>
+<h4 id="Linux系统的分段"><a href="#Linux系统的分段" class="headerlink" title="Linux系统的分段"></a>Linux系统的分段</h4><ul>
+<li>Linux系统在用户态时，使用用户代码段和用户数据段来对指令和数据寻址</li>
+<li>在内核态时，使用内核代码段和内核数据段来对指令和数据寻址</li>
+<li>每个分段式一个连续的线性地址空间，从0开始直到$2^{32}-1$的寻址长度</li>
+<li>虚拟内存-共4G字节，分为内核空间(最高的1G字节)和用户空间(较低的3G字节)两部分，每个进程最大拥有3G字节的私有虚存空间</li>
+</ul>
+<h1 id="设备管理"><a href="#设备管理" class="headerlink" title="设备管理"></a>设备管理</h1><h2 id="设备管理概述"><a href="#设备管理概述" class="headerlink" title="设备管理概述"></a>设备管理概述</h2><ul>
+<li><p>设备分类</p>
+<ul>
+<li>块设备<ul>
+<li>以块为单位传输信息的设备，通常为存储设备</li>
+<li>e.g. 磁盘、磁带、光驱</li>
+</ul>
+</li>
+<li>字符设备<ul>
+<li>以字符为单位将信息从计算机外部输入到内部，或反之</li>
+<li>e.g. 键盘、显示器、打印机</li>
+</ul>
+</li>
+<li>网络设备<ul>
+<li>负责计算机之间的信息传输</li>
+<li>e.g. 以太网、无线、蓝牙</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>设备管理的目标</p>
+<ul>
+<li>提高设备利用率<ul>
+<li>合理分配设备</li>
+<li>提高设备与CPU、各外部设备之间的并行性</li>
+</ul>
+</li>
+<li>方便用户的使用<ul>
+<li>提供使用方便且独立于设备的接口</li>
+<li>统一: 对各种不同的设备提供一致的接口</li>
+<li>独立于设备: 用户使用的设备与物理设备无关</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>设备管理功能</p>
+<ul>
+<li>状态跟踪: 动态地记录各种设备的状态</li>
+<li>设备分配与回收<ul>
+<li>静态分配: 应用程序级<ul>
+<li>程序进入系统时进行分配，退出系统时收回全部资源</li>
+</ul>
+</li>
+<li>动态分配: 进程级<ul>
+<li>进程提出设备申请时分配，使用完毕后立即回收</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>设备控制: 实施设备驱动和中断处理工作</li>
+</ul>
+</li>
+<li><p>设备独立性</p>
+<ul>
+<li>概念<ul>
+<li>用户在程序中使用的设备与实际使用的设备无关，也就是在用户程序中仅使用逻辑设备名</li>
+</ul>
+</li>
+<li>逻辑设备名: 用户自己指定的设备名(设备号)，是暂时的、可更改的</li>
+<li>物理设备名: 系统提供的设备的标准名称，是永久的、不可更改的</li>
+<li>两种类型的设备独立性<ul>
+<li>一个程序独立于分配给它的某种类型的具体设备<ul>
+<li>系统可以根据设备的使用情况，动态的分配给程序某类设备中的任一台物理设备，程序都能正确地执行</li>
+</ul>
+</li>
+<li>程序应尽可能与它所使用的I&#x2F;O设备类型无关<ul>
+<li>在输入(或输出)信息时，信息可以从不同类型的输入(或输出)设备上输入(或输出)，若要改变输入输出设备的类型，程序只需要进行最少的修改</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>实现<ul>
+<li>在高级语言中用软通道实现<ul>
+<li>在使用高级语言提供的指派语句，通过指派一个逻辑设备名(通道号)来定义一个设备或文件</li>
+<li>e.g. <code>fd=open(&quot;/dev/lp&quot;, mode)</code></li>
+</ul>
+</li>
+<li>在批处理系统中，用链接说明语句来定义<ul>
+<li>e.g. <code>OUTPUT1=LPT</code></li>
+</ul>
+</li>
+<li>在交互系统中，用指派命令来定义<ul>
+<li>e.g. <code>ASSIGN 设备物理名 设备逻辑名</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>优点<ul>
+<li>方便用户</li>
+<li>改善设备利用率</li>
+<li>提高系统的可扩展性和可适应性</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>设备控制块</p>
+<ul>
+<li>DCB: 系统为每一台设备都配置了一个用来记录设备的硬件特性、连接和使用情况的一组数据，称为设备控制块</li>
+<li>内容<ul>
+<li>设备名: 设备的系统名，即设备的物理名</li>
+<li>设备属性: 描述设备信息的一组属性</li>
+<li>命令转换表: 转换表包含设备特定的I&#x2F;O例程地址，不具备相应功能的设备在其例程地址上可以填”-1”</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="I-O控制"><a href="#I-O控制" class="headerlink" title="I&#x2F;O控制"></a>I&#x2F;O控制</h2><h3 id="输入输出控制方式"><a href="#输入输出控制方式" class="headerlink" title="输入输出控制方式"></a>输入输出控制方式</h3><p>CPU通过I&#x2F;O控制器与物理设备打交道。按照I&#x2F;O控制器智能化程度的高低，I&#x2F;O设备的控制方式分为四类</p>
+<ul>
+<li>循环测试I&#x2F;O方式</li>
+<li>I&#x2F;O中断方式</li>
+<li>DMA方式</li>
+<li>通道方式</li>
+</ul>
+<h4 id="I-O中断方式"><a href="#I-O中断方式" class="headerlink" title="I&#x2F;O中断方式"></a>I&#x2F;O中断方式</h4><ul>
+<li>要求输入数据的进程把一个启动命令和允许中断位”1”写入相应设备的控制状态寄存器中，从而启动该设备</li>
+<li>进程因等待输入的完成而进入睡眠状态(CPU执行其它任务)</li>
+<li>当输入完成后，输入设备向CPU发出中断请求信号</li>
+<li>处理机响应中断，处理该中断，并唤醒等待输入完成的进程</li>
+<li>该进程在以后的某个时刻被调度运行</li>
+<li>优点: 大大提高了CPU的利用效率</li>
+<li>缺点: 每次I&#x2F;O都要CPU的干预，如果系统中配备了多台设备时候，CPU的利用率也会降低</li>
+</ul>
+<h4 id="DMA方式"><a href="#DMA方式" class="headerlink" title="DMA方式"></a>DMA方式</h4><ul>
+<li>存放输入数据的内存起始地址、要传送的字节数送入DMA控制器的内存地址寄存器和传送字节计数器</li>
+<li>中断允许位和启动位置1，启动设备</li>
+<li>发出传输要求的进程进入等待状态，进程调度其它进程占据CPU</li>
+<li>输入设备不断窃取CPU工作周期将数据写入内存，传送完毕后发出中断信号</li>
+<li>CPU接到中断信号转纳入中断处理程序处理</li>
+<li>中断处理结束，CPU返回原进程或切换到新的进程</li>
+<li>DMA与中断的主要区别<ul>
+<li>中断方式是在数据缓冲寄存器满后发中断请求</li>
+<li>DMA方式则在所要求传送的数据块全部传送结束时要求CPU进行中断处理，大大减少了CPU进行中断处理的次数</li>
+<li>中断方式下，设备与内存之间的数据传送式由CPU控制完成的</li>
+<li>DMA方式下，设备与主存之间的数据交换式在DMA控制器的控制下直接使用总线进行的</li>
+</ul>
+</li>
+</ul>
+<h4 id="通道方式"><a href="#通道方式" class="headerlink" title="通道方式"></a>通道方式</h4><ul>
+<li>CPU: 执行用户程序，当遇到I&#x2F;O请求时，可根据该请求生成通道程序放入内存(也可事先编好放入内存)，并将该通道程序的首地址放入通道地址字CAW中；然后执行“启动I&#x2F;O”指令，启动通道工作</li>
+<li>通道: 接收到“启动I&#x2F;O”指令后，从CAW中取出通道程序的首地址，同时向CPU发出应答信号，使CPU可继续执行其它程序，而通道则开始执行通道程序，完成I&#x2F;O传输工作</li>
+<li>通道: 当通道程序的最后一条指令执行完成时，通道向CPU发I&#x2F;O中断信号，并停止工作</li>
+<li>CPU: CPU接受到I&#x2F;O中断信号，从通道状态字CSW中取得有关信息，决定下一步做什么</li>
+</ul>
+<h3 id="I-O子系统"><a href="#I-O子系统" class="headerlink" title="I&#x2F;O子系统"></a>I&#x2F;O子系统</h3><ul>
+<li>I&#x2F;O控制的功能<ul>
+<li>解释用户的I&#x2F;O系统调用</li>
+<li>设备驱动</li>
+<li>中断处理</li>
+</ul>
+</li>
+<li>设备驱动程序<ul>
+<li>设备驱动程序是能直接控制设备运转的程序，它根据各类设备的特点和性能来编写。每一类设备有一个相应的设备驱动程序，能控制同类中多台物理设备同时工作。设备I&#x2F;O完成或出错时产生中断，由该类设备的中断处理程序处理</li>
+</ul>
+</li>
+<li>I&#x2F;O子系统的接口<ul>
+<li>在应用层为用户提供I&#x2F;O应用接口<ul>
+<li>对设备的控制和操作则由内核I&#x2F;O子系统来实施</li>
+</ul>
+</li>
+<li>对每个通用设备类型都通过一组标准函数(及接口)来访问<ul>
+<li>设备间的差异被设备驱动程序所封装，这些设备驱动程序一方面可以定制以适合各种设备，另一方面也提供了一组标准的设备访问接口</li>
+<li>设备驱动程序层的作用是隐藏设备控制器之间的差异，它将I&#x2F;O子系统与硬件分离，简化了操作系统开发人员的任务，也有利于设备的设计与制造</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>I&#x2F;O控制模块的实现方式<ul>
+<li>以设备处理进程的方式<ul>
+<li>为每一类设备设置一个设备处理进程</li>
+<li>没有I&#x2F;O请求时，该进程睡眠；当有I&#x2F;O请求到来时，该进程被唤醒，进行设备驱动工作</li>
+</ul>
+</li>
+<li>由I&#x2F;O控制模块的接口程序负责解释用户的I&#x2F;O系统调用，将其转换称I&#x2F;O控制模块认识的命令形式后，将I&#x2F;O请求发给对应的设备处理进程</li>
+<li>将设备与文件一样对待: 将设备与文件一样对待，使用文件系统的系统调用命令进行设备的读写</li>
+</ul>
+</li>
+</ul>
+<h3 id="输入输出控制示例"><a href="#输入输出控制示例" class="headerlink" title="输入输出控制示例"></a>输入输出控制示例</h3><h4 id="用户进程请求I-O的系统功能调用"><a href="#用户进程请求I-O的系统功能调用" class="headerlink" title="用户进程请求I&#x2F;O的系统功能调用"></a>用户进程请求I&#x2F;O的系统功能调用</h4><p><code>doio(ldev, mode, amount, addr)</code></p>
+<ul>
+<li><code>ldev</code>: 逻辑设备名</li>
+<li><code>mode</code>: 操作模式</li>
+<li><code>amount</code>: 传输数据的数目</li>
+<li><code>addr</code>: 传送地址</li>
+</ul>
+<h4 id="I-O例程"><a href="#I-O例程" class="headerlink" title="I&#x2F;O例程"></a>I&#x2F;O例程</h4><ul>
+<li>将逻辑设备转换为物理设备<ul>
+<li>获得I&#x2F;O系统调用中给出的逻辑设备名(ldev)</li>
+<li>根据逻辑设备描述器，将逻辑设备名转换为物理设备名</li>
+</ul>
+</li>
+<li>合法性检查<ul>
+<li>获得I&#x2F;O系统嗲用中给出的操作模式mode</li>
+<li>根据DCB中命令转换表中允许的操作，检查操作的合法性</li>
+</ul>
+</li>
+<li>形成I&#x2F;O请求块，发送消息给对应的设备处理进程<ul>
+<li>根据请求的参数形成I&#x2F;O请求块(IORB)</li>
+<li>将I&#x2F;O请求快(IORB)挂到对应的设备请求队列</li>
+</ul>
+</li>
+<li>输入输出控制示例: 文件操作方式<ul>
+<li>用户进程执行I&#x2F;O系统调用，对I&#x2F;O数据进行格式化</li>
+<li>独立于设备的文件系统软件实现设备的命名、设备的保护、成块处理、缓冲技术和设备分配</li>
+<li>设备驱动程序设置设备寄存器、检查设备的执行状态，驱动I&#x2F;O，I&#x2F;O请求进程进入等待状态</li>
+<li>中断处理程序负责I&#x2F;O完成时，唤醒I&#x2F;O请求进程，进行中断处理</li>
+<li>硬件层实现物理I&#x2F;O操作</li>
+</ul>
+</li>
+</ul>
+<h3 id="Linux设备驱动程序框架"><a href="#Linux设备驱动程序框架" class="headerlink" title="Linux设备驱动程序框架"></a>Linux设备驱动程序框架</h3><ul>
+<li>驱动程序的注册和注销</li>
+<li>设备的打开和释放</li>
+<li>设备的读写操作</li>
+<li>设备的控制操作</li>
+<li>设备的中断和查询处理</li>
+</ul>
+<h2 id="缓冲技术"><a href="#缓冲技术" class="headerlink" title="缓冲技术"></a>缓冲技术</h2><h3 id="缓冲概念"><a href="#缓冲概念" class="headerlink" title="缓冲概念"></a>缓冲概念</h3><ul>
+<li>定义: 缓冲是两种不同速度的设备之间传输信息时平滑传输过程的常用手段</li>
+<li>缓冲类别<ul>
+<li>缓冲器: 缓冲器是用来暂时存放数据的一种存储装置，它容量较小，存取速度快</li>
+<li>软件缓冲: 在I&#x2F;O操作期间用来临时存放I&#x2F;O数据的一块存储区域</li>
+</ul>
+</li>
+<li>引入的意义<ul>
+<li>处理数据流的生产者与消费者间的速度差异</li>
+<li>协调传输数据大小不一致的设备</li>
+<li>应用程序的拷贝语义<ul>
+<li>e.g. 操作系统为保证系统调用write的正确语义(应用程序要写入磁盘的数据就是write系统调用时发生时候的版本)</li>
+<li>方法: 在系统调用返回前将应用程序缓冲区复制到内核缓冲区</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="利用缓冲技术如何进行I-O操作"><a href="#利用缓冲技术如何进行I-O操作" class="headerlink" title="利用缓冲技术如何进行I&#x2F;O操作"></a>利用缓冲技术如何进行I&#x2F;O操作</h3><ul>
+<li>进程活动期间，请求从某输入设备读入数据<ul>
+<li>当用户要求在某个设备进行读操作时，首先从操作系统中获得一个空的缓冲区</li>
+<li>操作系统将一个物理记录送到缓冲区中</li>
+<li>用户请求这些数据时，操作系统将依据逻辑记录特性从缓冲区中提取数据并发送到用户进程存储区中</li>
+<li>当缓冲区空而进程又要从中取用数据时该进程被迫等待。此时操作系统需要重新送数据填满缓冲区，进程才能从中取数据继续运行</li>
+</ul>
+</li>
+<li>进程活动期间，请求从输出设备输出数据<ul>
+<li>当用户要求进行写操作时，首先从操作系统中获得一个空的缓冲区</li>
+<li>将一个逻辑记录从进程存储区传送到缓冲区中</li>
+<li>当缓冲区写满时，操作系统将缓冲区的内容作为物理记录文件写到设备上，使缓冲区再次为空</li>
+<li>只有在系统还来不及腾空缓冲区之前，进程又企图输出信息时，它才需要等待</li>
+</ul>
+</li>
+</ul>
+<h3 id="常用的缓冲技术"><a href="#常用的缓冲技术" class="headerlink" title="常用的缓冲技术"></a>常用的缓冲技术</h3><ul>
+<li>双缓冲<ul>
+<li>在双缓冲方案下，为输入或输出分配两个缓冲区buf1, buf2</li>
+</ul>
+</li>
+<li>环形缓冲<ul>
+<li>在系统中设置若干缓冲区，并把这些缓冲区连接起来，这样若干个缓冲区就形成了一个环，故称环形缓冲区</li>
+</ul>
+</li>
+<li>缓冲池<ul>
+<li>将系统内所有的缓冲区统一管理起来，就形成了能用于输入&#x2F;输出的缓冲池。缓冲池通常由大小相同的缓冲区组成，是系统的公用资源，任何进程都可以申请使用这个缓冲池中的各个缓冲区</li>
+</ul>
+</li>
+</ul>
+<h3 id="Unix系统的缓冲区管理"><a href="#Unix系统的缓冲区管理" class="headerlink" title="Unix系统的缓冲区管理"></a>Unix系统的缓冲区管理</h3><ul>
+<li>目的<ul>
+<li>加快系统相应、增强系统吞吐量</li>
+<li>减少对磁盘的I&#x2F;O操作次数</li>
+</ul>
+</li>
+<li>UNIX系统缓冲管理的思路<ul>
+<li>当进程要从磁盘读数据时，首先考虑从缓冲区中读</li>
+<li>当进程要写数据到磁盘时，先写入缓冲区中</li>
+</ul>
+</li>
+<li>缓冲区数据结构<ul>
+<li>缓存数组: 含有磁盘上的数据的存储器数组</li>
+<li>缓存首部: 描述缓冲区特性的数据结构<ul>
+<li>设备号: 缓冲区所包含的信息所属设备的设备号</li>
+<li>快号: 由设备号指出的设备上相对于第0快的块号</li>
+<li>状态flag: 描述了缓冲区当前的状态<ul>
+<li>BUSY: 缓冲区当前正忙</li>
+<li>AVE: 缓冲区包含的数据有效</li>
+<li>DELWR: 内核在某缓冲区重新分配出去之前必须把缓冲区内容写到磁盘上</li>
+<li>WRITE: 内核当前正把缓冲区的内容写到磁盘</li>
+<li>READ: 内核当前正从磁盘往缓冲区写信息</li>
+<li>WAIT: 一个进程当前正在等待缓冲区变为空闲</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>缓冲区队列结构<ul>
+<li>设备缓冲区队列: 与某类设备有关的所有缓冲区组成的队列称为设备缓冲区队列，简称b链</li>
+<li>空闲缓冲区队列: 可供重新分配使用的缓冲区组成的队列称为空闲缓冲区队列，简称av链</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>UNIX缓冲管理算法<ul>
+<li>一个buf被分配用于读&#x2F;写某设备上的块时<ul>
+<li>置B_BUSY&#x3D;1，位于b链上，不在av链上</li>
+</ul>
+</li>
+<li>当读写操作结束时<ul>
+<li>释放该buf吗，置B_BUSY&#x3D;0，仍留在b链上，并送入av链尾</li>
+</ul>
+</li>
+<li>若进程需要的信息在buf中时<ul>
+<li>在该设备的b链上找到，置B_BUSY&#x3D;1，从av链上摘除，使用完后，送入av链队尾</li>
+</ul>
+</li>
+<li>对空闲buf队列的处理<ul>
+<li>当需要一个空闲buf时，总是取av链的首元素；一个使用过的buf释放时，插入到空闲buf队列(av链)的队尾。实现了精确的最久未使用淘汰算法(LRU算法)</li>
+</ul>
+</li>
+<li>对延迟写的处理<ul>
+<li>当一个具有延迟标写标记的buf移动到av链头，要用于分配时，立即进行写操作。从av链上摘除，使用完后又送入av头部</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="设备分配"><a href="#设备分配" class="headerlink" title="设备分配"></a>设备分配</h2><h3 id="独享分配"><a href="#独享分配" class="headerlink" title="独享分配"></a>独享分配</h3><ul>
+<li>独享设备<ul>
+<li>让一个作业在整个运行期间独占使用的设备</li>
+<li>特点<ul>
+<li>临界资源</li>
+<li>费时的I&#x2F;O操作或需要人工干预</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>独享分配<ul>
+<li>在一个作业执行前，将它所要使用的设备分配给它；当它结束时，将分配给它的这类设备收回</li>
+</ul>
+</li>
+</ul>
+<h3 id="共享分配"><a href="#共享分配" class="headerlink" title="共享分配"></a>共享分配</h3><ul>
+<li>共享设备<ul>
+<li>由多个作业、进程共同使用的设备称为共享设备</li>
+<li>特点<ul>
+<li>旋转设备，可直接或随机访问</li>
+<li>便于共享，转接简单，耗费较少</li>
+</ul>
+</li>
+<li>共享分配<ul>
+<li>进程提出资源申请时，将所要使用的设备分配给它；进程使用完毕后，立即将设备收回</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="虚拟分配"><a href="#虚拟分配" class="headerlink" title="虚拟分配"></a>虚拟分配</h3><ul>
+<li>虚拟技术<ul>
+<li>在一类物理设备上模拟另一类物理设备的技术，将独占设备转化为共享设备的技术</li>
+</ul>
+</li>
+<li>虚拟分配<ul>
+<li>当进程需要与独占型设备交换信息时，系统将分配磁盘空间，并建立相应的数据结构，这种分配方法称为设备的虚拟分配</li>
+</ul>
+</li>
+<li>虚拟设备<ul>
+<li>通常把用来代替独占型设备的那部分外存空间(包括有关的控制表格)称为虚拟设备</li>
+</ul>
+</li>
+</ul>
+<h3 id="SPOOLING系统"><a href="#SPOOLING系统" class="headerlink" title="SPOOLING系统"></a>SPOOLING系统</h3><p>Simultaneous Peripheral Operations On Line系统，也叫假脱机系统，为用户提供外围设备同时联机操作的功能</p>
+<ul>
+<li>设计思想<ul>
+<li>预输入<ul>
+<li>在应用程序需要数据前，OS已将所需数据预先输入到辅存输入井存放。当应用程序(或进程)需要数据时，可直接从辅存中读入主存</li>
+</ul>
+</li>
+<li>缓输出<ul>
+<li>在应用程序执行时，将输出数据写入辅存输出井中。当应用程序(或进程)执行完毕(或需要数据时候)，由操作系统将数据输出</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>SPOOLING<ul>
+<li>利用通道和中断技术，在主机控制之下，由通道完成输入输出工作。</li>
+<li>系统提供一个软件系统(包括预输入程序、缓输出程序、井管理程序、预输入表、缓输出表)。</li>
+<li>它提供输入收存和输出发送的功能，使外部设备可以并性操作</li>
+</ul>
+</li>
+<li>优点<ul>
+<li>提供虚拟设备</li>
+<li>外围设备同时联机操作</li>
+<li>加快作业处理速度</li>
+</ul>
+</li>
+<li>实现<ul>
+<li>大容量的辅存空间<ul>
+<li>在辅存上需要开辟两个较大的输入和输出井，用以存放大量应用程序的输入信息和输出信息</li>
+</ul>
+</li>
+<li>硬件基础<ul>
+<li>通道装置、中断系统</li>
+</ul>
+</li>
+<li>数据结构<ul>
+<li>预输入表、缓输出表: 描述辅存输入井和输出井的状态变化</li>
+</ul>
+</li>
+<li>软件<ul>
+<li>预输入软件: 控制信息从独占设备输入到辅存</li>
+<li>缓输出程序: 控制信息从辅存输出到独占设备</li>
+<li>井管理程序: 控制用户程序和辅存之间的信息交换</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h1 id="文件系统"><a href="#文件系统" class="headerlink" title="文件系统"></a>文件系统</h1><h2 id="文件系统概述"><a href="#文件系统概述" class="headerlink" title="文件系统概述"></a>文件系统概述</h2><h3 id="文件"><a href="#文件" class="headerlink" title="文件"></a>文件</h3><ul>
+<li>文件: 在逻辑上具有完整意义的信息集合，有一个名字以供标识，文件名是由若干约束的字符串<ul>
+<li>特点: 可以长期保存、可以在进程间共享、具有内部结构</li>
+</ul>
+</li>
+<li>构成文件的基本单位: 信息项(单个字节或字符)、记录</li>
+<li>文件的其它描述<ul>
+<li>文件是就有符号名的信息(数据项)的集合</li>
+<li>文件是具有符号名的记录的集合</li>
+</ul>
+</li>
+<li>分类<ul>
+<li>按文件的性质和用途分类: 系统文件、程序库文件、用户文件</li>
+<li>按文件保护级分类: 不保护文件、执行文件、只读文件、读写文件</li>
+<li>按文件刘翔分类: 输入文件、输出文件、输入输出文件</li>
+</ul>
+</li>
+<li>文件名与属性<ul>
+<li>文件名: 每个文件有一个给定的名字，包括文件符号名和内部标识符</li>
+<li>文件扩展名: 表示文件的使用特征</li>
+<li>文件属性: 表示文件类别、保护级等信息</li>
+</ul>
+</li>
+</ul>
+<h3 id="文件系统-1"><a href="#文件系统-1" class="headerlink" title="文件系统"></a>文件系统</h3><ul>
+<li>定义: 文件系统是操作系统中负责管理和存取文件信息的软件机构</li>
+<li>组成<ul>
+<li>管理文件所需的数据结构: 如目录表、文件控制块、存储分配表</li>
+<li>管理程序</li>
+<li>一组操作</li>
+</ul>
+</li>
+<li>文件系统的功能<ul>
+<li>从用户角度看: 文件系统实现了“按名存取”的功能</li>
+<li>从系统角度看: 文件系统提供的功能包括: 辅存空间管理、构造文件结构、文件共享、存取文件的方法、文件保护、一组文件操作命令</li>
+</ul>
+</li>
+<li>特点<ul>
+<li>使用简单: 使用文件名、一组文件操作命令</li>
+<li>安全可靠:<ul>
+<li>提供防护措施，在文件遭受破坏时，能及时修复</li>
+<li>全量备份、增量备份、动态备份、远程备份</li>
+</ul>
+</li>
+<li>既能共享，又能保密: 身份验证、存取权限验证</li>
+</ul>
+</li>
+</ul>
+<h3 id="文件系统的两种结构"><a href="#文件系统的两种结构" class="headerlink" title="文件系统的两种结构"></a>文件系统的两种结构</h3><ul>
+<li>逻辑结构<ul>
+<li>从用户角度看到的文件面貌，即用户对信息进行逻辑组织的文件结构</li>
+<li>为用户提供一种逻辑结构清晰、使用简单的逻辑文件形式</li>
+<li>用户按文件的逻辑结构形式取存储、检索和加工文件中的信息</li>
+</ul>
+</li>
+<li>物理结构<ul>
+<li>信息在物理存储器上的存储方式，是数据的物理表示和组织</li>
+<li>选则工作性能良好、设备利用率高的物理文件形式</li>
+<li>系统按照文件的蓄力结构形式和外部设备打交道，控制信息的传输</li>
+</ul>
+</li>
+<li>逻辑记录与物理记录(磁盘块)<ul>
+<li>逻辑记录: 文件中按信息在逻辑上的独立含义来划分的信息单位，逻辑记录是对文件进行存取操作的基本单位</li>
+<li>物理记录: 在存储截至上，由连续信息所组成的一个区称为块，也叫物理记录</li>
+<li>逻辑记录与物理记录的区别与联系<ul>
+<li>一个是逻辑的概念，一个是物理的概念</li>
+<li>逻辑记录最终要存放到物理记录上</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="文件的逻辑结构与存取方法"><a href="#文件的逻辑结构与存取方法" class="headerlink" title="文件的逻辑结构与存取方法"></a>文件的逻辑结构与存取方法</h2><h3 id="文件的逻辑结构"><a href="#文件的逻辑结构" class="headerlink" title="文件的逻辑结构"></a>文件的逻辑结构</h3><ul>
+<li>流式文件<ul>
+<li>定义: 流式文件是相关的有序字符的集合，是无结构的</li>
+<li>存取方法: 流式文件是按信息的个数或以特殊字符为界进行存取的</li>
+</ul>
+</li>
+<li>记录式文件<ul>
+<li>定义: 记录式文件是一种有结构的文件，这种文件在逻辑上总是被看成是一组连续顺序的记录的集合</li>
+<li>定长记录与变长记录</li>
+</ul>
+</li>
+</ul>
+<h3 id="文件存取方法"><a href="#文件存取方法" class="headerlink" title="文件存取方法"></a>文件存取方法</h3><ul>
+<li>顺序存取<ul>
+<li>后一次存取总是在前一次存取的基础上进行的</li>
+<li>顺序存取时不必给出具体的存取位置</li>
+</ul>
+</li>
+<li>随机存取<ul>
+<li>用户以任意次序请求某个记录</li>
+<li>随机存取时要指出起始存取位置</li>
+</ul>
+</li>
+</ul>
+<h2 id="文件的物理结构"><a href="#文件的物理结构" class="headerlink" title="文件的物理结构"></a>文件的物理结构</h2><h3 id="基本概念-1"><a href="#基本概念-1" class="headerlink" title="基本概念"></a>基本概念</h3><ul>
+<li>块是存储介质上连续信息所组成的一个区域，也叫物理记录</li>
+<li>间隙是块之间不记录用户代码信息的区域</li>
+<li>块是主存和辅存间信息交换的物理单位，每次交换一块或整数块</li>
+<li>不同类型的存介质，块的大小常常各不相同；同一类型的存储截至，块的大小也可以不同</li>
+<li>块的大小要考虑到用户使用方式、数据传输效率和存储设备类型等多种因素</li>
+</ul>
+<h3 id="连续文件"><a href="#连续文件" class="headerlink" title="连续文件"></a>连续文件</h3><ul>
+<li>连续文件结构是由一组分配在磁盘连续区域的物理块组成的</li>
+<li>特点: <ul>
+<li>存取速度较快</li>
+<li>文件长度一经固定便不易改变</li>
+<li>文件的增生和扩容不易</li>
+</ul>
+</li>
+</ul>
+<h3 id="串联文件"><a href="#串联文件" class="headerlink" title="串联文件"></a>串联文件</h3><ul>
+<li>由按属于内需串联的块组成，即文件的信息存于若干个物理块中，每个物理块的最末一个字作为链接字，指出后续块的物理地址。文件的最后一块的链接字为结束标记”^”，它表示文件至本块结束</li>
+<li>特点<ul>
+<li>能较好利用辅存空间</li>
+<li>易于对文件进行增生和扩容</li>
+<li>连续存取速度较快，随机存取速度慢</li>
+</ul>
+</li>
+</ul>
+<h3 id="文件映照"><a href="#文件映照" class="headerlink" title="文件映照"></a>文件映照</h3><ul>
+<li>把串联文件中的链接字集中在一个结构中，既保持了串联文件的优点，也克服了其随机存取速度慢的缺点，就是FAT文件</li>
+<li>文件分配表FAT是以链接方式存取文件的系统中记录磁盘分配和跟踪空白磁盘(蔟)的数据结构</li>
+<li>该表在文件系统格式化后产生，共包含N个表项，每个表项对应一个蔟，编号从0开始直至N-14(N为磁盘中蔟的总数)</li>
+<li>每个表项中的内容为存放文件数据的下一个蔟的蔟号</li>
+<li>文件的首地址(第一个蔟号)存放在目录中。因此，从目录中找到文件的首地址后，就能找到文件在磁盘上的所有存放地址</li>
+</ul>
+<h3 id="索引文件"><a href="#索引文件" class="headerlink" title="索引文件"></a>索引文件</h3><ul>
+<li>系统为每个文件建立逻辑块号与物理块号的对照表，这张表称为该文件的索引表</li>
+<li>索引文件由数据块和索引表构成</li>
+<li>操作<ul>
+<li>索引文件在存储区中占两个区<ul>
+<li>索引区: 存放索引表</li>
+<li>数据区: 存放数据文件</li>
+</ul>
+</li>
+<li>访问索引文件的操作<ul>
+<li>查文件的索引表，由逻辑块号查得物理块号</li>
+<li>由物理块号而获得所要求的数据</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>特点<ul>
+<li>易于文件的增删</li>
+<li>直接读写任意记录</li>
+</ul>
+</li>
+<li>组织<ul>
+<li>直接索引: 文件目录项中有一组表项用于索引，登记逻辑记录所在的磁盘块号</li>
+<li>一级间接索引: 文件目录项中有一组表项，其内容等级的是第一季索引表块的块号。第一季索引表块号中的索引表项等级的是文件逻辑记录所在的磁盘块号</li>
+<li>二级间接索引: 文件目录项中有一组表项，其内容等级的是第二级索引表块的块号。第二季索引表块中的索引表项等级的是第一季索引表块的块号，第一季索引表项中等级的是文件逻辑记录所在的磁盘块号</li>
+</ul>
+</li>
+</ul>
+<h3 id="几种文件物理结构的比较"><a href="#几种文件物理结构的比较" class="headerlink" title="几种文件物理结构的比较"></a>几种文件物理结构的比较</h3><ul>
+<li>连续文件<ul>
+<li>优点: 不需要额外空间开销，顺序访问和随机访问的效率都高</li>
+<li>缺点: 动态增长困难；要求用户创建时提供文件大小；存储空间浪费较大</li>
+<li>适合长度固定不变的只读文件的存储</li>
+</ul>
+</li>
+<li>串联文件<ul>
+<li>克服了连续文件的不足；但随机访问的系统开销过大；适应于顺序访问的文件</li>
+<li>DOS及WINDOWS系统中改造了串联文件结构，使其克服了串联文件的不足，但增加了系统的危险性</li>
+</ul>
+</li>
+<li>索引文件<ul>
+<li>既适用于顺序访问，也适用于随机访问；但索引表需要存储开销和访问时间开销</li>
+<li>UNIX系统是适用索引结构</li>
+</ul>
+</li>
+</ul>
+<h2 id="文件存储空间的管理"><a href="#文件存储空间的管理" class="headerlink" title="文件存储空间的管理"></a>文件存储空间的管理</h2><ul>
+<li>功能: 负责辅助存储空间的有效分配和释放<ul>
+<li>创建和扩充文件时，确定分配哪些磁盘块</li>
+<li>删除文件和缩短文件时，回收磁盘块</li>
+<li>随着分配和回收，可能会出现碎片需要整理</li>
+</ul>
+</li>
+<li>常用方法<ul>
+<li>位示图</li>
+<li>空闲文件目录</li>
+<li>空闲块链</li>
+</ul>
+</li>
+</ul>
+<h3 id="位示图法"><a href="#位示图法" class="headerlink" title="位示图法"></a>位示图法</h3><ul>
+<li>磁盘空间由固定大小的块组成，可方便地适用位示图管理</li>
+<li>每一位对应一个物理块，1表示被占用，0表示空闲</li>
+<li>优点<ul>
+<li>每个盘块仅需要1bit来标识</li>
+<li>若盘块长为1KB，则位视图开销位0.012%</li>
+</ul>
+</li>
+<li>缺点: 对于大容量磁盘，位示图的存储和查找考校较大，需要建立辅助存储统计表来提高访问速度</li>
+</ul>
+<h3 id="空闲文件目录"><a href="#空闲文件目录" class="headerlink" title="空闲文件目录"></a>空闲文件目录</h3><ul>
+<li>将空闲区存储块的位置及其连续空闲的块数构成一张表</li>
+<li>分配时，依次扫描空闲区表，寻找合适的空闲块并修改登记项</li>
+<li>删除文件并释放空闲区时，把空闲位置及连续空闲区长度填入空闲区表，出现邻接的空闲区时，还需要执行合并操作</li>
+<li>适用于连续文件结构</li>
+<li>缺点: 碎片问题</li>
+</ul>
+<h3 id="空闲块链"><a href="#空闲块链" class="headerlink" title="空闲块链"></a>空闲块链</h3><ul>
+<li>把所有空闲块连接在一起，系统保持指针指向第一个空闲块，每一个空闲块中包含指向下一个空闲块的指针</li>
+<li>申请一个空闲块时，从链头取一块修改系统指针</li>
+<li>释放占用块时，将其挂到空闲链的链头，并修改系统指针指向它</li>
+<li>优点: 几乎不需要占用空间</li>
+<li>缺点: 分配多块时效率低(需要I&#x2F;O操作)</li>
+<li>UNIX文件系统对这种方法进行了改进，在一个空闲块中保存一组空闲块指针，称链成组链接法</li>
+</ul>
+<h2 id="文件目录及其结构"><a href="#文件目录及其结构" class="headerlink" title="文件目录及其结构"></a>文件目录及其结构</h2><h3 id="文件控制块"><a href="#文件控制块" class="headerlink" title="文件控制块"></a>文件控制块</h3><ul>
+<li>文件控制块(FCB)是文件系统位每个文件建立的位移的管理数据结构<ul>
+<li>文件标识和控制信息: 文件名、用户名、文件存取权限、访问控制权限、文件类型等</li>
+<li>文件逻辑结构信息: 记录类型、记录个数、记录长度、成组银子等</li>
+<li>文件物理结构信息: 文件所在设备名、文件物理结构类型、记录存放在辅存中的块号或文件信息首块盘块号，文件索引的位置等</li>
+<li>文件适用信息: 共享文件的进程数，文件修改情况，文件最大长度和当前大小</li>
+<li>文件管理信息: 文件建立日期，最近修改日期，最近访问日期等</li>
+</ul>
+</li>
+</ul>
+<h3 id="文件目录"><a href="#文件目录" class="headerlink" title="文件目录"></a>文件目录</h3><ul>
+<li>文件系统基于FCB来实现文件的按名存取<ul>
+<li>创建文件时，为其建立FCB，用来记录文件的属性信息</li>
+<li>存取文件时，先找到其FCB，再来找到文件信息盘块号或首块物理位置</li>
+</ul>
+</li>
+<li>为了加快文件的查找速度，通常将FCB集中起来，组成文件目录</li>
+<li>文件目录包含至少两种目录选项: 普通文件的FCB、子目录的目录文件的FCB</li>
+<li>目录文件至少包含两个目录项<ul>
+<li>当前目录项 <code>.</code></li>
+<li>父目录项 <code>..</code></li>
+</ul>
+</li>
+<li>文件目录的基本功能<ul>
+<li>将文件名转换成此文件信息在磁盘上的物理位置</li>
+<li>有效的组织和管理文件</li>
+</ul>
+</li>
+</ul>
+<h4 id="一级文件目录"><a href="#一级文件目录" class="headerlink" title="一级文件目录"></a>一级文件目录</h4><p>系统将已建立的所有文件的文件名、存放地址及有关的说明信息放在一张表中，这张表称为一级文件目录(整个系统中只有一个目录文件)</p>
+<ul>
+<li>特点<ul>
+<li>实现简单</li>
+<li>不允许两个文件有相同的名字</li>
+<li>在多用户环境中，容易出现重名问题</li>
+</ul>
+</li>
+</ul>
+<h4 id="二级文件目录"><a href="#二级文件目录" class="headerlink" title="二级文件目录"></a>二级文件目录</h4><ul>
+<li>将文件目录分成主目录和用户文件目录两级</li>
+<li>每个用户建立一个用户文件目录，等级该用户建立的所有文件的相关信息</li>
+<li>主目录等级系统中各个用户文件目录的相关信息</li>
+<li>特点<ul>
+<li>解决了命名冲突，允许不同用户目录下的文件名可以相同</li>
+</ul>
+</li>
+<li>方法<ul>
+<li>存取一个文件时给出文件路径名</li>
+<li>在二级文件目录下，文件的路径名是由用户名和文件名拼起来得到的</li>
+</ul>
+</li>
+</ul>
+<h4 id="树型文件目录"><a href="#树型文件目录" class="headerlink" title="树型文件目录"></a>树型文件目录</h4><p>在多级目录系统中(除最末一级外)，任何一级目录的录项可以描述一个目录文件，也可以描述一个非目录文件(数据文件)， 而数据文件一定在树叶上。这样就构成了一个树形层次结构。</p>
+<h5 id="文件路径名"><a href="#文件路径名" class="headerlink" title="文件路径名"></a>文件路径名</h5><p>多级目录中文件的路径名，是由根目录到该文件的通路上所有目录文件的符号名和该文件的符号名组成的字符串，中间用分隔符分隔</p>
+<h5 id="纯树形目录结构"><a href="#纯树形目录结构" class="headerlink" title="纯树形目录结构"></a>纯树形目录结构</h5><ul>
+<li>目录可以有任意多的层次</li>
+<li>目录可以包含子目录，也可以包含文件</li>
+<li>每个文件只有一个父目录</li>
+<li>文件共享较为困难</li>
+</ul>
+<h4 id="DAG目录结构"><a href="#DAG目录结构" class="headerlink" title="DAG目录结构"></a>DAG目录结构</h4><ul>
+<li>一个文件可以有多个父目录</li>
+<li>能较方便地实现文件的共享</li>
+<li>目录结构的维护较复杂</li>
+<li>需要为每个文件维护一个引用计数，以记录文件的父目录个数，仅当引用计数值为1时，删除操作才真正删除文件</li>
+</ul>
+<h2 id="文件共享与安全"><a href="#文件共享与安全" class="headerlink" title="文件共享与安全"></a>文件共享与安全</h2><ul>
+<li>文件共享是指某一个或某一部分文件可以让实现规定的某些用户共同适用</li>
+<li>文件安全是指保护文件不得被未经文件主授权的任何用户存取，且对于授权用户也智能在允许的存取权限内适用文件。常见权限包括<ul>
+<li>无(None): 用户不知道该文件的存在</li>
+<li>知情(Knowledge): 用户可以确定该文件的存在和文件的所有者</li>
+<li>执行(Execution): 用户可以加载并执行一个程序文件</li>
+<li>读(Reading): 用户可以读文件</li>
+<li>追加(Appending): 用户可以在文件末尾追加数据，但不能修改或删除内容</li>
+<li>更新(Updating): 用户可以在文件中修改、删除或添加数据</li>
+<li>变更保护(Chaning protection): 用户可以变更授予其它用户的访问权限</li>
+<li>删除(Deletion): 用户可以从文件系统中删除该文件</li>
+</ul>
+</li>
+</ul>
+<h3 id="文件共享与文件保护"><a href="#文件共享与文件保护" class="headerlink" title="文件共享与文件保护"></a>文件共享与文件保护</h3><ul>
+<li>保护<ul>
+<li>操作前先对用户的权限进行验证</li>
+<li>所谓存取权限的验证，是指用户存取文件之前，需要检查用户的存取权限是否符合规定，符合者允许适用，否则据绝</li>
+</ul>
+</li>
+<li>验证用户存取权限的方法<ul>
+<li>访问控制矩阵</li>
+<li>存取控制表</li>
+<li>用户权限表</li>
+<li>口令</li>
+<li>密码</li>
+</ul>
+</li>
+<li>加快文件的查找<ul>
+<li>当前目录(值班目录)<ul>
+<li>当指定当前目录后，用户对文件的所有访问都是相对于当前目录进行的</li>
+</ul>
+</li>
+<li>链接技术: 在相应目录表目之间进行连接，即个不路中的表目直接指向另一个目表所在的物理位置</li>
+</ul>
+</li>
+</ul>
+<h3 id="Linux的链接文件"><a href="#Linux的链接文件" class="headerlink" title="Linux的链接文件"></a>Linux的链接文件</h3><h4 id="硬链接和软链接的区别"><a href="#硬链接和软链接的区别" class="headerlink" title="硬链接和软链接的区别"></a>硬链接和软链接的区别</h4><ul>
+<li>创建命令<ul>
+<li>硬链接: <code>ln /data/ln/src /data/ln/dst</code></li>
+<li>软链接: <code>ln -s /data/ln/src /data/ln/dst</code></li>
+</ul>
+</li>
+<li>硬链接与源文件等价；软链接文件中并不包括实际的文件数据，只包括了它指向文件的路径</li>
+<li>删除源文件后，硬链接文件可以照常适用，软链接文件的操作则会失败</li>
+<li>硬链接不能连接目录文件，软链接既可以连接到普通文件也可以连接到目录</li>
+<li>硬链接只限于本文件系统，软连接可以链接到处于不同文件系统的文件及目录</li>
+<li>硬链接可以加快文件查找速度，软链接并不能</li>
+</ul>
+<h2 id="文件操作与文件备份"><a href="#文件操作与文件备份" class="headerlink" title="文件操作与文件备份"></a>文件操作与文件备份</h2><h3 id="文件操作"><a href="#文件操作" class="headerlink" title="文件操作"></a>文件操作</h3><ul>
+<li>常用的文件操作命令<ul>
+<li>create 创建一个新文件</li>
+<li>delete 从系统目录中撤销一个文件</li>
+<li>rename 在系统目录中改变文件的名字</li>
+<li>open 打开文件，在用户和文件(或设备)之间建立一个逻辑通路</li>
+<li>close 关闭文件，在用户和文件(或设备)之间撤销一个逻辑通路</li>
+<li>write 写到一个文件(或设备)上</li>
+<li>read 从一个文件(或设备)读入数据信息</li>
+</ul>
+</li>
+<li>打开文件和关闭文件操作<ul>
+<li>打开文件操作: 把该文件的有关目录表目复制到主存中的约定区域，建立文件控制块，建立用户和这个文件的联系</li>
+<li>关闭文件操作: 用户宣布这个文件当前不再适用，系统将其在主存中的文件控制块山区，因而也就切断了用户同这个文件的联系</li>
+</ul>
+</li>
+<li>文件备份: 为了能在软、硬件实现的以外情况下恢复文件，保证文件的完整性、数据的连续可利用性，文件系统提供适当的机构，以便复制备份<ul>
+<li>周期性转储: 按固定的时间周期把存储器中所有文件的内容转存到某种截至上，通常是磁带或磁盘。在系统失效时，使用这些转存磁盘或磁带，将所有文件重新建立并恢复到最后一次转存时的状态</li>
+<li>增量型转储: 只转储从上次转储以后已经改变过的信息，增量转储的信息量较小，故转储可在更短的时间周期内进行</li>
+<li>文件备份技术的发展: 动态备份，远程备份技术</li>
+</ul>
+</li>
+</ul>
+<h2 id="Unix文件系统的主要结构及实现技术"><a href="#Unix文件系统的主要结构及实现技术" class="headerlink" title="Unix文件系统的主要结构及实现技术"></a>Unix文件系统的主要结构及实现技术</h2><h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><ul>
+<li>特点<ul>
+<li>树形文件目录结构</li>
+<li>可安装拆卸的文件系统</li>
+<li>文件是无结构的字节流式文件</li>
+<li>将外部设备与文件一样对待</li>
+</ul>
+</li>
+<li>类型<ul>
+<li>普通文件: 用户程序、数据文件</li>
+<li>目录文件: 用于组织和形成树形目录结构中的一个单位，由若干目录项组成</li>
+<li>特别文件: 与硬件设备有关的文件称为特别文件。包括块设备文件、字符设备文件。与计算机链接每一种输入输出设备都有一个特别文件。它式操作系统核心用于存取输入输出设备的通道，是用户与硬件设备联系的桥梁</li>
+<li>命名管道: 管道是一种进程间通信机制。管道中缓存了从输入端接收的数据，这样从输入端读数据的进程就能以先进先出的方式来接收数据</li>
+<li>链接文件: 本质上，链接文件是一个已存在的文件的另一个文件名</li>
+<li>符号链接: 者是一个数据文件，文件中包含了其所链接的那个文件的名字</li>
+</ul>
+</li>
+</ul>
+<h3 id="UNIX系统的索引文件结构"><a href="#UNIX系统的索引文件结构" class="headerlink" title="UNIX系统的索引文件结构"></a>UNIX系统的索引文件结构</h3><ul>
+<li>文件索引节点<ul>
+<li>UNIX系统把文件目录项中除了名字以外的信息全部存放到一个磁盘的数据块上，这种数据块称为磁盘索引节点(index node)，简称i节点(inode)</li>
+<li>结构<ul>
+<li>文件所有者标识: 定义对一个文件具有存取权的用户集合，分为文件所有者、文件所有者用户组</li>
+<li>文件类型: 分为正规文件、目录文件、字符特殊文件或块特殊文件等</li>
+<li>文件存取许可权: 按文件所有者、文件的用户组所有者及其它用户三个类别对文件实行保护，每类都具有读、写、执行该文件的存取全，并且能分别地设置</li>
+<li>文件链接数目: 表示在文件目录结构中，有多少个文件名指向该文件。每当增加一个名字时，i_ilink值+1，减少一个名字是其值-1.当其值减为0时，该文件才能真正删除</li>
+<li>地址索引表: 文件数据的磁盘地址信息，即地址索引表，</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="UNIX系统文件目录结构"><a href="#UNIX系统文件目录结构" class="headerlink" title="UNIX系统文件目录结构"></a>UNIX系统文件目录结构</h3><ul>
+<li>目录文件与目录项<ul>
+<li>目录文件: 每个目录表为一个目录文件。目录文件由目录项组成</li>
+<li>目录项: 每个目录项包含16个字节(UNIX老版本)。在目录项中，低1，2字节为响应文件的辅存i节点号，后14个字节为文件名。一个辅存磁盘块(512B)包含32个目录项</li>
+</ul>
+</li>
+<li>树形目录结构<ul>
+<li>每个文件系统都有一个根目录文件，它的辅存i节点是相应文件存储设备上辅存索引区中的第一个</li>
+<li>打开某个文件时，从根目录的i节点可以找到根目录文件的索引结构，得到根目录文件的每个数据块</li>
+<li>将待打开文件的路径信息与目录文件中的目录项逐一比较，可以得到下级目录的i节点号，并最终得到目标文件的i节点号。从i节点号中的索引表，得到数据文件的存储块号，实现对目标文件的随机存取</li>
+</ul>
+</li>
+<li>文件目录结构中的链接<ul>
+<li>Unix文件目录结构中带有交叉连接。用户可以用不同的文件路径名共享一个文件</li>
+<li>文件连接在用户看来是为一个已存在的文件另起一个路路径名</li>
+<li>文件连接的结果表现为一个文件由多个目录项所指向</li>
+</ul>
+</li>
+</ul>
+<h3 id="Unix系统的打开文件机构"><a href="#Unix系统的打开文件机构" class="headerlink" title="Unix系统的打开文件机构"></a>Unix系统的打开文件机构</h3><ul>
+<li>为了提高系统效率，减少主存空间的占用，系统设置了打开文件和关闭文件操作。当打开一个文件时，建立用户与该文件的联系</li>
+<li>文件系统中管理这一工作的结构称为打开文件机构。打开文件机构由活动i节点表、打开文件表和用户文件描述符表组成</li>
+<li>活动i节点表<ul>
+<li>当执行打开文件操作时，将文件辅存i节点的有关信息拷贝到主存，形成活动i节点(主存索引节点)，若干个活动i节点组成活动i节点</li>
+</ul>
+</li>
+<li>系统打开文件表<ul>
+<li>一个文件可以被同一进程或不同进程，用同一或不同路径名，相同的或互异的操作要求(读、写)同时打开。为了记录打开文件所需的附加信息，文件系统设置了一个内核结构: 系统打开文件表</li>
+</ul>
+</li>
+<li>用户文件描述符表<ul>
+<li>用户进程扩充块user中的一个数组u_ofile[NOFILE]称为用户文件描述符表，其中的每一项(指针)指向系统打开文件表的一个表项</li>
+<li>一个打开文件在用户文件描述表中所占的文职就是它的文件描述符(或称打开文件号)。进程可以打开不同的文件，也可以对统一文件以不同的操作方式打开</li>
+</ul>
+</li>
+</ul>
+<h5 id="父子进程对文件的共享"><a href="#父子进程对文件的共享" class="headerlink" title="父子进程对文件的共享"></a>父子进程对文件的共享</h5><ul>
+<li>子进程共享父进程的”系统打开文件表项”,该表项的文件打开技术fcount+1，子进程直接使用父进程open()操作返回的fd即可访问该文件</li>
+<li>父进程的close()操作不影响子进程对该文件的使用，反之亦然</li>
+<li>父子进程独立运行后，各自open的文件就不再共享了，跟两个独立进程打开文件情况一样</li>
+</ul>
+<h3 id="文件存储器空闲块的管理"><a href="#文件存储器空闲块的管理" class="headerlink" title="文件存储器空闲块的管理"></a>文件存储器空闲块的管理</h3><ul>
+<li>文件卷和卷管理块: 一个文件系统就是逻辑设备，每个逻辑设备占用一片连续的磁盘存储空间。文件卷上存放UNIX文件系统。<br>文件卷的结构<table>
+<thead>
+<tr>
+<th align="left">引导块</th>
+<th align="left">管理块</th>
+<th align="left">索引节点区</th>
+<th align="left">数据区</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">大小为一个磁盘块，包含引导程序</td>
+<td align="left">记录文件系统各种数据，如文件系统大小、空闲块数目等</td>
+<td align="left">索引节点结构组成</td>
+<td align="left">数据文件占用的区域</td>
+</tr>
+</tbody></table>
+</li>
+<li>空闲磁盘块的管理<ul>
+<li>UNIX的空闲磁盘块管理采用成组连接法，即将空闲表和空闲连两种方法相结合</li>
+<li>系统初启动时，文件存储区是空闲的，将空闲块从尾倒向前，每100块分为一组(最后一组99块)，每一组的最后一块作为索引表，用来等级下一组100块的物理块号和块数</li>
+<li>最前面一组(可能不足100块)的物理块号和块数存放在管理块的s_free[100]和s_nfree中</li>
+</ul>
+</li>
+<li>空闲块的分配算法<ul>
+<li>检查管理块的空闲块号栈是否已经上锁(邻接资源)，若已上锁则进程睡眠等待</li>
+<li>给空闲磁盘块号栈上锁后，将s_nfree减1，若s_nfree仍大于0，即栈中还剩布置一个空闲块，则将s_free[s_nfree]中等级的空闲盘块分配出去</li>
+<li>若s_nfree为0，即当前空闲盘块号栈中只剩下最后一个空闲盘块，必须先将该盘块的内容读入管理块的空闲盘块号栈中，然后再将该盘块分配湖区。若s_nfree为0，而且栈底等级的盘块号为0，则表示系统中无空闲盘块可分配</li>
+</ul>
+</li>
+<li>空闲块的回收<ul>
+<li>再系统回收空闲盘块时，将回收盘块的盘块号计入空闲盘块号栈的顶部，并执行空闲盘块数加1操作</li>
+<li>当栈中空闲盘块号数目已达100时，表示栈已满，便将现有栈中的100个盘块号，记如新回收的盘块中，再将盘块号作为新栈底</li>
+</ul>
+</li>
+</ul>
+<h1 id="提纲"><a href="#提纲" class="headerlink" title="提纲"></a>提纲</h1><h2 id="绪论-1"><a href="#绪论-1" class="headerlink" title="绪论"></a>绪论</h2><ul>
+<li>存储程序式计算机的特点: 集中、顺序、过程控制</li>
+<li>计算机系统的组成及操作系统的地位</li>
+<li>操作系统的定义: 一个大型软件系统，负责计算机系统软硬件资源的分配，控制和协调并发活动，提供给用户和其它软件方便的接口和环境，使用户获得良好的工作环境</li>
+<li>操作系统的特征: 并发、共享、不确定性、虚拟性</li>
+<li>操作系统的四大资源管理功能: 处理机调度、内存管理、设备管理、软件资源管理</li>
+<li>多道程序设计<ul>
+<li>定义: 在计算机主存中同时存放寄到相互独立的程序。这些程序在管理程序控制之下，相互穿插的运行。当谋道程序因&#x3D;某种原因不能继续运行下去时(如等待外部设备传输数据),管理程序便将另一道程序投入运行</li>
+<li>特征: <ul>
+<li>多道(内存中存放多个相互独立的程序)</li>
+<li>宏观上并性(相互川沙运行)</li>
+<li>微观上穿行(CPU永远只能执行单个程序)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>分时技术<ul>
+<li>定义: 把处理机时间分成很短的时间片，轮流分配给各个应用程序使用，如果某个程序在分配的时间片用完之前计算还未完成，该程序就暂停执行，等待下一次获得时间片之后再继续计算</li>
+<li>特点: 联机交互、独占使用、响应时间块</li>
+</ul>
+</li>
+<li>操作系统的几个基本类型: 批量操作系统、分时操作系统、实时操作系统、网络操作系统</li>
+</ul>
+<h2 id="操作系统的结构和硬件支持"><a href="#操作系统的结构和硬件支持" class="headerlink" title="操作系统的结构和硬件支持"></a>操作系统的结构和硬件支持</h2><ul>
+<li>处理机的状态及区别<ul>
+<li>内核态: 操作系统的管理程序执行时机器所处的状态，在此状态下处理机可以使用全部指令(包括特权指令)和全部系统资源(包括整个存储区域)</li>
+<li>用户态: 用户程序执行时机器所处的状态。在此状态下，禁止使用特权指令，不能直接取用资源与改变机器状态，并且只允许用户程序访问自己的存储区域</li>
+</ul>
+</li>
+<li>中断<ul>
+<li>定义: 某个事件发生后系统终止现行程序的运行，引出处理事件程序对该事件进行处理，处理完毕后返回断点继续执行的过程</li>
+<li>类型: 外部中断、异常、系统调用</li>
+<li>中断响应的实质: 交换指令地址及处理机的状态信息(PSW)</li>
+</ul>
+</li>
+<li>向量中断: 当中断发生时，由中断源自己引导处理机进入中断服务程序的中断过程称为向量中断<ul>
+<li>中断向量: 每类中断类型都有自己的中断向量，包含: 中断服务例程的入口地址和程序状态字</li>
+<li>中断向量表: 主存中用于存放中断向量服务地址的一组存储单元组成的表</li>
+</ul>
+</li>
+</ul>
+<h2 id="操作系统的用户接口-1"><a href="#操作系统的用户接口-1" class="headerlink" title="操作系统的用户接口"></a>操作系统的用户接口</h2><ul>
+<li>用户工作环境(系统安装、引导)</li>
+<li>处理应用程序的步骤(编辑、编译、链接、运行)<ul>
+<li>链接的类型: 静态链接 &amp; 动态链接</li>
+</ul>
+</li>
+<li>操作系统提供的接口: 操作命令、系统功能调用</li>
+<li>系统调用: 用户在程序一级请求操作系统服务的一种手段，它是带有一定功能的访管指令。其功能是由操作系统中的程序完成的，即由软件方法实现的<ul>
+<li>系统调用 VS 库函数<ul>
+<li>系统调用代码属于OS(驻留在内存)，一般库函数由开发软件提供，由编译工具链链入用户程序</li>
+<li>系统调用代码的执行引起CPU状态的变化，一般库函数的执行不会引起CPU状态的变化</li>
+<li>系统调用减小了用户程序的大小</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="进程及进程管理-1"><a href="#进程及进程管理-1" class="headerlink" title="进程及进程管理"></a>进程及进程管理</h2><ul>
+<li>程序的顺序执行<ul>
+<li>定义: 一个计算的若干操作必须按照严格的先后次序顺序的执行</li>
+<li>特点: 顺序性、封闭性、可再现性</li>
+</ul>
+</li>
+<li>程序的并发执行<ul>
+<li>定义: 若干程序段同时在系统中运行，并且程序的执行时间上是重叠的。</li>
+<li>特点: <ul>
+<li>程序与计算不再一一对应</li>
+<li>程序并发执行的相互制约</li>
+<li>失去程序的封闭性和可再现性</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>进程<ul>
+<li>定义: 一个具有一定独立功能的程序关于某个数据集合的一次运行活动</li>
+<li>VS 程序<ul>
+<li>程序是静态 概念，进程是动态的概念</li>
+<li>进程是一个独立运行的活动单位</li>
+<li>进程是竞争系统资源的基本单位</li>
+<li>一个程序可以对应多个进程，一个进程至少包含一个程序</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>进程的三个基本状态: 运行、就绪、等待</li>
+<li>进程的组成: 程序控制块PCB + 程序与数据<ul>
+<li>程序控制块: 描述进程与其它进程、系统资源的概念以及进程在各个不同时期所处的状态的数据结构。</li>
+<li>程序数据: 描述进程本身应完成的功能</li>
+</ul>
+</li>
+<li>基本进程控制原语: 创建原语、撤销原语、等待原语、唤醒原语</li>
+<li>进程间制约: 临界资源、临界区、互斥、同步</li>
+<li>同步机构: 锁、信号灯</li>
+<li>用PV操作或上锁&#x2F;开锁实现进程互斥</li>
+<li>合作进程的执行次序</li>
+<li>共享缓冲区的合作进程的同步</li>
+<li>生产者-消费者问题的解答</li>
+<li>进程通信</li>
+<li>线程的概念</li>
+<li>Linux进程、线程基本控制接口</li>
+</ul>
+<h2 id="资源分配与调度-1"><a href="#资源分配与调度-1" class="headerlink" title="资源分配与调度"></a>资源分配与调度</h2><ul>
+<li>资源分配机制: 资源描述器、资源信息块</li>
+<li>常用的资源分配策略: 先请求先服务、优先调度</li>
+<li>死锁的定义及举例</li>
+<li>引起死锁的原因: 系统资源不足，进程推进顺序非法</li>
+<li>产生死锁的必要条件: 互斥条件，不剥夺条件，部分分配，环路条件</li>
+<li>死锁的处理<ul>
+<li>预防、避免与检测: 静态资源分配、有序资源分配、银行家算法</li>
+</ul>
+</li>
+</ul>
+<h2 id="处理机调度-1"><a href="#处理机调度-1" class="headerlink" title="处理机调度"></a>处理机调度</h2><ul>
+<li>多级调度(作业调度、进程调度)<ul>
+<li>作业调度: 先来先服务、短作业优先、响应比高优先</li>
+<li>进程调度算法<ul>
+<li>剥夺&#x2F;非剥夺</li>
+<li>静态优先数、动态优先数</li>
+<li>基于优先数的调度算法</li>
+<li>循环轮转调度算法</li>
+<li>多队列循环轮转调度</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>进程状态变迁图</li>
+</ul>
+<h2 id="主存管理-1"><a href="#主存管理-1" class="headerlink" title="主存管理"></a>主存管理</h2><ul>
+<li>地址映射的概念及类型<ul>
+<li>概念: 将程序地址空间中使用的逻辑地址变换成主存中的物理地址的过程</li>
+<li>类型: 编译时确定地址映射、程序装如时确定地址映射(静态地址映射)、程序运行时确定地址映射(动态地址映射)</li>
+</ul>
+</li>
+<li>虚拟存储器: 由操作系统和硬件相配合来完成主存和辅存之间的信息的动态调度，让计算机好像为用户提供了一个比实际主存大得多的存储器，称为虚拟存储器<ul>
+<li>核心: 逻辑地址与物理地址分开、存储空间与虚地址空间分开、提供地址变换机构</li>
+<li>物质基础: 有大容量辅存、地址变换机构</li>
+</ul>
+</li>
+<li>界地址保护方法: 上下界保护、基址限长保护</li>
+<li>动态分区存储管理<ul>
+<li>自由主存(空闲区)队列机构: 地址-&gt;flag+size+next_addr</li>
+<li>首次适应算法、最佳适应、最坏适应</li>
+</ul>
+</li>
+<li>页式存储管理</li>
+<li>页面、内存块、页表</li>
+<li>页式地址变换、快表、多级页表</li>
+<li>请调策略的扩充页表: 页号+主存块号+中断位+辅存地址</li>
+<li>淘汰策略的扩充页表: 页号+主存块号+中断位+辅存地址+引用位+改变位</li>
+<li>最佳置换算法(不可能)、先进先出、LRU、LRU近似</li>
+<li>段式与段页式系统及其地址结构</li>
+</ul>
+<h2 id="I-O管理"><a href="#I-O管理" class="headerlink" title="I&#x2F;O管理"></a>I&#x2F;O管理</h2><ul>
+<li>设备独立性的定义及优点<ul>
+<li>定义: 用户在程序中使用的设备与实际使用的设备无关，也就是用户程序中仅使用逻辑设备名</li>
+<li>优点: 方便用户、改善设备利用率、提高系统的可扩展性和可适应性</li>
+</ul>
+</li>
+<li>设备控制块: 系统为每一台设备都配置了一个用来记录设备的硬件特性、链接和使用情况的一组数据</li>
+<li>缓冲技术: 两种不同速度的设备之间传输信息时平滑传输过程的常用手段</li>
+<li>常用的缓冲技术: 双缓冲、环形缓冲、缓冲池</li>
+</ul>
+<h2 id="文件系统-2"><a href="#文件系统-2" class="headerlink" title="文件系统"></a>文件系统</h2><ul>
+<li>文件概念: 在逻辑上具有完整意义的集合，有一个名字以标识，文件名是有若干约束的字符串</li>
+<li>文件系统的主要功能: 按名存取</li>
+<li>文件的逻辑结构: 流式文件 &amp; 记录式文件</li>
+<li>文件存取方法: 顺序存取、随机存取</li>
+<li>文件的物理结构<ul>
+<li>连续文件、串联文件、FAT文件、索引文件</li>
+</ul>
+</li>
+<li>文件存储空间(磁盘)管理</li>
+<li>文件目录项和目录文件</li>
+</ul>
+]]></content>
+      <categories>
+        <category>HUST</category>
+      </categories>
+      <tags>
+        <tag>整理</tag>
+        <tag>OS</tag>
       </tags>
   </entry>
 </search>
