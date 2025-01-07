@@ -871,6 +871,14 @@
 <li><code>-f</code>: 如果目标文件已经存在，不会询问而直接覆盖。</li>
 <li><code>-i</code>: 如果目标文件已经存在，会询问是否覆盖。</li>
 </ul>
+<h2 id="samba配置"><a href="#samba配置" class="headerlink" title="samba配置"></a>samba配置</h2><p>samba是为了用来创建共享文件夹的。可以与局域网下的其它Windows或Linux电脑共享文件夹。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo apt update &amp;&amp; sudo apt upgrade</span><br><span class="line">sudo apt install samba</span><br></pre></td></tr></table></figure>
+<p>编辑<code>smb.conf</code>文件，配置自己的共享文件夹</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[samba_share]  # the driver name in which you input in Windows explorer</span><br><span class="line">   comment = Samba Share</span><br><span class="line">   path = /samba_share  # path to your samba shared directory</span><br><span class="line">   browsable = yes</span><br><span class="line">   guest ok = yes</span><br><span class="line">   read only = no</span><br><span class="line">   create mask = 0755</span><br></pre></td></tr></table></figure>
+<p>修改文件后需要重启smbd服务<code>sudo systemctl restart smbd</code></p>
+<h4 id="添加samba用户"><a href="#添加samba用户" class="headerlink" title="添加samba用户"></a>添加samba用户</h4><p>在局域网内其它电脑连接samba共享文件夹的时候，需要认证用户名和密码。为了方便，可以先用<code>adduser</code>创建一个账户(也可以使用已有账户)，然后把该用户添加到samba用户组中。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo smbpasswd -a sambauser</span><br></pre></td></tr></table></figure>
+<p>把<code>sambauser</code>添加到samba用户组中，当认证用户名和密码的时候，就可以使用sambauser的用户名和密码了。</p>
 ]]></content>
       <categories>
         <category>basic_cs</category>
@@ -5695,6 +5703,7 @@
 <li><code>:set nu</code> 显示行号。</li>
 <li><code>:set nonu</code> 不显示行号。</li>
 <li><code>:&lt;n&gt;</code> 定位到第<n>行</li>
+<li><code>:&lt;n&gt;,&lt;m&gt;&lt;cmd&gt;</code> 对第n到第m行执行操作，如删除就是<code>:&lt;n&gt;,&lt;m&gt;d</code>，复制就是<code>&lt;n&gt;,&lt;m&gt;y</code></li>
 </ul>
 <h3 id="关键字查找"><a href="#关键字查找" class="headerlink" title="关键字查找"></a>关键字查找</h3><ul>
 <li><code>/&#123;目标字符串&#125;</code> 查找文本中匹配的目标字符串，查到以后按<code>n</code>会去寻找下一个匹配，<code>N</code>会去寻找上一个匹配。</li>
