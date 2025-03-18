@@ -12626,4 +12626,20 @@
 </ul>
 ]]></content>
   </entry>
+  <entry>
+    <title>samba-configure</title>
+    <url>/2025/03/19/samba-configure/</url>
+    <content><![CDATA[<h1 id="在Ubuntu上配置samba"><a href="#在Ubuntu上配置samba" class="headerlink" title="在Ubuntu上配置samba"></a>在Ubuntu上配置samba</h1><h2 id="安装samba"><a href="#安装samba" class="headerlink" title="安装samba"></a>安装samba</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo apt install samba</span><br></pre></td></tr></table></figure>
+<h2 id="配置samba文件"><a href="#配置samba文件" class="headerlink" title="配置samba文件"></a>配置samba文件</h2><figure class="highlight toml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># /etc/samba/smb.conf</span></span><br><span class="line"><span class="section">[shared_name]</span>  <span class="comment"># the name that will be known by others in the network</span></span><br><span class="line">    <span class="attr">comment</span> = you comment </span><br><span class="line">    <span class="attr">path</span> = /path/to/your/shared/directory</span><br><span class="line">    <span class="attr">browsable</span> = <span class="literal">yes</span></span><br><span class="line">    guest <span class="attr">ok</span> = <span class="literal">yes</span></span><br><span class="line">    read <span class="attr">only</span> = <span class="literal">no</span></span><br><span class="line">    create <span class="attr">mask</span> = <span class="number">0755</span></span><br></pre></td></tr></table></figure>
+<h2 id="重启samba"><a href="#重启samba" class="headerlink" title="重启samba"></a>重启samba</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo systemctl restart smbd</span><br></pre></td></tr></table></figure>
+<h2 id="把当前用户添加为samba用户-optional"><a href="#把当前用户添加为samba用户-optional" class="headerlink" title="把当前用户添加为samba用户(optional)"></a>把当前用户添加为samba用户(optional)</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo smbpasaswd -a $(whoami)</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>basic_cs</category>
+      </categories>
+      <tags>
+        <tag>linux</tag>
+        <tag>网络</tag>
+        <tag>samba</tag>
+      </tags>
+  </entry>
 </search>
