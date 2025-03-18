@@ -5777,6 +5777,23 @@
 </ul>
 </li>
 </ul>
+<h1 id="neovim-LazyVim"><a href="#neovim-LazyVim" class="headerlink" title="neovim+LazyVim"></a>neovim+LazyVim</h1><h2 id="modal-editing"><a href="#modal-editing" class="headerlink" title="modal editing"></a>modal editing</h2><h3 id="从normal进入insert模式"><a href="#从normal进入insert模式" class="headerlink" title="从normal进入insert模式"></a>从normal进入insert模式</h3><ul>
+<li><code>i</code>: 在当前光标左边插入字符</li>
+<li><code>a</code>: 在当前光标右边插入字符</li>
+<li><code>I</code>: 在当前光标所在行的行首插入字符</li>
+<li><code>A</code>: 在当前光标所在行的行末插入字符</li>
+<li><code>o</code>: 在当前行所在的下一行插入字符</li>
+<li><code>O</code>: 在当前行所在的上一行插入字符</li>
+</ul>
+<h3 id="进入visual模式"><a href="#进入visual模式" class="headerlink" title="进入visual模式"></a>进入visual模式</h3><p>visual模式是为了一次性选中多行的</p>
+<h3 id="command模式"><a href="#command模式" class="headerlink" title="command模式"></a>command模式</h3><p>按下冒号就进入了命令模式。在命令模式中，按下命令的开头字母之后，按<code>tab</code>会出现补全。当有多个补全候选的时候，继续按<code>tab</code>向下选择，<code>shift+tab</code>向上选择</p>
+<h3 id="z模式"><a href="#z模式" class="headerlink" title="z模式"></a>z模式</h3><p>z模式本质上就是跳转模式的一个若干快捷键的集合。比如<code>zt</code>就是把当前光标所在行移动到屏幕顶部。<code>zb</code>就是把当前光标所在行移动到屏幕底部。<code>zz</code>是把当前光标所在行移动到屏幕中间。</p>
+<h3 id="词间移动"><a href="#词间移动" class="headerlink" title="词间移动"></a>词间移动</h3><ul>
+<li><code>e</code>: 移动到下一个单词的最后一个字母</li>
+<li><code>w</code>: 移动到下一个单词的第一个字母</li>
+<li><code>b</code>: 移动到前一个单词的第一个字母</li>
+<li>以上三个指令都可以先带上数字，一次性跳过多个单词</li>
+</ul>
 ]]></content>
       <categories>
         <category>basic_cs</category>
@@ -12415,5 +12432,198 @@
         <tag>整理</tag>
         <tag>系统</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>acme-nginx-configure</title>
+    <url>/2025/03/18/acme-nginx-configure/</url>
+    <content><![CDATA[<h1 id="在vps上通过acme-sh自动申请证书，并用nginx作反向代理"><a href="#在vps上通过acme-sh自动申请证书，并用nginx作反向代理" class="headerlink" title="在vps上通过acme.sh自动申请证书，并用nginx作反向代理"></a>在vps上通过acme.sh自动申请证书，并用nginx作反向代理</h1><p>本篇博客记录一下个人在自己的vps服务器上通过acme.sh获取证书，并配置nginx反向代理的过程。</p>
+<h2 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h2><h3 id="安装acme-sh"><a href="#安装acme-sh" class="headerlink" title="安装acme.sh"></a>安装acme.sh</h3><p>安装acme.sh非常简单，只要照着github上面的说明走就可以了。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">curl https://get.acme.sh | sh -s email=my@example.com</span><br></pre></td></tr></table></figure>
+<p>一般来说，都是把acme.sh直接安装到当前用户的用户根目录下。</p>
+<h3 id="安装nginx"><a href="#安装nginx" class="headerlink" title="安装nginx"></a>安装nginx</h3><p>在Ubuntu上安装nginx直接通过apt就可以安装</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo apt install nginx</span><br></pre></td></tr></table></figure>
+<h3 id="域名"><a href="#域名" class="headerlink" title="域名"></a>域名</h3><p>需要购买一个自己的域名，只要有了根域名后就可以在cloudflare上创建多个子域名，干各种事情了。</p>
+<h2 id="为自己的域名申请证书"><a href="#为自己的域名申请证书" class="headerlink" title="为自己的域名申请证书"></a>为自己的域名申请证书</h2><p>假设在cloudflare上，为自己的域名解析添加了一个子域名test.example.com到自己的服务器xx.xx.xx.xx，类型为<code>A</code>，开启cloudflare代理。</p>
+<h3 id="创建一个随便的nginx配置文件"><a href="#创建一个随便的nginx配置文件" class="headerlink" title="创建一个随便的nginx配置文件"></a>创建一个随便的nginx配置文件</h3><p>首先在<code>/etc/nginx/sites-available</code>中随便创建一个nginx的配置文件（真的随便创建一个就好，不影响后面的）</p>
+<figure class="highlight nginx"><table><tr><td class="code"><pre><span class="line"><span class="comment"># /etc/nginx/sites-available/test</span></span><br><span class="line"><span class="section">server</span> &#123;</span><br><span class="line">    <span class="attribute">listen</span> <span class="number">80</span>;</span><br><span class="line">    <span class="attribute">server_name</span> test.example.com;</span><br><span class="line"></span><br><span class="line">    <span class="section">location</span> /.well-known/acme-challenge/ &#123;</span><br><span class="line">        <span class="attribute">root</span> /var/www/certbot;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后创建一个软链接，把这个文件链接到<code>/etc/nginx/sites-enabled</code>下面去</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">ln -s /etc/nginx/sites-available/test /etc/nginx/sites-enabled/test</span><br></pre></td></tr></table></figure>
+<p>接下来，最好检查一下创建的这个test配置文件是否有什么语法问题，使用以下命令来检查</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">check <span class="keyword">if</span> any syntax error <span class="keyword">in</span> nginx configuration files</span></span><br><span class="line">nginx -t</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">reload nginx process</span></span><br><span class="line">service reload nginx</span><br></pre></td></tr></table></figure>
+
+<h3 id="使用acme-sh针对自己的域名和配置文件申请证书"><a href="#使用acme-sh针对自己的域名和配置文件申请证书" class="headerlink" title="使用acme.sh针对自己的域名和配置文件申请证书"></a>使用acme.sh针对自己的域名和配置文件申请证书</h3><p>使用以下命令来为域名test.example.com申请一个方便nginx使用的证书</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">acme.sh --issue --nginx -d test.example.com</span><br></pre></td></tr></table></figure>
+<p>如果输出中没有error，就说明申请成功。</p>
+<h2 id="修改nginx配置文件"><a href="#修改nginx配置文件" class="headerlink" title="修改nginx配置文件"></a>修改nginx配置文件</h2><p>目前只碰到过两种类型的网页。一种是诸如hexo博客这种的静态网页，直接会生成好文件。另一种就是像frps dashboard或者galene这样的直接在某一端口号上的进程。<br>两种网页的nginx配置稍微有点不同。</p>
+<h3 id="静态网页"><a href="#静态网页" class="headerlink" title="静态网页"></a>静态网页</h3><figure class="highlight nginx"><table><tr><td class="code"><pre><span class="line"><span class="comment"># HTTP 配置 - 监听 80 端口并重定向所有流量到 HTTPS</span></span><br><span class="line"><span class="section">server</span> &#123;</span><br><span class="line">    <span class="attribute">listen</span> <span class="number">80</span>;</span><br><span class="line">    <span class="attribute">server_name</span> blog.cassiusblack.top;</span><br><span class="line"></span><br><span class="line">    <span class="attribute">root</span> /var/www/html;  <span class="comment"># 默认生成的静态网页放在/var/www/html下</span></span><br><span class="line">    <span class="attribute">index</span> index.html;</span><br><span class="line"></span><br><span class="line">    <span class="section">location</span> / &#123;</span><br><span class="line">        <span class="attribute">try_files</span> <span class="variable">$uri</span> <span class="variable">$uri</span>/ =<span class="number">404</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 重定向 HTTP 到 HTTPS</span></span><br><span class="line">    <span class="attribute">return</span> <span class="number">301</span> https://<span class="variable">$host</span><span class="variable">$request_uri</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"># HTTPS 配置 - 监听 443 端口并启用 SSL</span></span><br><span class="line"><span class="section">server</span> &#123;</span><br><span class="line">    <span class="attribute">listen</span> <span class="number">443</span> ssl;</span><br><span class="line">    <span class="attribute">server_name</span> test.example.com;</span><br><span class="line"></span><br><span class="line">    <span class="attribute">ssl_certificate</span> /etc/nginx/tls/test_fullchain.crt;</span><br><span class="line">    <span class="attribute">ssl_certificate_key</span> /etc/nginx/tls/test.key;</span><br><span class="line"></span><br><span class="line">    <span class="attribute">ssl_protocols</span> TLSv1.<span class="number">2</span> TLSv1.<span class="number">3</span>;</span><br><span class="line">    <span class="attribute">ssl_ciphers</span> <span class="string">&#x27;TLS_AES_128_GCM_SHA256:TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384&#x27;</span>;</span><br><span class="line">    <span class="attribute">ssl_prefer_server_ciphers</span> <span class="literal">off</span>;</span><br><span class="line">    <span class="attribute">ssl_session_cache</span> shared:SSL:<span class="number">10m</span>;</span><br><span class="line">    <span class="attribute">ssl_session_timeout</span> <span class="number">1h</span>;</span><br><span class="line"></span><br><span class="line">    <span class="attribute">root</span> /var/www/html;</span><br><span class="line">    <span class="attribute">index</span> index.html;</span><br><span class="line"></span><br><span class="line">    <span class="section">location</span> / &#123;</span><br><span class="line">        <span class="attribute">try_files</span> <span class="variable">$uri</span> <span class="variable">$uri</span>/ =<span class="number">404</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>其中，把<code>server_name</code>修改为自己的对应的域名，然后需要注意<code>ssl_certificate</code>和<code>ssl_certificate_key</code>后面的这两个路径，在之后的acme.sh的install命令中会要用到。一般也就顺便放在<code>/etc/nginx</code>中</p>
+<h3 id="进程类网页"><a href="#进程类网页" class="headerlink" title="进程类网页"></a>进程类网页</h3><figure class="highlight nginx"><table><tr><td class="code"><pre><span class="line"><span class="section">server</span> &#123;</span><br><span class="line">    <span class="attribute">listen</span> <span class="number">80</span>;</span><br><span class="line">    <span class="attribute">server_name</span> test.example.com;</span><br><span class="line"></span><br><span class="line">    <span class="comment"># HTTP 到 HTTPS 的重定向</span></span><br><span class="line">    <span class="attribute">return</span> <span class="number">301</span> https://<span class="variable">$host</span><span class="variable">$request_uri</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="section">server</span> &#123;</span><br><span class="line">    <span class="attribute">listen</span> <span class="number">443</span> ssl;</span><br><span class="line">    <span class="attribute">server_name</span> meeting.cassiusblack.top;</span><br><span class="line"></span><br><span class="line">    <span class="comment"># SSL 证书配置</span></span><br><span class="line">    <span class="attribute">ssl_certificate</span> /etc/nginx/tls/test_fullchain.crt;</span><br><span class="line">    <span class="attribute">ssl_certificate_key</span> /etc/nginx/tls/test.key;</span><br><span class="line">    <span class="attribute">ssl_protocols</span> TLSv1.<span class="number">2</span> TLSv1.<span class="number">3</span>;</span><br><span class="line">    <span class="attribute">ssl_ciphers</span> <span class="string">&#x27;TLS_AES_128_GCM_SHA256:TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384&#x27;</span>;</span><br><span class="line">    <span class="attribute">ssl_prefer_server_ciphers</span> <span class="literal">off</span>;</span><br><span class="line">    <span class="attribute">ssl_session_cache</span> shared:SSL:<span class="number">10m</span>;</span><br><span class="line">    <span class="attribute">ssl_session_timeout</span> <span class="number">1h</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 反向代理 Galene Web 服务器</span></span><br><span class="line">    <span class="section">location</span> / &#123;</span><br><span class="line">        <span class="attribute">proxy_pass</span> http://127.0.0.1:8443;</span><br><span class="line">        <span class="attribute">proxy_set_header</span> Host <span class="variable">$host</span>;</span><br><span class="line">        <span class="attribute">proxy_set_header</span> X-Real-IP <span class="variable">$remote_addr</span>;</span><br><span class="line">        <span class="attribute">proxy_set_header</span> X-Forwarded-For <span class="variable">$proxy_add_x_forwarded_for</span>;</span><br><span class="line">        <span class="attribute">proxy_set_header</span> X-Forwarded-Proto <span class="variable">$scheme</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment"># WebSocket 代理配置（用于实时视频和音频）</span></span><br><span class="line">    <span class="section">location</span> /ws &#123;</span><br><span class="line">        <span class="attribute">proxy_pass</span> http://127.0.0.1:8443;</span><br><span class="line">        <span class="attribute">proxy_http_version</span> <span class="number">1</span>.<span class="number">1</span>;</span><br><span class="line">        <span class="attribute">proxy_set_header</span> Upgrade <span class="variable">$http_upgrade</span>;</span><br><span class="line">        <span class="attribute">proxy_set_header</span> Connection <span class="string">&quot;Upgrade&quot;</span>;</span><br><span class="line">        <span class="attribute">proxy_set_header</span> Host <span class="variable">$host</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="安装证书到指定位置"><a href="#安装证书到指定位置" class="headerlink" title="安装证书到指定位置"></a>安装证书到指定位置</h2><p>需要记住之前使用到的<code>ssl_certificate</code>和<code>ssl_certificate_key</code>中的路径，接下来就是要把cert和key安装到这个目录下。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">acme.sh --install-cert -d test.example.com --key-file /etc/nginx/tls/test.key --fullchain-file /etc/nginx/tls/test_fullchain.crt --cert-file /etc/nginx/tls/test.crt --reloadcmd &quot;service nginx reload&quot;</span><br></pre></td></tr></table></figure>
+<p>其中，<code>cert-file</code>其实是只有Apache才需要的，nginx并不需要，所以也可以选择不生成cert-file，只要确保有fullchain-file和key-file就可以了。</p>
+<h2 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h2><p>重载nginx服务一遍，同时确保ping自己的域名的时候能够解析出服务器的IP。然后就可以通过浏览器登录了。</p>
+]]></content>
+      <categories>
+        <category>basic_cs</category>
+      </categories>
+      <tags>
+        <tag>linux</tag>
+        <tag>acme</tag>
+        <tag>nginx</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title></title>
+    <url>/2025/02/23/workflowsim/</url>
+    <content><![CDATA[<h1 id="WorkflowSim-A-Toolkit-for-Simulating-Scientific-Workflows-in-Distributed-Environments"><a href="#WorkflowSim-A-Toolkit-for-Simulating-Scientific-Workflows-in-Distributed-Environments" class="headerlink" title="WorkflowSim: A Toolkit for Simulating Scientific Workflows in Distributed Environments"></a>WorkflowSim: A Toolkit for Simulating Scientific Workflows in Distributed Environments</h1><h2 id="related-work"><a href="#related-work" class="headerlink" title="related work"></a>related work</h2><ul>
+<li>disadvantages of CloudSim<ul>
+<li>only supports the execution of single workloads<ul>
+<li>does not consider dependencies or clustering</li>
+</ul>
+</li>
+<li>ignore the occurence of failures and overheads</li>
+</ul>
+</li>
+<li>task clustering<ul>
+<li>static</li>
+<li>not consider middleware overhead from diverse grid middelware services</li>
+</ul>
+</li>
+<li>failure analysis and modeling present</li>
+</ul>
+<h2 id="models-and-features"><a href="#models-and-features" class="headerlink" title="models and features"></a>models and features</h2><h3 id="workflow-management-system"><a href="#workflow-management-system" class="headerlink" title="workflow management system"></a>workflow management system</h3><ul>
+<li>workflow mapper: map abstract workflows to concrete, dependent on execfution sites</li>
+<li>workflow engine: handle data dependencies</li>
+<li>workflow scheduler: match jobs to resources</li>
+<li>clustering engine: merge small tasks into a large hob</li>
+<li>provenance collector: tracks the history of task&#x2F;job execution</li>
+<li>workflow partitioner: divide user workflow into multiple sub-workflows</li>
+</ul>
+<h4 id="components"><a href="#components" class="headerlink" title="components"></a>components</h4><h5 id="workflow-mapper"><a href="#workflow-mapper" class="headerlink" title="workflow mapper"></a>workflow mapper</h5><p>model workflows as DAG. mapper is used to import DAG files formatted in XML</p>
+<h5 id="cluster-engine"><a href="#cluster-engine" class="headerlink" title="cluster engine"></a>cluster engine</h5><ul>
+<li>job vs task<ul>
+<li>task: program tath a user would like to execute</li>
+<li>job: an atomic unit seen by the exeuction system, contains multiple tasks to be executed in sequence or parallel</li>
+</ul>
+</li>
+</ul>
+<p>cluster engine merge task into jobs</p>
+<h5 id="workflow-engine"><a href="#workflow-engine" class="headerlink" title="workflow engine"></a>workflow engine</h5><p>make sure a job is released when all its parent jobs have completed successfully</p>
+<p>use DAGMan as the workflow engine</p>
+<h5 id="workflow-scheduler-and-job-execution"><a href="#workflow-scheduler-and-job-execution" class="headerlink" title="workflow scheduler and job execution"></a>workflow scheduler and job execution</h5><ul>
+<li>static: jobs are assinged to a worker node at workflow panning stage. when a job reach remote scheduler, it will wialt until the assinged worker node is free.</li>
+<li>dynamic: jobs are matched to a worker node in the remote scheduler whenever a worker node becomes idle.</li>
+</ul>
+<h4 id="layered-overhead"><a href="#layered-overhead" class="headerlink" title="layered overhead"></a>layered overhead</h4><ul>
+<li>workflow engine delay: 上一个parent job完成(released)到下一个job被提交(into the ready queue)的时间</li>
+<li>queue delay: 一个job被workflow engine提交到queue中到local scheduler发现这个job已经在running状态</li>
+<li>poststript delay &amp; prescript delay: job执行前后的脚本执行的时间.</li>
+<li>data transfer delay: 节点之间传输数据的延时 [stage in, clean up, stage out]</li>
+<li>clustering delay: 用来衡量真正的运行时间和workflow scheduler认为的运行时间. 因为把job包装起来也需要消耗一定的时间</li>
+</ul>
+<h4 id="Layered-Failures-and-Job-Retry"><a href="#Layered-Failures-and-Job-Retry" class="headerlink" title="Layered Failures and Job Retry"></a>Layered Failures and Job Retry</h4><ul>
+<li>task failure VS job failure<ul>
+<li>task failure: 一个task失败只影响自己</li>
+<li>job failure: 一个task失败还影响其他task</li>
+</ul>
+</li>
+<li>failure generator: ? 为什么要产生failure?</li>
+<li>failure monitor: collect failure records, return to workflow management system</li>
+</ul>
+<ul>
+<li>options to improve workflow perfomance<ul>
+<li>选择重试整个job,或者只运行failure的部分 -&gt; workflow scheduler里集成,将根据用户的选择执行</li>
+<li>reclustering: 根据failure rate来调整 clustering strategy -&gt; workflow engine里集成</li>
+</ul>
+</li>
+</ul>
+<h2 id="validation"><a href="#validation" class="headerlink" title="validation"></a>validation</h2><h1 id="GPUCloudSim"><a href="#GPUCloudSim" class="headerlink" title="GPUCloudSim"></a>GPUCloudSim</h1><ul>
+<li>contributions<ul>
+<li>enable cloudsim to use GPU-features</li>
+<li>models to simulate interference among co-running applications, the overhead of virtualization and power consumption of GPUs.</li>
+<li>multi-level scheduling and provisioning of GPU resources.</li>
+<li>VM placement greedy algorithm</li>
+</ul>
+</li>
+</ul>
+<h2 id="related-work-1"><a href="#related-work-1" class="headerlink" title="related work"></a>related work</h2><p>GPGPU-sim让我看起来非常印象深刻~~</p>
+<h2 id="GPU-enabled-cloud-computing"><a href="#GPU-enabled-cloud-computing" class="headerlink" title="GPU-enabled cloud computing"></a>GPU-enabled cloud computing</h2><p>我使用过full and para virtualization版本的</p>
+<h2 id="proposed-GPUCloudSim-extention"><a href="#proposed-GPUCloudSim-extention" class="headerlink" title="proposed GPUCloudSim extention"></a>proposed GPUCloudSim extention</h2><ul>
+<li>GPUCloudSim layer provides necessary classes to model and simulate GPU-enabled </li>
+<li>interference-aware GPUCloudSim layer gives GPUCloudSim the ability to model the interfenrece of co-running app in a GPU</li>
+<li>perfomance-aware GPUCloudSim layer provides its underlying layer with the ability to model the virtualization-incurred performance degradation of virtualized GPUs</li>
+<li>Power-aware GPUCloudSim layer enables extention to simulate power-aware GPUs</li>
+</ul>
+<h3 id="cloud-layer"><a href="#cloud-layer" class="headerlink" title="cloud layer"></a>cloud layer</h3><ul>
+<li><code>SimEntity</code>: abstract class extended by event-aware entities within the simulator</li>
+<li><code>CloudSimTags</code> contains the event</li>
+<li><code>DatacenterBroker</code> and <code>Datacneter</code> are CloudSim classes that use events to comunicate. <ul>
+<li><code>DatacenterBroker</code> acts on behalf of end-users; queries data centers fo r allocation of resources and then submits computations.  to support GPU workdloads</li>
+<li><code>Datacenter</code> represents the hardware infrastructure for a datacenter to support GPU-equipped hosts</li>
+</ul>
+</li>
+<li><code>PowerGpuDatacenter</code> represents a power- and engery-aware GPU-enabled data center.</li>
+</ul>
+<h3 id="server-layer"><a href="#server-layer" class="headerlink" title="server layer"></a>server layer</h3><ul>
+<li>classes in GPUCloudSim layer: provide basic support for GPU hardware and software in hosts and vms<ul>
+<li><code>GpuVm</code>: extends CloudSim’s Vm class to model a VM with a vGPU attached</li>
+<li><code>Vgpu</code>: represents a vGPU that is attached to a VM</li>
+<li><code>GpuHost</code>: extends <code>Host</code> class from CloudSim to model a GPU-capable host with one ore more video cards attached</li>
+<li><code>VgpuScheduler</code>: abstract class that defines the policy to share the processing power of a video card among resident vGPUs</li>
+<li><code>Pgpu</code>: the Pgpu class represents a physical GPU. A <code>Pgup</code> incorporates multiple processing elements that represent GPU SMs.</li>
+<li><code>VideoCard</code>: represents a video card in the system. a video card has one ore more <code>Pgpu</code> on board, each with its own memory</li>
+<li><code>VideoCardAllocationPolicy</code>: abstract class represents the provisioning policy of video cards to vGPUs. each <code>GpuHost</code> has its own video card allocation policy</li>
+<li><code>VideoCardBwProvisioner</code>: abstract class, represents the provisioning policy used by a video card to allocated PCIe bandwidth for its GPUs. each video card has its own PCIe provisioner</li>
+<li><code>PgpuSelectionPolicy</code>: an interface implemented by classes that provide a GPU selection policy for vGPUs on a video card. when there are multiple available GPUs for a vGPU on a video card, the selection policy determines which GPU to select.</li>
+</ul>
+</li>
+<li>classes in performance-aware GPUCloudSim layer.<ul>
+<li><code>PerformanceGpuHost</code>: extends <code>GpuHost</code> to support schedulers that model the virtualization overhead for vGPUs. implements both <code>performanceScheduler</code> and <code>performanceModel</code> interfaces</li>
+<li><code>PerformanceScheduler</code>: an interface implemented by a <code>VgpuScheduler</code> with a performance degradation model, in order to become compatible with <code>PerformanceGpuHost</code></li>
+<li><code>PerformanceModel</code>: interface implemented by a <code>VgpuScheduler</code> to model virtulization overheads for vGPUs</li>
+</ul>
+</li>
+<li>classes in power-aware GPUCloudSim layer<ul>
+<li><code>PowerGpuHost</code>: extends <code>PerformanceGpuHost</code> to support power-aware video cards and incorporate a power model for other host components. a power model for the host needs to implement the PowerModel interface, provided by the power package of CloudSim</li>
+<li><code>PowerVideoCard</code>: represents a power-aware video card that incorporates a video card model</li>
+<li><code>VideoCardPowerModel</code>: interface needs to be implemented by the classes that provide a power model for video cards</li>
+</ul>
+</li>
+<li>implemented scheduling and provisioning policy:<ul>
+<li><code>VpuSchedulerTimeShared</code></li>
+<li><code>VgpuSchedulerSpaceShared</code></li>
+<li><code>VgpuSchedulerFairShare</code></li>
+</ul>
+</li>
+</ul>
+<h3 id="gpu-layer"><a href="#gpu-layer" class="headerlink" title="gpu layer"></a>gpu layer</h3><ul>
+<li>classes in GPUCloudSim layer<ul>
+<li><code>Pe</code>: a CloudSim class that represents a processing elemnt. used to simulate an Sm in the GPU</li>
+<li><code>PeProvisioner</code>: abstract class from CloudSim represents the provisioning policy that is used to allocatate the processing power of a <code>Pe</code> to vGPUs</li>
+<li><code>GpuBwProvisioner</code>: abstract class that represents the provisioning policy of a GPU to allocate GPU memory bandwidth for resident vGPUs</li>
+<li><code>GpuGddramProvisioner</code>: abstract class represents the provisioning policy used by a GPU to allocate GPU memroy for resident vGPUs</li>
+<li><code>GpuCloudlet</code>: extends Cloudlet class from CloudSim to represent an application with both CPU and GPU portions of execution</li>
+<li><code>GpuTask</code>: represents a computation that is executed on the GPU. includes the number of thread blocks and the length of each block. in addition, it incorporates utilization models to imitate resource demands</li>
+<li><code>MemoryTransfer</code>: internal class that represents a memory transfer that occurs within a GpuTask context</li>
+<li><code>GpuTaskScheduler</code>: abstract class that represents the scheduling policy employed by a <code>Vgpu</code> to execute its GPu tasks.<ul>
+<li><code>GpuTaskSchedulerLeftover</code> extends above to implement the cooperative multitasking scheduler based on leftover policy&#x2F;</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>classes in interface-aware GpuCloudSim layer, model inter-application interference that may slow down co-running GPU tasks<ul>
+<li><code>InterferenceModel</code>: interface needs to be implemented in order to provide a model for inter-application interference</li>
+<li><code>InterferenceGpuTaskSchedulerLeftover</code>: extends the <code>GpuTaskSchedulerLeftover</code> class to add supoort for interference models. co-running GPu tasks may experience a slow down depending on their utilization of shared resources.</li>
+</ul>
+</li>
+</ul>
+<h3 id="models-and-policies"><a href="#models-and-policies" class="headerlink" title="models and policies"></a>models and policies</h3><h1 id="astram-sim"><a href="#astram-sim" class="headerlink" title="astram-sim"></a>astram-sim</h1><h2 id="2-0-新增功能"><a href="#2-0-新增功能" class="headerlink" title="2.0 新增功能"></a>2.0 新增功能</h2><ul>
+<li>Execution Trace</li>
+<li>Dependency Management</li>
+<li>Resource Management</li>
+<li>Graph-Input workload layer</li>
+</ul>
+]]></content>
   </entry>
 </search>
