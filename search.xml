@@ -12474,8 +12474,8 @@
       </tags>
   </entry>
   <entry>
-    <title></title>
-    <url>/2025/02/23/workflowsim/</url>
+    <title>workflowsim随笔记录</title>
+    <url>/2025/01/18/workflowsim/</url>
     <content><![CDATA[<h1 id="WorkflowSim-A-Toolkit-for-Simulating-Scientific-Workflows-in-Distributed-Environments"><a href="#WorkflowSim-A-Toolkit-for-Simulating-Scientific-Workflows-in-Distributed-Environments" class="headerlink" title="WorkflowSim: A Toolkit for Simulating Scientific Workflows in Distributed Environments"></a>WorkflowSim: A Toolkit for Simulating Scientific Workflows in Distributed Environments</h1><h2 id="related-work"><a href="#related-work" class="headerlink" title="related work"></a>related work</h2><ul>
 <li>disadvantages of CloudSim<ul>
 <li>only supports the execution of single workloads<ul>
