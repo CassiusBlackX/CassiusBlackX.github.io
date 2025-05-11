@@ -879,6 +879,18 @@
 <h4 id="添加samba用户"><a href="#添加samba用户" class="headerlink" title="添加samba用户"></a>添加samba用户</h4><p>在局域网内其它电脑连接samba共享文件夹的时候，需要认证用户名和密码。为了方便，可以先用<code>adduser</code>创建一个账户(也可以使用已有账户)，然后把该用户添加到samba用户组中。</p>
 <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo smbpasswd -a sambauser</span><br></pre></td></tr></table></figure>
 <p>把<code>sambauser</code>添加到samba用户组中，当认证用户名和密码的时候，就可以使用sambauser的用户名和密码了。</p>
+<h2 id="在ubuntu上安装更新版本的cmake"><a href="#在ubuntu上安装更新版本的cmake" class="headerlink" title="在ubuntu上安装更新版本的cmake"></a>在ubuntu上安装更新版本的cmake</h2><h3 id="motivation"><a href="#motivation" class="headerlink" title="motivation"></a>motivation</h3><ul>
+<li>ubuntu上通过<code>apt</code>安装的cmake版本都非常的老，在构建一些项目的时候可能会无法成功。</li>
+<li><code>snap</code>有时候会突然死掉，而且无法通过<code>systemctl</code>重启，这样的情况下甚至没有办法卸载snap安装的cmake</li>
+</ul>
+<h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><p>在Linux上，遇事不决就应该尝试源码构建，这永远是最方便的方法，而且在性能相对较可的电脑上也不会需要很多时间。</p>
+<h4 id="获取cmake源码"><a href="#获取cmake源码" class="headerlink" title="获取cmake源码"></a>获取cmake源码</h4><p>先确定自己想要的cmake的版本，目前cmake大版本已经出到了4，但是我暂时用不到4的任何特性，所以我选择安装cmake3.31.3</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">version=3.11</span><br><span class="line">build=3</span><br><span class="line">mkdir cmake-repo-temp &amp; cd cmake-repo-temp</span><br><span class="line">wget https://cmake.org/files/v$version/cmake-$version.$build.tar.gz</span><br><span class="line">tar -xzvf cmake-$version.$build.tar.gz</span><br><span class="line">cd cmake-$version.$build/</span><br></pre></td></tr></table></figure>
+
+<h4 id="编译并安装cmake"><a href="#编译并安装cmake" class="headerlink" title="编译并安装cmake"></a>编译并安装cmake</h4><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">./bootstrap</span><br><span class="line">make -j$(nproc)</span><br><span class="line">sudo make install</span><br></pre></td></tr></table></figure>
+
+<h4 id="测试cmake"><a href="#测试cmake" class="headerlink" title="测试cmake"></a>测试cmake</h4><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">cmake --version</span><br></pre></td></tr></table></figure>
+<p>如果看到输出版本为3.31.3，则说明安装成功！</p>
 ]]></content>
       <categories>
         <category>basic_cs</category>
@@ -12625,44 +12637,5 @@
 <li>Graph-Input workload layer</li>
 </ul>
 ]]></content>
-  </entry>
-  <entry>
-    <title>samba-configure</title>
-    <url>/2025/03/19/samba-configure/</url>
-    <content><![CDATA[<h1 id="在Ubuntu上配置samba"><a href="#在Ubuntu上配置samba" class="headerlink" title="在Ubuntu上配置samba"></a>在Ubuntu上配置samba</h1><h2 id="安装samba"><a href="#安装samba" class="headerlink" title="安装samba"></a>安装samba</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo apt install samba</span><br></pre></td></tr></table></figure>
-<h2 id="配置samba文件"><a href="#配置samba文件" class="headerlink" title="配置samba文件"></a>配置samba文件</h2><figure class="highlight toml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># /etc/samba/smb.conf</span></span><br><span class="line"><span class="section">[shared_name]</span>  <span class="comment"># the name that will be known by others in the network</span></span><br><span class="line">    <span class="attr">comment</span> = you comment </span><br><span class="line">    <span class="attr">path</span> = /path/to/your/shared/directory</span><br><span class="line">    <span class="attr">browsable</span> = <span class="literal">yes</span></span><br><span class="line">    guest <span class="attr">ok</span> = <span class="literal">yes</span></span><br><span class="line">    read <span class="attr">only</span> = <span class="literal">no</span></span><br><span class="line">    create <span class="attr">mask</span> = <span class="number">0755</span></span><br></pre></td></tr></table></figure>
-<h2 id="重启samba"><a href="#重启samba" class="headerlink" title="重启samba"></a>重启samba</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo systemctl restart smbd</span><br></pre></td></tr></table></figure>
-<h2 id="把当前用户添加为samba用户-optional"><a href="#把当前用户添加为samba用户-optional" class="headerlink" title="把当前用户添加为samba用户(optional)"></a>把当前用户添加为samba用户(optional)</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo smbpasaswd -a $(whoami)</span><br></pre></td></tr></table></figure>]]></content>
-      <categories>
-        <category>basic_cs</category>
-      </categories>
-      <tags>
-        <tag>linux</tag>
-        <tag>网络</tag>
-        <tag>samba</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>install-newer-cmake-on-ubuntu</title>
-    <url>/2025/05/11/install-newer-cmake-on-ubuntu/</url>
-    <content><![CDATA[<h1 id="在ubuntu上安装更新版本的cmake"><a href="#在ubuntu上安装更新版本的cmake" class="headerlink" title="在ubuntu上安装更新版本的cmake"></a>在ubuntu上安装更新版本的cmake</h1><h3 id="motivation"><a href="#motivation" class="headerlink" title="motivation"></a>motivation</h3><ul>
-<li>ubuntu上通过<code>apt</code>安装的cmake版本都非常的老，在构建一些项目的时候可能会无法成功。</li>
-<li><code>snap</code>有时候会突然死掉，而且无法通过<code>systemctl</code>重启，这样的情况下甚至没有办法卸载snap安装的cmake</li>
-</ul>
-<h2 id="安装方法"><a href="#安装方法" class="headerlink" title="安装方法"></a>安装方法</h2><p>在Linux上，遇事不决就应该尝试源码构建，这永远是最方便的方法，而且在性能相对较可的电脑上也不会需要很多时间。</p>
-<h3 id="获取cmake源码"><a href="#获取cmake源码" class="headerlink" title="获取cmake源码"></a>获取cmake源码</h3><p>先确定自己想要的cmake的版本，目前cmake大版本已经出到了4，但是我暂时用不到4的任何特性，所以我选择安装cmake3.31.3</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">version=3.11</span><br><span class="line">build=3</span><br><span class="line">mkdir cmake-repo-temp &amp; cd cmake-repo-temp</span><br><span class="line">wget https://cmake.org/files/v$version/cmake-$version.$build.tar.gz</span><br><span class="line">tar -xzvf cmake-$version.$build.tar.gz</span><br><span class="line">cd cmake-$version.$build/</span><br></pre></td></tr></table></figure>
-
-<h3 id="编译并安装cmake"><a href="#编译并安装cmake" class="headerlink" title="编译并安装cmake"></a>编译并安装cmake</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">./bootstrap</span><br><span class="line">make -j$(nproc)</span><br><span class="line">sudo make install</span><br></pre></td></tr></table></figure>
-
-<h3 id="测试cmake"><a href="#测试cmake" class="headerlink" title="测试cmake"></a>测试cmake</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">cmake --version</span><br></pre></td></tr></table></figure>
-<p>如果看到输出版本为3.31.3，则说明安装成功！</p>
-]]></content>
-      <categories>
-        <category>basic_cs</category>
-      </categories>
-      <tags>
-        <tag>linux</tag>
-      </tags>
   </entry>
 </search>
