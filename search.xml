@@ -17737,18 +17737,7 @@
 </ul>
 </li>
 </ul>
-<script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.8/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Config({
-    tex2jax: {
-      inlineMath: [ ['$','$'], ["\$","\$"] ],
-      displayMath: [ ['$$','$$'], ["\$$","\$$"] ],
-      processEscapes: true,  // 处理转义符
-      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']  // 避免冲突
-    },
-    messageStyle: "none"
-  });
-</script>]]></content>
+]]></content>
       <categories>
         <category>HUST</category>
       </categories>
