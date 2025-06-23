@@ -15701,7 +15701,10 @@
 <li>非阻塞cache技术</li>
 </ul>
 <h2 id="第八章-输入输出系统"><a href="#第八章-输入输出系统" class="headerlink" title="第八章 输入输出系统"></a>第八章 输入输出系统</h2><h3 id="可靠性模型-1"><a href="#可靠性模型-1" class="headerlink" title="可靠性模型"></a>可靠性模型</h3><p>对于一个串联系统，系统的可靠性$R_s$<br>$$ R_s &#x3D; \prod _{i&#x3D;1}^n R_i $$<br>对于并联系统，<br>$$ R_s &#x3D; 1 - \prod _{i&#x3D;1}^n (1- R_i) $$<br>串并联系统，其中n代表串联倍数，m代表并联倍数<br>$$ R(t) &#x3D; 1-(1-R_i ^n (t))^m $$<br>并串联系统<br>$$ R(t) &#x3D; (1-(1-R_i(t))^m)^n $$</p>
-]]></content>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({ tex2jax: {inlineMath: [['$', '$']]}, messageStyle: "none" });
+</script>]]></content>
       <categories>
         <category>HUST</category>
       </categories>
@@ -17734,7 +17737,10 @@
 </ul>
 </li>
 </ul>
-]]></content>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({ tex2jax: {inlineMath: [['$', '$']]}, messageStyle: "none" });
+</script>]]></content>
       <categories>
         <category>HUST</category>
       </categories>
