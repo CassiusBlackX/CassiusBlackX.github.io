@@ -780,10 +780,6 @@
 </ol>
 <p>MIPS采用软件识别方式。IA32采用硬件识别方式，用专门的硬件查询电路按优先级顺序识别中断，得到”中断类型号“，根据此好，到中断向量表中读取对应的中断服务程序的入口地址。<br>所有事件都被分配一个”中断类型号”，每个中断都有相应的“中断服务程序”，可根据中断类型号找到中断服务器程序的入口地址。<br>中断类型号相当于中断向量表的索引，表中存放中断服务程序首地址。</p>
 <p><strong>要重点注意汇编代码中的数字是十六进制还是十进制！！</strong></p>
-<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Config({ tex2jax: {inlineMath: [['$', '$']]}, messageStyle: "none" });
-</script>
 ]]></content>
       <categories>
         <category>HUST</category>
@@ -5421,10 +5417,6 @@
 </li>
 <li>CRC编码实验中，对16位汉字进行编码，选择生成多项式7位，余数6位，能够区分一位错和两位错，直接通过余数区分。</li>
 </ul>
-<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Config({ tex2jax: {inlineMath: [['$', '$']]}, messageStyle: "none" });
-</script>
 ]]></content>
       <categories>
         <category>HUST</category>
@@ -5759,33 +5751,6 @@
         <tag>linux</tag>
         <tag>tmux</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>bittorrent原理自学</title>
-    <url>/2024/11/21/bittorrent%E5%8E%9F%E7%90%86%E8%87%AA%E5%AD%A6/</url>
-    <content><![CDATA[<h1 id="种子文件"><a href="#种子文件" class="headerlink" title="种子文件"></a>种子文件</h1><h2 id="编码"><a href="#编码" class="headerlink" title="编码"></a>编码</h2><p>一个种子文件实际上是包含<code>字符串</code>, <code>整数</code>, <code>列表</code>, <code>字典</code>进行编码后的文件。</p>
-<ul>
-<li>字符串：字符串由一个标识长度的十进制数字，紧接着一个冒号和字符串本身组成</li>
-<li>整数：整数由一个小写字母<code>i</code>开头，小写字母<code>e</code>结尾拼接而成，数字使用十进制<ul>
-<li><code>i2e</code>: 对应2</li>
-<li><code>i-2e</code>: 对应-2</li>
-<li><code>i0e</code>: 对应0，除0外，其它数字不能以0开头，同时也不允许<code>i-0e</code></li>
-</ul>
-</li>
-<li>列表：列表由小写字母<code>l</code>开头，小写字母<code>e</code>结束<ul>
-<li>eg: <code>l4:spam4:eggse</code>，对应&#96;[‘spam’, ‘eggs’]</li>
-</ul>
-</li>
-<li>字典：字典由小写字母<code>d</code>开头，小写字母<code>e</code>结束<ul>
-<li>eg: <code>d3:cow3:moo4:spam4:eggse</code>, 对应<code>&#123;&#39;cow&#39;: &#39;moo&#39;, &#39;spam&#39;: &#39;eggs&#39;&#125;</code></li>
-</ul>
-</li>
-</ul>
-<p>分析完以上编码格式以后，就可以把一个种子文件解析为json格式来方便阅读。</p>
-<blockquote>
-<p>理论上种子应该是这样的格式</p>
-</blockquote>
-]]></content>
   </entry>
   <entry>
     <title>airhust视觉追踪入门</title>
@@ -9315,10 +9280,6 @@
 </ul>
 </li>
 </ul>
-<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Config({ tex2jax: {inlineMath: [['$', '$']]}, messageStyle: "none" });
-</script>
 ]]></content>
       <categories>
         <category>HUST</category>
@@ -12378,159 +12339,6 @@
         <tag>acme</tag>
         <tag>nginx</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>workflowsim随笔记录</title>
-    <url>/2025/01/18/workflowsim/</url>
-    <content><![CDATA[<h1 id="WorkflowSim-A-Toolkit-for-Simulating-Scientific-Workflows-in-Distributed-Environments"><a href="#WorkflowSim-A-Toolkit-for-Simulating-Scientific-Workflows-in-Distributed-Environments" class="headerlink" title="WorkflowSim: A Toolkit for Simulating Scientific Workflows in Distributed Environments"></a>WorkflowSim: A Toolkit for Simulating Scientific Workflows in Distributed Environments</h1><h2 id="related-work"><a href="#related-work" class="headerlink" title="related work"></a>related work</h2><ul>
-<li>disadvantages of CloudSim<ul>
-<li>only supports the execution of single workloads<ul>
-<li>does not consider dependencies or clustering</li>
-</ul>
-</li>
-<li>ignore the occurence of failures and overheads</li>
-</ul>
-</li>
-<li>task clustering<ul>
-<li>static</li>
-<li>not consider middleware overhead from diverse grid middelware services</li>
-</ul>
-</li>
-<li>failure analysis and modeling present</li>
-</ul>
-<h2 id="models-and-features"><a href="#models-and-features" class="headerlink" title="models and features"></a>models and features</h2><h3 id="workflow-management-system"><a href="#workflow-management-system" class="headerlink" title="workflow management system"></a>workflow management system</h3><ul>
-<li>workflow mapper: map abstract workflows to concrete, dependent on execfution sites</li>
-<li>workflow engine: handle data dependencies</li>
-<li>workflow scheduler: match jobs to resources</li>
-<li>clustering engine: merge small tasks into a large hob</li>
-<li>provenance collector: tracks the history of task&#x2F;job execution</li>
-<li>workflow partitioner: divide user workflow into multiple sub-workflows</li>
-</ul>
-<h4 id="components"><a href="#components" class="headerlink" title="components"></a>components</h4><h5 id="workflow-mapper"><a href="#workflow-mapper" class="headerlink" title="workflow mapper"></a>workflow mapper</h5><p>model workflows as DAG. mapper is used to import DAG files formatted in XML</p>
-<h5 id="cluster-engine"><a href="#cluster-engine" class="headerlink" title="cluster engine"></a>cluster engine</h5><ul>
-<li>job vs task<ul>
-<li>task: program tath a user would like to execute</li>
-<li>job: an atomic unit seen by the exeuction system, contains multiple tasks to be executed in sequence or parallel</li>
-</ul>
-</li>
-</ul>
-<p>cluster engine merge task into jobs</p>
-<h5 id="workflow-engine"><a href="#workflow-engine" class="headerlink" title="workflow engine"></a>workflow engine</h5><p>make sure a job is released when all its parent jobs have completed successfully</p>
-<p>use DAGMan as the workflow engine</p>
-<h5 id="workflow-scheduler-and-job-execution"><a href="#workflow-scheduler-and-job-execution" class="headerlink" title="workflow scheduler and job execution"></a>workflow scheduler and job execution</h5><ul>
-<li>static: jobs are assinged to a worker node at workflow panning stage. when a job reach remote scheduler, it will wialt until the assinged worker node is free.</li>
-<li>dynamic: jobs are matched to a worker node in the remote scheduler whenever a worker node becomes idle.</li>
-</ul>
-<h4 id="layered-overhead"><a href="#layered-overhead" class="headerlink" title="layered overhead"></a>layered overhead</h4><ul>
-<li>workflow engine delay: 上一个parent job完成(released)到下一个job被提交(into the ready queue)的时间</li>
-<li>queue delay: 一个job被workflow engine提交到queue中到local scheduler发现这个job已经在running状态</li>
-<li>poststript delay &amp; prescript delay: job执行前后的脚本执行的时间.</li>
-<li>data transfer delay: 节点之间传输数据的延时 [stage in, clean up, stage out]</li>
-<li>clustering delay: 用来衡量真正的运行时间和workflow scheduler认为的运行时间. 因为把job包装起来也需要消耗一定的时间</li>
-</ul>
-<h4 id="Layered-Failures-and-Job-Retry"><a href="#Layered-Failures-and-Job-Retry" class="headerlink" title="Layered Failures and Job Retry"></a>Layered Failures and Job Retry</h4><ul>
-<li>task failure VS job failure<ul>
-<li>task failure: 一个task失败只影响自己</li>
-<li>job failure: 一个task失败还影响其他task</li>
-</ul>
-</li>
-<li>failure generator: ? 为什么要产生failure?</li>
-<li>failure monitor: collect failure records, return to workflow management system</li>
-</ul>
-<ul>
-<li>options to improve workflow perfomance<ul>
-<li>选择重试整个job,或者只运行failure的部分 -&gt; workflow scheduler里集成,将根据用户的选择执行</li>
-<li>reclustering: 根据failure rate来调整 clustering strategy -&gt; workflow engine里集成</li>
-</ul>
-</li>
-</ul>
-<h2 id="validation"><a href="#validation" class="headerlink" title="validation"></a>validation</h2><h1 id="GPUCloudSim"><a href="#GPUCloudSim" class="headerlink" title="GPUCloudSim"></a>GPUCloudSim</h1><ul>
-<li>contributions<ul>
-<li>enable cloudsim to use GPU-features</li>
-<li>models to simulate interference among co-running applications, the overhead of virtualization and power consumption of GPUs.</li>
-<li>multi-level scheduling and provisioning of GPU resources.</li>
-<li>VM placement greedy algorithm</li>
-</ul>
-</li>
-</ul>
-<h2 id="related-work-1"><a href="#related-work-1" class="headerlink" title="related work"></a>related work</h2><p>GPGPU-sim让我看起来非常印象深刻~~</p>
-<h2 id="GPU-enabled-cloud-computing"><a href="#GPU-enabled-cloud-computing" class="headerlink" title="GPU-enabled cloud computing"></a>GPU-enabled cloud computing</h2><p>我使用过full and para virtualization版本的</p>
-<h2 id="proposed-GPUCloudSim-extention"><a href="#proposed-GPUCloudSim-extention" class="headerlink" title="proposed GPUCloudSim extention"></a>proposed GPUCloudSim extention</h2><ul>
-<li>GPUCloudSim layer provides necessary classes to model and simulate GPU-enabled </li>
-<li>interference-aware GPUCloudSim layer gives GPUCloudSim the ability to model the interfenrece of co-running app in a GPU</li>
-<li>perfomance-aware GPUCloudSim layer provides its underlying layer with the ability to model the virtualization-incurred performance degradation of virtualized GPUs</li>
-<li>Power-aware GPUCloudSim layer enables extention to simulate power-aware GPUs</li>
-</ul>
-<h3 id="cloud-layer"><a href="#cloud-layer" class="headerlink" title="cloud layer"></a>cloud layer</h3><ul>
-<li><code>SimEntity</code>: abstract class extended by event-aware entities within the simulator</li>
-<li><code>CloudSimTags</code> contains the event</li>
-<li><code>DatacenterBroker</code> and <code>Datacneter</code> are CloudSim classes that use events to comunicate. <ul>
-<li><code>DatacenterBroker</code> acts on behalf of end-users; queries data centers fo r allocation of resources and then submits computations.  to support GPU workdloads</li>
-<li><code>Datacenter</code> represents the hardware infrastructure for a datacenter to support GPU-equipped hosts</li>
-</ul>
-</li>
-<li><code>PowerGpuDatacenter</code> represents a power- and engery-aware GPU-enabled data center.</li>
-</ul>
-<h3 id="server-layer"><a href="#server-layer" class="headerlink" title="server layer"></a>server layer</h3><ul>
-<li>classes in GPUCloudSim layer: provide basic support for GPU hardware and software in hosts and vms<ul>
-<li><code>GpuVm</code>: extends CloudSim’s Vm class to model a VM with a vGPU attached</li>
-<li><code>Vgpu</code>: represents a vGPU that is attached to a VM</li>
-<li><code>GpuHost</code>: extends <code>Host</code> class from CloudSim to model a GPU-capable host with one ore more video cards attached</li>
-<li><code>VgpuScheduler</code>: abstract class that defines the policy to share the processing power of a video card among resident vGPUs</li>
-<li><code>Pgpu</code>: the Pgpu class represents a physical GPU. A <code>Pgup</code> incorporates multiple processing elements that represent GPU SMs.</li>
-<li><code>VideoCard</code>: represents a video card in the system. a video card has one ore more <code>Pgpu</code> on board, each with its own memory</li>
-<li><code>VideoCardAllocationPolicy</code>: abstract class represents the provisioning policy of video cards to vGPUs. each <code>GpuHost</code> has its own video card allocation policy</li>
-<li><code>VideoCardBwProvisioner</code>: abstract class, represents the provisioning policy used by a video card to allocated PCIe bandwidth for its GPUs. each video card has its own PCIe provisioner</li>
-<li><code>PgpuSelectionPolicy</code>: an interface implemented by classes that provide a GPU selection policy for vGPUs on a video card. when there are multiple available GPUs for a vGPU on a video card, the selection policy determines which GPU to select.</li>
-</ul>
-</li>
-<li>classes in performance-aware GPUCloudSim layer.<ul>
-<li><code>PerformanceGpuHost</code>: extends <code>GpuHost</code> to support schedulers that model the virtualization overhead for vGPUs. implements both <code>performanceScheduler</code> and <code>performanceModel</code> interfaces</li>
-<li><code>PerformanceScheduler</code>: an interface implemented by a <code>VgpuScheduler</code> with a performance degradation model, in order to become compatible with <code>PerformanceGpuHost</code></li>
-<li><code>PerformanceModel</code>: interface implemented by a <code>VgpuScheduler</code> to model virtulization overheads for vGPUs</li>
-</ul>
-</li>
-<li>classes in power-aware GPUCloudSim layer<ul>
-<li><code>PowerGpuHost</code>: extends <code>PerformanceGpuHost</code> to support power-aware video cards and incorporate a power model for other host components. a power model for the host needs to implement the PowerModel interface, provided by the power package of CloudSim</li>
-<li><code>PowerVideoCard</code>: represents a power-aware video card that incorporates a video card model</li>
-<li><code>VideoCardPowerModel</code>: interface needs to be implemented by the classes that provide a power model for video cards</li>
-</ul>
-</li>
-<li>implemented scheduling and provisioning policy:<ul>
-<li><code>VpuSchedulerTimeShared</code></li>
-<li><code>VgpuSchedulerSpaceShared</code></li>
-<li><code>VgpuSchedulerFairShare</code></li>
-</ul>
-</li>
-</ul>
-<h3 id="gpu-layer"><a href="#gpu-layer" class="headerlink" title="gpu layer"></a>gpu layer</h3><ul>
-<li>classes in GPUCloudSim layer<ul>
-<li><code>Pe</code>: a CloudSim class that represents a processing elemnt. used to simulate an Sm in the GPU</li>
-<li><code>PeProvisioner</code>: abstract class from CloudSim represents the provisioning policy that is used to allocatate the processing power of a <code>Pe</code> to vGPUs</li>
-<li><code>GpuBwProvisioner</code>: abstract class that represents the provisioning policy of a GPU to allocate GPU memory bandwidth for resident vGPUs</li>
-<li><code>GpuGddramProvisioner</code>: abstract class represents the provisioning policy used by a GPU to allocate GPU memroy for resident vGPUs</li>
-<li><code>GpuCloudlet</code>: extends Cloudlet class from CloudSim to represent an application with both CPU and GPU portions of execution</li>
-<li><code>GpuTask</code>: represents a computation that is executed on the GPU. includes the number of thread blocks and the length of each block. in addition, it incorporates utilization models to imitate resource demands</li>
-<li><code>MemoryTransfer</code>: internal class that represents a memory transfer that occurs within a GpuTask context</li>
-<li><code>GpuTaskScheduler</code>: abstract class that represents the scheduling policy employed by a <code>Vgpu</code> to execute its GPu tasks.<ul>
-<li><code>GpuTaskSchedulerLeftover</code> extends above to implement the cooperative multitasking scheduler based on leftover policy&#x2F;</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>classes in interface-aware GpuCloudSim layer, model inter-application interference that may slow down co-running GPU tasks<ul>
-<li><code>InterferenceModel</code>: interface needs to be implemented in order to provide a model for inter-application interference</li>
-<li><code>InterferenceGpuTaskSchedulerLeftover</code>: extends the <code>GpuTaskSchedulerLeftover</code> class to add supoort for interference models. co-running GPu tasks may experience a slow down depending on their utilization of shared resources.</li>
-</ul>
-</li>
-</ul>
-<h3 id="models-and-policies"><a href="#models-and-policies" class="headerlink" title="models and policies"></a>models and policies</h3><h1 id="astram-sim"><a href="#astram-sim" class="headerlink" title="astram-sim"></a>astram-sim</h1><h2 id="2-0-新增功能"><a href="#2-0-新增功能" class="headerlink" title="2.0 新增功能"></a>2.0 新增功能</h2><ul>
-<li>Execution Trace</li>
-<li>Dependency Management</li>
-<li>Resource Management</li>
-<li>Graph-Input workload layer</li>
-</ul>
-]]></content>
   </entry>
   <entry>
     <title>Linux基础知识</title>
@@ -15701,10 +15509,7 @@
 <li>非阻塞cache技术</li>
 </ul>
 <h2 id="第八章-输入输出系统"><a href="#第八章-输入输出系统" class="headerlink" title="第八章 输入输出系统"></a>第八章 输入输出系统</h2><h3 id="可靠性模型-1"><a href="#可靠性模型-1" class="headerlink" title="可靠性模型"></a>可靠性模型</h3><p>对于一个串联系统，系统的可靠性$R_s$<br>$$ R_s &#x3D; \prod _{i&#x3D;1}^n R_i $$<br>对于并联系统，<br>$$ R_s &#x3D; 1 - \prod _{i&#x3D;1}^n (1- R_i) $$<br>串并联系统，其中n代表串联倍数，m代表并联倍数<br>$$ R(t) &#x3D; 1-(1-R_i ^n (t))^m $$<br>并串联系统<br>$$ R(t) &#x3D; (1-(1-R_i(t))^m)^n $$</p>
-<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Config({ tex2jax: {inlineMath: [['$', '$']]}, messageStyle: "none" });
-</script>]]></content>
+]]></content>
       <categories>
         <category>HUST</category>
       </categories>
